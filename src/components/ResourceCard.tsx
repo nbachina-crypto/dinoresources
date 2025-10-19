@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Video, Link2, Trash2, Edit } from "lucide-react";
+import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -15,6 +15,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Resource {
   id: string;
@@ -34,6 +40,7 @@ interface ResourceCardProps {
 export default function ResourceCard({ resource, viewMode, isContributor, onUpdate }: ResourceCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showViewDialog, setShowViewDialog] = useState(false);
 
   const getIcon = () => {
     switch (resource.type) {
@@ -80,6 +87,30 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
     }
   };
 
+  const renderResourceContent = () => {
+    if (resource.type === "pdf") {
+      return (
+        <iframe
+          src={resource.url}
+          className="w-full h-[600px] rounded-lg border border-border"
+          title={resource.title}
+        />
+      );
+    }
+    if (resource.type === "youtube") {
+      return (
+        <iframe
+          src={getYoutubeEmbedUrl(resource.url) || resource.url}
+          className="w-full h-[400px] rounded-lg"
+          title={resource.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      );
+    }
+    return null;
+  };
+
   const renderContent = () => {
     if (viewMode === "list") {
       return (
@@ -92,6 +123,12 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
             <span className="font-medium truncate">{resource.title}</span>
           </div>
           <div className="flex gap-2">
+            {(resource.type === "pdf" || resource.type === "youtube") && (
+              <Button size="sm" onClick={() => setShowViewDialog(true)}>
+                <Eye className="w-4 h-4 mr-1" />
+                View
+              </Button>
+            )}
             {resource.type === "link" && (
               <Button size="sm" asChild>
                 <a href={resource.url} target="_blank" rel="noopener noreferrer">
@@ -137,22 +174,7 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
           </div>
         </CardHeader>
         <CardContent>
-          {resource.type === "pdf" && (
-            <iframe
-              src={resource.url}
-              className="w-full h-[600px] rounded-lg border border-border"
-              title={resource.title}
-            />
-          )}
-          {resource.type === "youtube" && (
-            <iframe
-              src={getYoutubeEmbedUrl(resource.url) || resource.url}
-              className="w-full h-[400px] rounded-lg"
-              title={resource.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          )}
+          {renderResourceContent()}
           {resource.type === "link" && (
             <Button asChild className="w-full">
               <a href={resource.url} target="_blank" rel="noopener noreferrer">
@@ -175,6 +197,17 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
           renderContent()
         )}
       </Card>
+
+      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+        <DialogContent className="max-w-4xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>{resource.title}</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            {renderResourceContent()}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
