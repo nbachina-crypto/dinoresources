@@ -1,0 +1,197 @@
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ExternalLink, FileText, Video, Link2, Trash2, Edit } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+interface Resource {
+  id: string;
+  title: string;
+  type: "pdf" | "youtube" | "link";
+  url: string;
+  created_at: string;
+}
+
+interface ResourceCardProps {
+  resource: Resource;
+  viewMode: "list" | "expanded";
+  isContributor: boolean;
+  onUpdate: () => void;
+}
+
+export default function ResourceCard({ resource, viewMode, isContributor, onUpdate }: ResourceCardProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const getIcon = () => {
+    switch (resource.type) {
+      case "pdf":
+        return <FileText className="w-4 h-4" />;
+      case "youtube":
+        return <Video className="w-4 h-4" />;
+      case "link":
+        return <Link2 className="w-4 h-4" />;
+    }
+  };
+
+  const getTypeColor = () => {
+    switch (resource.type) {
+      case "pdf":
+        return "bg-red-500/10 text-red-500 hover:bg-red-500/20";
+      case "youtube":
+        return "bg-red-600/10 text-red-600 hover:bg-red-600/20";
+      case "link":
+        return "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20";
+    }
+  };
+
+  const getYoutubeEmbedUrl = (url: string) => {
+    const videoId = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^&\n?#]+)/)?.[1];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    const { error } = await supabase
+      .from("resources")
+      .delete()
+      .eq("id", resource.id);
+
+    setIsDeleting(false);
+    setShowDeleteDialog(false);
+
+    if (error) {
+      toast.error("Failed to delete resource");
+    } else {
+      toast.success("Resource deleted successfully");
+      onUpdate();
+    }
+  };
+
+  const renderContent = () => {
+    if (viewMode === "list") {
+      return (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <Badge className={getTypeColor()}>
+              {getIcon()}
+              <span className="ml-1 uppercase text-xs">{resource.type}</span>
+            </Badge>
+            <span className="font-medium truncate">{resource.title}</span>
+          </div>
+          <div className="flex gap-2">
+            {resource.type === "link" && (
+              <Button size="sm" asChild>
+                <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="w-4 h-4 mr-1" />
+                  Open
+                </a>
+              </Button>
+            )}
+            {isContributor && (
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <CardHeader>
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle className="text-lg">{resource.title}</CardTitle>
+            <div className="flex gap-2">
+              <Badge className={getTypeColor()}>
+                {getIcon()}
+                <span className="ml-1 uppercase text-xs">{resource.type}</span>
+              </Badge>
+              {isContributor && (
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {resource.type === "pdf" && (
+            <iframe
+              src={resource.url}
+              className="w-full h-[600px] rounded-lg border border-border"
+              title={resource.title}
+            />
+          )}
+          {resource.type === "youtube" && (
+            <iframe
+              src={getYoutubeEmbedUrl(resource.url) || resource.url}
+              className="w-full h-[400px] rounded-lg"
+              title={resource.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          )}
+          {resource.type === "link" && (
+            <Button asChild className="w-full">
+              <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Open Resource
+              </a>
+            </Button>
+          )}
+        </CardContent>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <Card className="shadow-card hover:shadow-hover transition-all border-border/50">
+        {viewMode === "list" ? (
+          <CardContent className="py-4">{renderContent()}</CardContent>
+        ) : (
+          renderContent()
+        )}
+      </Card>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Resource</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{resource.title}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}

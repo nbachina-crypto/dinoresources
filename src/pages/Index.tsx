@@ -1,14 +1,70 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import AuthPage from "@/components/AuthPage";
+import ProfileSetup from "@/components/ProfileSetup";
+import Dashboard from "@/components/Dashboard";
 
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+  const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState<any>(null);
+  const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        checkProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        checkProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+        setNeedsProfileSetup(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("department, year, semester")
+      .eq("id", userId)
+      .single();
+
+    const needsSetup = !data?.department || !data?.year || !data?.semester;
+    setNeedsProfileSetup(needsSetup);
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center gradient-subtle">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (!session) {
+    return <AuthPage />;
+  }
+
+  if (needsProfileSetup) {
+    return <ProfileSetup />;
+  }
+
+  return <Dashboard />;
 };
 
 export default Index;
