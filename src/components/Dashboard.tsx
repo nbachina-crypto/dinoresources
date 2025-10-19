@@ -174,7 +174,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => navigate("/setup")}>
+              <Button variant="outline" onClick={() => navigate("/setup?edit=true")}>
                 Edit Profile
               </Button>
               <Button variant="outline" onClick={handleSignOut}>

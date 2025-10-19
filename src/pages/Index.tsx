@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AuthPage from "@/components/AuthPage";
 import ProfileSetup from "@/components/ProfileSetup";
 import Dashboard from "@/components/Dashboard";
 
 const Index = () => {
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
+  const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -45,6 +47,12 @@ const Index = () => {
     setIsLoading(false);
   };
 
+  const refreshProfile = () => {
+    if (session?.user?.id) {
+      checkProfile(session.user.id);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center gradient-subtle">
@@ -60,11 +68,11 @@ const Index = () => {
     return <AuthPage />;
   }
 
-  if (needsProfileSetup) {
-    return <ProfileSetup />;
+  if (needsProfileSetup || isEditMode) {
+    return <ProfileSetup onProfileUpdated={refreshProfile} />;
   }
 
-  return <Dashboard />;
+  return <Dashboard key={session.user.id} />;
 };
 
 export default Index;

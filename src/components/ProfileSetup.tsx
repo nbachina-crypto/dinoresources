@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -22,12 +22,38 @@ const DEPARTMENTS = [
 const YEARS = [1, 2, 3, 4];
 const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
-export default function ProfileSetup() {
+interface ProfileSetupProps {
+  onProfileUpdated?: () => void;
+}
+
+export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [department, setDepartment] = useState("");
   const [year, setYear] = useState("");
   const [semester, setSemester] = useState("");
+
+  useEffect(() => {
+    loadCurrentProfile();
+  }, []);
+
+  const loadCurrentProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("department, year, semester")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setDepartment(data.department || "");
+      setYear(data.year?.toString() || "");
+      setSemester(data.semester?.toString() || "");
+    }
+    setIsLoading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,9 +81,21 @@ export default function ProfileSetup() {
       toast.error("Failed to update profile");
     } else {
       toast.success("Profile updated successfully!");
+      onProfileUpdated?.();
       navigate("/dashboard");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center gradient-subtle">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-subtle p-4">
