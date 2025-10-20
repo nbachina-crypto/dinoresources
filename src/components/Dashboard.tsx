@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { GraduationCap, LogOut, Upload, List, LayoutGrid } from "lucide-react";
-import ResourceCard from "./ResourceCard";
+import { GraduationCap, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
+import SubjectDrawer from "./SubjectDrawer";
 
 interface Profile {
   department: string;
@@ -21,23 +19,15 @@ interface Subject {
   name: string;
 }
 
-interface Resource {
-  id: string;
-  title: string;
-  type: "pdf" | "youtube" | "link";
-  url: string;
-  created_at: string;
-}
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [resources, setResources] = useState<Resource[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"list" | "expanded">("list");
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
   const [isContributor, setIsContributor] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -50,11 +40,6 @@ export default function Dashboard() {
     }
   }, [profile]);
 
-  useEffect(() => {
-    if (selectedSubject) {
-      loadResources();
-    }
-  }, [selectedSubject]);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -111,26 +96,6 @@ export default function Dashboard() {
     }
 
     setSubjects(data || []);
-    if (data && data.length > 0) {
-      setSelectedSubject(data[0].id);
-    }
-  };
-
-  const loadResources = async () => {
-    if (!selectedSubject) return;
-
-    const { data, error } = await supabase
-      .from("resources")
-      .select("*")
-      .eq("subject_id", selectedSubject)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      toast.error("Failed to load resources");
-      return;
-    }
-
-    setResources(data || []);
   };
 
   const handleSignOut = async () => {
@@ -138,8 +103,9 @@ export default function Dashboard() {
     navigate("/auth");
   };
 
-  const handleResourceUploaded = () => {
-    loadResources();
+  const handleSubjectClick = (subject: Subject) => {
+    setSelectedSubject(subject);
+    setIsDrawerOpen(true);
   };
 
   if (isLoading) {
@@ -189,33 +155,17 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold">Your Resources</h2>
+            <h2 className="text-2xl font-bold">Your Subjects</h2>
             <p className="text-muted-foreground">
-              Browse and access study materials for your subjects
+              Click on a subject to view organized resources
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("list")}
-            >
-              <List className="w-4 h-4" />
+          {isContributor && (
+            <Button onClick={() => setIsUploadDialogOpen(true)}>
+              <Upload className="w-4 h-4 mr-2" />
+              Upload Resource
             </Button>
-            <Button
-              variant={viewMode === "expanded" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("expanded")}
-            >
-              <LayoutGrid className="w-4 h-4" />
-            </Button>
-            {isContributor && (
-              <Button onClick={() => setIsUploadDialogOpen(true)}>
-                <Upload className="w-4 h-4 mr-2" />
-                Upload Resource
-              </Button>
-            )}
-          </div>
+          )}
         </div>
 
         {subjects.length === 0 ? (
@@ -227,50 +177,44 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         ) : (
-          <Tabs value={selectedSubject || ""} onValueChange={setSelectedSubject}>
-            <TabsList className="w-full justify-start overflow-x-auto flex-wrap h-auto gap-2 bg-card/50 p-2">
-              {subjects.map((subject) => (
-                <TabsTrigger key={subject.id} value={subject.id} className="flex-shrink-0">
-                  {subject.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {subjects.map((subject) => (
-              <TabsContent key={subject.id} value={subject.id} className="mt-6">
-                {resources.length === 0 ? (
-                  <Card className="shadow-card border-border/50">
-                    <CardContent className="py-12 text-center">
-                      <p className="text-muted-foreground">
-                        No resources available yet for {subject.name}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div className={viewMode === "list" ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-4"}>
-                    {resources.map((resource) => (
-                      <ResourceCard
-                        key={resource.id}
-                        resource={resource}
-                        viewMode={viewMode}
-                        isContributor={isContributor}
-                        onUpdate={loadResources}
-                      />
-                    ))}
-                  </div>
-                )}
-              </TabsContent>
+              <Card
+                key={subject.id}
+                className="shadow-card border-border/50 hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => handleSubjectClick(subject)}
+              >
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold">{subject.name}</h3>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Click to view resources
+                  </p>
+                </CardContent>
+              </Card>
             ))}
-          </Tabs>
+          </div>
         )}
       </main>
+
+      {selectedSubject && (
+        <SubjectDrawer
+          open={isDrawerOpen}
+          onOpenChange={setIsDrawerOpen}
+          subjectId={selectedSubject.id}
+          subjectName={selectedSubject.name}
+          isContributor={isContributor}
+        />
+      )}
 
       {isContributor && subjects.length > 0 && (
         <UploadResourceDialog
           open={isUploadDialogOpen}
           onOpenChange={setIsUploadDialogOpen}
           subjects={subjects}
-          onResourceUploaded={handleResourceUploaded}
+          onResourceUploaded={() => {
+            // Drawer will reload its own resources
+            setIsUploadDialogOpen(false);
+          }}
         />
       )}
     </div>

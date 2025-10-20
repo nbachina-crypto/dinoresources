@@ -46,32 +46,38 @@ export type Database = {
       }
       resources: {
         Row: {
+          category: string | null
           created_at: string | null
           created_by: string | null
           id: string
           subject_id: string
           title: string
           type: Database["public"]["Enums"]["resource_type"]
+          unit_number: number | null
           updated_at: string | null
           url: string
         }
         Insert: {
+          category?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
           subject_id: string
           title: string
           type: Database["public"]["Enums"]["resource_type"]
+          unit_number?: number | null
           updated_at?: string | null
           url: string
         }
         Update: {
+          category?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
           subject_id?: string
           title?: string
           type?: Database["public"]["Enums"]["resource_type"]
+          unit_number?: number | null
           updated_at?: string | null
           url?: string
         }

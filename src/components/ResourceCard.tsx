@@ -28,6 +28,8 @@ interface Resource {
   type: "pdf" | "youtube" | "link";
   url: string;
   created_at: string;
+  category?: string;
+  unit_number?: number | null;
 }
 
 interface ResourceCardProps {

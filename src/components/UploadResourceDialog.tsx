@@ -30,6 +30,7 @@ export default function UploadResourceDialog({
   const [type, setType] = useState<"pdf" | "youtube" | "link">("pdf");
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
+  const [category, setCategory] = useState<string>("general");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +49,7 @@ export default function UploadResourceDialog({
       url,
       subject_id: subjectId,
       created_by: user.id,
+      category,
     });
 
     setIsLoading(false);
@@ -59,6 +61,7 @@ export default function UploadResourceDialog({
       setTitle("");
       setUrl("");
       setSubjectId("");
+      setCategory("general");
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -131,6 +134,25 @@ export default function UploadResourceDialog({
               }
               required
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="category">Category</Label>
+            <Select value={category} onValueChange={setCategory} required>
+              <SelectTrigger id="category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="syllabus">Syllabus</SelectItem>
+                <SelectItem value="unit_1">Unit 1</SelectItem>
+                <SelectItem value="unit_2">Unit 2</SelectItem>
+                <SelectItem value="unit_3">Unit 3</SelectItem>
+                <SelectItem value="unit_4">Unit 4</SelectItem>
+                <SelectItem value="unit_5">Unit 5</SelectItem>
+                <SelectItem value="pyq">Previous Year Questions</SelectItem>
+                <SelectItem value="general">General</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex gap-2 justify-end">
