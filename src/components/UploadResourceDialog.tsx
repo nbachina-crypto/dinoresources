@@ -30,7 +30,7 @@ export default function UploadResourceDialog({
   const [type, setType] = useState<"pdf" | "youtube" | "link">("pdf");
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
-  const [category, setCategory] = useState<string>("general");
+  const [category, setCategory] = useState<string>("Syllabus");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ export default function UploadResourceDialog({
       setTitle("");
       setUrl("");
       setSubjectId("");
-      setCategory("general");
+      setCategory("Syllabus");
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -143,14 +143,13 @@ export default function UploadResourceDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="syllabus">Syllabus</SelectItem>
-                <SelectItem value="unit_1">Unit 1</SelectItem>
-                <SelectItem value="unit_2">Unit 2</SelectItem>
-                <SelectItem value="unit_3">Unit 3</SelectItem>
-                <SelectItem value="unit_4">Unit 4</SelectItem>
-                <SelectItem value="unit_5">Unit 5</SelectItem>
-                <SelectItem value="pyq">Previous Year Questions</SelectItem>
-                <SelectItem value="general">General</SelectItem>
+                <SelectItem value="Syllabus">Syllabus</SelectItem>
+                <SelectItem value="Unit 1">Unit 1</SelectItem>
+                <SelectItem value="Unit 2">Unit 2</SelectItem>
+                <SelectItem value="Unit 3">Unit 3</SelectItem>
+                <SelectItem value="Unit 4">Unit 4</SelectItem>
+                <SelectItem value="Unit 5">Unit 5</SelectItem>
+                <SelectItem value="Previous Papers">Previous Papers</SelectItem>
               </SelectContent>
             </Select>
           </div>

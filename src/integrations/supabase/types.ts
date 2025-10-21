@@ -43,7 +43,7 @@ export type Database = {
       }
       resources: {
         Row: {
-          category: string | null
+          category: Database["public"]["Enums"]["resource_category"]
           created_at: string | null
           created_by: string | null
           id: string
@@ -55,7 +55,7 @@ export type Database = {
           url: string
         }
         Insert: {
-          category?: string | null
+          category?: Database["public"]["Enums"]["resource_category"]
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -67,7 +67,7 @@ export type Database = {
           url: string
         }
         Update: {
-          category?: string | null
+          category?: Database["public"]["Enums"]["resource_category"]
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -95,7 +95,6 @@ export type Database = {
           id: string
           name: string
           semester: number
-          year: number
         }
         Insert: {
           created_at?: string | null
@@ -103,7 +102,6 @@ export type Database = {
           id?: string
           name: string
           semester: number
-          year: number
         }
         Update: {
           created_at?: string | null
@@ -111,7 +109,6 @@ export type Database = {
           id?: string
           name?: string
           semester?: number
-          year?: number
         }
         Relationships: []
       }
@@ -151,6 +148,14 @@ export type Database = {
     }
     Enums: {
       app_role: "student" | "contributor" | "admin"
+      resource_category:
+        | "Syllabus"
+        | "Unit 1"
+        | "Unit 2"
+        | "Unit 3"
+        | "Unit 4"
+        | "Unit 5"
+        | "Previous Papers"
       resource_type: "pdf" | "youtube" | "link"
     }
     CompositeTypes: {
@@ -280,6 +285,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["student", "contributor", "admin"],
+      resource_category: [
+        "Syllabus",
+        "Unit 1",
+        "Unit 2",
+        "Unit 3",
+        "Unit 4",
+        "Unit 5",
+        "Previous Papers",
+      ],
       resource_type: ["pdf", "youtube", "link"],
     },
   },

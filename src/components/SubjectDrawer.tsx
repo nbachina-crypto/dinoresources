@@ -44,7 +44,7 @@ export default function SubjectDrawer({
   isContributor,
 }: SubjectDrawerProps) {
   const [resources, setResources] = useState<Resource[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("syllabus");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Syllabus");
   const [viewMode, setViewMode] = useState<"list" | "expanded">("list");
 
   useEffect(() => {
@@ -73,12 +73,7 @@ export default function SubjectDrawer({
   };
 
   const getCategoryLabel = (category: string) => {
-    if (category.startsWith("unit_")) {
-      const unitNum = category.split("_")[1];
-      return `Unit ${unitNum}`;
-    }
-    if (category === "pyq") return "Previous Year Questions";
-    if (category === "syllabus") return "Syllabus";
+    if (category === "Previous Papers") return "Previous Year Questions";
     return category;
   };
 
@@ -96,16 +91,16 @@ export default function SubjectDrawer({
           <div className="w-64 border-r border-border p-4 overflow-y-auto">
             <nav className="space-y-1">
               <button
-                onClick={() => setSelectedCategory("syllabus")}
+                onClick={() => setSelectedCategory("Syllabus")}
                 className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                  selectedCategory === "syllabus"
+                  selectedCategory === "Syllabus"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 Syllabus
                 <Badge variant="secondary" className="ml-2">
-                  {getResourcesByCategory("syllabus").length}
+                  {getResourcesByCategory("Syllabus").length}
                 </Badge>
               </button>
 
@@ -117,7 +112,7 @@ export default function SubjectDrawer({
                   <AccordionContent className="pb-0">
                     <div className="space-y-1 pl-4">
                       {[1, 2, 3, 4, 5].map((unitNum) => {
-                        const category = `unit_${unitNum}`;
+                        const category = `Unit ${unitNum}`;
                         const count = getResourcesByCategory(category).length;
                         return (
                           <button
@@ -142,16 +137,16 @@ export default function SubjectDrawer({
               </Accordion>
 
               <button
-                onClick={() => setSelectedCategory("pyq")}
+                onClick={() => setSelectedCategory("Previous Papers")}
                 className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                  selectedCategory === "pyq"
+                  selectedCategory === "Previous Papers"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 PYQs
                 <Badge variant="secondary" className="ml-2">
-                  {getResourcesByCategory("pyq").length}
+                  {getResourcesByCategory("Previous Papers").length}
                 </Badge>
               </button>
             </nav>
