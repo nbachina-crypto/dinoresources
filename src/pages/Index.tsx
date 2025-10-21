@@ -38,11 +38,11 @@ const Index = () => {
   const checkProfile = async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("department, year, semester")
+      .select("department, semester")
       .eq("id", userId)
       .single();
 
-    const needsSetup = !data?.department || !data?.year || !data?.semester;
+    const needsSetup = !data?.department || !data?.semester;
     setNeedsProfileSetup(needsSetup);
     setIsLoading(false);
   };

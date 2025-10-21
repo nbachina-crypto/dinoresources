@@ -10,7 +10,6 @@ import SubjectDrawer from "./SubjectDrawer";
 
 interface Profile {
   department: string;
-  year: number;
   semester: number;
 }
 
@@ -55,14 +54,13 @@ export default function Dashboard() {
       .eq("id", session.user.id)
       .single();
 
-    if (!profileData?.department || !profileData?.year || !profileData?.semester) {
+    if (!profileData?.department || !profileData?.semester) {
       navigate("/setup");
       return;
     }
 
     setProfile({
       department: profileData.department,
-      year: profileData.year,
       semester: profileData.semester,
     });
 
@@ -86,7 +84,6 @@ export default function Dashboard() {
       .from("subjects")
       .select("*")
       .eq("department", profile.department)
-      .eq("year", profile.year)
       .eq("semester", profile.semester)
       .order("name");
 
@@ -134,7 +131,7 @@ export default function Dashboard() {
                 <h1 className="text-xl font-bold">Campus Resources</h1>
                 {profile && (
                   <p className="text-sm text-muted-foreground">
-                    {profile.department} • Year {profile.year} • Sem {profile.semester}
+                    {profile.department} • Sem {profile.semester}
                   </p>
                 )}
               </div>

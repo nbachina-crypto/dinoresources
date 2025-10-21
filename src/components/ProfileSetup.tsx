@@ -19,7 +19,6 @@ const DEPARTMENTS = [
   "Biotechnology",
 ];
 
-const YEARS = [1, 2, 3, 4];
 const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 interface ProfileSetupProps {
@@ -30,7 +29,6 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [department, setDepartment] = useState("");
-  const [year, setYear] = useState("");
   const [semester, setSemester] = useState("");
 
   useEffect(() => {
@@ -43,13 +41,12 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
 
     const { data } = await supabase
       .from("profiles")
-      .select("department, year, semester")
+      .select("department, semester")
       .eq("id", user.id)
       .single();
 
     if (data) {
       setDepartment(data.department || "");
-      setYear(data.year?.toString() || "");
       setSemester(data.semester?.toString() || "");
     }
     setIsLoading(false);
@@ -70,7 +67,6 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
       .from("profiles")
       .update({
         department,
-        year: parseInt(year),
         semester: parseInt(semester),
       })
       .eq("id", user.id);
@@ -130,22 +126,6 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="year">Year</Label>
-              <Select value={year} onValueChange={setYear} required>
-                <SelectTrigger id="year">
-                  <SelectValue placeholder="Select your year" />
-                </SelectTrigger>
-                <SelectContent>
-                  {YEARS.map((y) => (
-                    <SelectItem key={y} value={y.toString()}>
-                      Year {y}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="semester">Semester</Label>
               <Select value={semester} onValueChange={setSemester} required>
                 <SelectTrigger id="semester">
@@ -164,7 +144,7 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
             <Button
               type="submit"
               className="w-full"
-              disabled={isLoading || !department || !year || !semester}
+              disabled={isLoading || !department || !semester}
             >
               {isLoading ? "Saving..." : "Continue to Dashboard"}
             </Button>

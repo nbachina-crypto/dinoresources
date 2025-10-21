@@ -22,7 +22,6 @@ export type Database = {
           id: string
           semester: number | null
           updated_at: string | null
-          year: number | null
         }
         Insert: {
           created_at?: string | null
@@ -31,7 +30,6 @@ export type Database = {
           id: string
           semester?: number | null
           updated_at?: string | null
-          year?: number | null
         }
         Update: {
           created_at?: string | null
@@ -40,7 +38,6 @@ export type Database = {
           id?: string
           semester?: number | null
           updated_at?: string | null
-          year?: number | null
         }
         Relationships: []
       }
