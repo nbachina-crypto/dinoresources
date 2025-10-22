@@ -153,6 +153,34 @@ export default function SubjectDrawer({
                   {getResourcesByCategory("Previous Papers").length}
                 </Badge>
               </button>
+
+              <button
+                onClick={() => setSelectedCategory("All Units Resources")}
+                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                  selectedCategory === "All Units Resources"
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent"
+                }`}
+              >
+                All Units Resources
+                <Badge variant="secondary" className="ml-2">
+                  {getResourcesByCategory("All Units Resources").length}
+                </Badge>
+              </button>
+
+              <button
+                onClick={() => setSelectedCategory("Additional Resources")}
+                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                  selectedCategory === "Additional Resources"
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent"
+                }`}
+              >
+                Additional Resources
+                <Badge variant="secondary" className="ml-2">
+                  {getResourcesByCategory("Additional Resources").length}
+                </Badge>
+              </button>
             </nav>
           </div>
 

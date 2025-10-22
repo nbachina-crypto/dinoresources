@@ -156,6 +156,8 @@ export type Database = {
         | "Unit 4"
         | "Unit 5"
         | "Previous Papers"
+        | "All Units Resources"
+        | "Additional Resources"
       resource_type: "pdf" | "youtube" | "link"
     }
     CompositeTypes: {
@@ -293,6 +295,8 @@ export const Constants = {
         "Unit 4",
         "Unit 5",
         "Previous Papers",
+        "All Units Resources",
+        "Additional Resources",
       ],
       resource_type: ["pdf", "youtube", "link"],
     },

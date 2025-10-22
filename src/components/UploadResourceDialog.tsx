@@ -30,7 +30,7 @@ export default function UploadResourceDialog({
   const [type, setType] = useState<"pdf" | "youtube" | "link">("pdf");
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
-  const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers">("Syllabus");
+  const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers" | "All Units Resources" | "Additional Resources">("Syllabus");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,6 +150,8 @@ export default function UploadResourceDialog({
                 <SelectItem value="Unit 4">Unit 4</SelectItem>
                 <SelectItem value="Unit 5">Unit 5</SelectItem>
                 <SelectItem value="Previous Papers">Previous Papers</SelectItem>
+                <SelectItem value="All Units Resources">All Units Resources</SelectItem>
+                <SelectItem value="Additional Resources">Additional Resources</SelectItem>
               </SelectContent>
             </Select>
           </div>
