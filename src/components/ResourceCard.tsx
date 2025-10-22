@@ -15,12 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { UserRole } from "@/hooks/useUserRole";
 
 interface Resource {
@@ -73,16 +68,15 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   };
 
   const getYoutubeEmbedUrl = (url: string) => {
-    const videoId = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^&\n?#]+)/)?.[1];
+    const videoId = url.match(
+      /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^&\n?#]+)/,
+    )?.[1];
     return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
   };
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const { error } = await supabase
-      .from("resources")
-      .delete()
-      .eq("id", resource.id);
+    const { error } = await supabase.from("resources").delete().eq("id", resource.id);
 
     setIsDeleting(false);
     setShowDeleteDialog(false);
@@ -146,11 +140,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               </Button>
             )}
             {canDelete && (
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={() => setShowDeleteDialog(true)}
-              >
+              <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
                 <Trash2 className="w-4 h-4" />
               </Button>
             )}
@@ -170,11 +160,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
                 <span className="ml-1 uppercase text-xs">{resource.type}</span>
               </Badge>
               {canDelete && (
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => setShowDeleteDialog(true)}
-                >
+                <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               )}
@@ -199,20 +185,30 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   return (
     <>
       <Card className="shadow-card hover:shadow-hover transition-all border-border/50">
-        {viewMode === "list" ? (
-          <CardContent className="py-4">{renderContent()}</CardContent>
-        ) : (
-          renderContent()
-        )}
+        {viewMode === "list" ? <CardContent className="py-4">{renderContent()}</CardContent> : renderContent()}
       </Card>
 
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
+        {/* <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>{resource.title}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
             {renderResourceContent()}
+          </div>
+        </DialogContent> */}
+        <DialogContent className="w-[95vw] h-[95vh] p-0 overflow-hidden">
+          <DialogHeader className="p-4">
+            <DialogTitle className="truncate">{resource.title}</DialogTitle>
+          </DialogHeader>
+          <div className="flex justify-center items-center w-full h-full">
+            <iframe
+              src={resource.url}
+              className="w-[90%] h-[90%] rounded-lg border border-border"
+              title={resource.title}
+              style={{ border: "none" }}
+              allowFullScreen
+            />
           </div>
         </DialogContent>
       </Dialog>
