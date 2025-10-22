@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { UserRole } from "@/hooks/useUserRole";
 
 interface Resource {
   id: string;
@@ -28,6 +29,7 @@ interface Resource {
   type: "pdf" | "youtube" | "link";
   url: string;
   created_at: string;
+  created_by?: string | null;
   category?: string;
   unit_number?: number | null;
 }
@@ -35,14 +37,18 @@ interface Resource {
 interface ResourceCardProps {
   resource: Resource;
   viewMode: "list" | "expanded";
-  isContributor: boolean;
+  userRole: UserRole | null;
+  userId: string | null;
   onUpdate: () => void;
 }
 
-export default function ResourceCard({ resource, viewMode, isContributor, onUpdate }: ResourceCardProps) {
+export default function ResourceCard({ resource, viewMode, userRole, userId, onUpdate }: ResourceCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
+
+  // Admin can delete any resource, contributor can only delete their own
+  const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
 
   const getIcon = () => {
     switch (resource.type) {
@@ -139,7 +145,7 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
                 </a>
               </Button>
             )}
-            {isContributor && (
+            {canDelete && (
               <Button
                 size="sm"
                 variant="destructive"
@@ -163,7 +169,7 @@ export default function ResourceCard({ resource, viewMode, isContributor, onUpda
                 {getIcon()}
                 <span className="ml-1 uppercase text-xs">{resource.type}</span>
               </Badge>
-              {isContributor && (
+              {canDelete && (
                 <Button
                   size="sm"
                   variant="destructive"

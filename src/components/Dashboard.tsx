@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { GraduationCap, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
+import { useUserRole } from "@/hooks/useUserRole";
 
 interface Profile {
   department: string;
@@ -21,10 +22,10 @@ interface Subject {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { isContributor, userId, role, isLoading: roleLoading } = useUserRole();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
-  const [isContributor, setIsContributor] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,16 +65,6 @@ export default function Dashboard() {
       semester: profileData.semester,
     });
 
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", session.user.id);
-
-    const hasContributorRole = roles?.some(
-      (r) => r.role === "contributor" || r.role === "admin"
-    );
-    setIsContributor(hasContributorRole || false);
-
     setIsLoading(false);
   };
 
@@ -105,7 +96,7 @@ export default function Dashboard() {
     setIsDrawerOpen(true);
   };
 
-  if (isLoading) {
+  if (isLoading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -199,7 +190,8 @@ export default function Dashboard() {
           onOpenChange={setIsDrawerOpen}
           subjectId={selectedSubject.id}
           subjectName={selectedSubject.name}
-          isContributor={isContributor}
+          userRole={role}
+          userId={userId}
         />
       )}
 

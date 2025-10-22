@@ -17,6 +17,7 @@ import { List, LayoutGrid } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ResourceCard from "./ResourceCard";
+import { UserRole } from "@/hooks/useUserRole";
 
 interface Resource {
   id: string;
@@ -24,6 +25,7 @@ interface Resource {
   type: "pdf" | "youtube" | "link";
   url: string;
   created_at: string;
+  created_by: string | null;
   category: string;
   unit_number: number | null;
 }
@@ -33,7 +35,8 @@ interface SubjectDrawerProps {
   onOpenChange: (open: boolean) => void;
   subjectId: string;
   subjectName: string;
-  isContributor: boolean;
+  userRole: UserRole | null;
+  userId: string | null;
 }
 
 export default function SubjectDrawer({
@@ -41,7 +44,8 @@ export default function SubjectDrawer({
   onOpenChange,
   subjectId,
   subjectName,
-  isContributor,
+  userRole,
+  userId,
 }: SubjectDrawerProps) {
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("Syllabus");
@@ -56,7 +60,7 @@ export default function SubjectDrawer({
   const loadResources = async () => {
     const { data, error } = await supabase
       .from("resources")
-      .select("*")
+      .select("id, title, type, url, created_at, created_by, category, unit_number")
       .eq("subject_id", subjectId)
       .order("created_at", { ascending: false });
 
@@ -193,7 +197,8 @@ export default function SubjectDrawer({
                     key={resource.id}
                     resource={resource}
                     viewMode={viewMode}
-                    isContributor={isContributor}
+                    userRole={userRole}
+                    userId={userId}
                     onUpdate={loadResources}
                   />
                 ))}

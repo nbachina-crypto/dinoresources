@@ -30,7 +30,7 @@ export default function UploadResourceDialog({
   const [type, setType] = useState<"pdf" | "youtube" | "link">("pdf");
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
-  const [category, setCategory] = useState<string>("Syllabus");
+  const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers">("Syllabus");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,7 +138,7 @@ export default function UploadResourceDialog({
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Select value={category} onValueChange={setCategory} required>
+            <Select value={category} onValueChange={(v) => setCategory(v as typeof category)} required>
               <SelectTrigger id="category">
                 <SelectValue />
               </SelectTrigger>
