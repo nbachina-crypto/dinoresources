@@ -189,15 +189,13 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       </Card>
 
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        {/* <DialogContent className="max-w-4xl max-h-[90vh]">
+        <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>{resource.title}</DialogTitle>
           </DialogHeader>
-          <div className="mt-4">
-            {renderResourceContent()}
-          </div>
-        </DialogContent> */}
-        <DialogContent className="w-[95vw] h-[95vh] p-0 overflow-hidden">
+          <div className="mt-4">{renderResourceContent()}</div>
+        </DialogContent>
+        {/* <DialogContent className="w-[95vw] h-[95vh] p-0 overflow-hidden">
           <DialogHeader className="p-4">
             <DialogTitle className="truncate">{resource.title}</DialogTitle>
           </DialogHeader>
@@ -210,7 +208,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               allowFullScreen
             />
           </div>
-        </DialogContent>
+        </DialogContent> */}
       </Dialog>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
