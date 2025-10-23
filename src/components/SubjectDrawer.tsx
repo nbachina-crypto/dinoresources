@@ -85,36 +85,36 @@ export default function SubjectDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="h-[90vh]">
+      <DrawerContent className="h-[90vh] max-h-[90vh]">
         <DrawerHeader>
-          <DrawerTitle className="text-2xl">{subjectName}</DrawerTitle>
+          <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
         </DrawerHeader>
 
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Left Panel - Navigation */}
-          <div className="w-64 border-r border-border p-4 overflow-y-auto">
+          <div className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-y-auto touch-pan-y overscroll-contain">
             <nav className="space-y-1">
               <button
                 onClick={() => setSelectedCategory("Syllabus")}
-                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                   selectedCategory === "Syllabus"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 Syllabus
-                <Badge variant="secondary" className="ml-2">
+                <Badge variant="secondary" className="ml-2 text-xs">
                   {getResourcesByCategory("Syllabus").length}
                 </Badge>
               </button>
 
               <Accordion type="single" collapsible defaultValue="units">
                 <AccordionItem value="units" className="border-0">
-                  <AccordionTrigger className="px-4 py-2 hover:bg-accent rounded-lg hover:no-underline">
+                  <AccordionTrigger className="px-3 sm:px-4 py-2 hover:bg-accent rounded-lg hover:no-underline text-sm sm:text-base">
                     Units
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
-                    <div className="space-y-1 pl-4">
+                    <div className="space-y-1 pl-2 sm:pl-4">
                       {[1, 2, 3, 4, 5].map((unitNum) => {
                         const category = `Unit ${unitNum}`;
                         const count = getResourcesByCategory(category).length;
@@ -122,14 +122,14 @@ export default function SubjectDrawer({
                           <button
                             key={unitNum}
                             onClick={() => setSelectedCategory(category)}
-                            className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                            className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                               selectedCategory === category
                                 ? "bg-primary text-primary-foreground"
                                 : "hover:bg-accent"
                             }`}
                           >
                             Unit {unitNum}
-                            <Badge variant="secondary" className="ml-2">
+                            <Badge variant="secondary" className="ml-2 text-xs">
                               {count}
                             </Badge>
                           </button>
@@ -142,42 +142,42 @@ export default function SubjectDrawer({
 
               <button
                 onClick={() => setSelectedCategory("Previous Papers")}
-                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                   selectedCategory === "Previous Papers"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 PYQs
-                <Badge variant="secondary" className="ml-2">
+                <Badge variant="secondary" className="ml-2 text-xs">
                   {getResourcesByCategory("Previous Papers").length}
                 </Badge>
               </button>
 
               <button
                 onClick={() => setSelectedCategory("All Units Resources")}
-                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                   selectedCategory === "All Units Resources"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 All Units Resources
-                <Badge variant="secondary" className="ml-2">
+                <Badge variant="secondary" className="ml-2 text-xs">
                   {getResourcesByCategory("All Units Resources").length}
                 </Badge>
               </button>
 
               <button
                 onClick={() => setSelectedCategory("Additional Resources")}
-                className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                   selectedCategory === "Additional Resources"
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent"
                 }`}
               >
                 Additional Resources
-                <Badge variant="secondary" className="ml-2">
+                <Badge variant="secondary" className="ml-2 text-xs">
                   {getResourcesByCategory("Additional Resources").length}
                 </Badge>
               </button>
@@ -185,22 +185,22 @@ export default function SubjectDrawer({
           </div>
 
           {/* Right Panel - Resources */}
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold">
+          <div className="flex-1 p-3 sm:p-6 overflow-y-auto touch-pan-y overscroll-contain">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2">
+              <h3 className="text-lg sm:text-xl font-semibold">
                 {getCategoryLabel(selectedCategory)}
               </h3>
               <div className="flex gap-2">
                 <Button
                   variant={viewMode === "list" ? "default" : "outline"}
-                  size="icon"
+                  size="sm"
                   onClick={() => setViewMode("list")}
                 >
                   <List className="w-4 h-4" />
                 </Button>
                 <Button
                   variant={viewMode === "expanded" ? "default" : "outline"}
-                  size="icon"
+                  size="sm"
                   onClick={() => setViewMode("expanded")}
                 >
                   <LayoutGrid className="w-4 h-4" />
@@ -209,15 +209,15 @@ export default function SubjectDrawer({
             </div>
 
             {selectedResources.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-8 sm:py-12 text-sm sm:text-base text-muted-foreground">
                 No resources available in this section yet
               </div>
             ) : (
               <div
                 className={
                   viewMode === "list"
-                    ? "space-y-4"
-                    : "grid grid-cols-1 md:grid-cols-2 gap-4"
+                    ? "space-y-3 sm:space-y-4"
+                    : "grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
                 }
               >
                 {selectedResources.map((resource) => (

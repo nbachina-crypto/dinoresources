@@ -130,12 +130,12 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => navigate("/setup?edit=true")}>
+              <Button variant="outline" size="sm" className="hidden sm:flex" onClick={() => navigate("/setup?edit=true")}>
                 Edit Profile
               </Button>
-              <Button variant="outline" onClick={handleSignOut}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Sign Out</span>
               </Button>
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
           {/* Tab Navigation */}
-          <div className="grid grid-cols-2 gap-4 max-w-2xl">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-2xl">
             <Card
               className={`shadow-card border-border/50 cursor-pointer transition-all ${
                 activeTab === 'subjects' 
@@ -154,8 +154,8 @@ export default function Dashboard() {
               }`}
               onClick={() => setActiveTab('subjects')}
             >
-              <CardContent className="p-4 text-center">
-                <h3 className="font-semibold">Your Subjects</h3>
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="font-semibold text-sm sm:text-base">Your Subjects</h3>
               </CardContent>
             </Card>
 
@@ -167,8 +167,8 @@ export default function Dashboard() {
               }`}
               onClick={() => setActiveTab('announcements')}
             >
-              <CardContent className="p-4 text-center">
-                <h3 className="font-semibold">Announcements & Feedback</h3>
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="font-semibold text-sm sm:text-base">Announcements & Feedback</h3>
               </CardContent>
             </Card>
           </div>
@@ -176,15 +176,15 @@ export default function Dashboard() {
           {/* Subjects View */}
           {activeTab === 'subjects' && (
             <div className="animate-fade-in">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold">Your Subjects</h2>
-                  <p className="text-muted-foreground">
+                  <h2 className="text-xl sm:text-2xl font-bold">Your Subjects</h2>
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Click on a subject to view organized resources
                   </p>
                 </div>
                 {isContributor && (
-                  <Button onClick={() => setIsUploadDialogOpen(true)}>
+                  <Button onClick={() => setIsUploadDialogOpen(true)} size="sm" className="w-full sm:w-auto">
                     <Upload className="w-4 h-4 mr-2" />
                     Upload Resource
                   </Button>

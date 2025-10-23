@@ -116,26 +116,26 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const renderContent = () => {
     if (viewMode === "list") {
       return (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
             <Badge className={getTypeColor()}>
               {getIcon()}
               <span className="ml-1 uppercase text-xs">{resource.type}</span>
             </Badge>
-            <span className="font-medium truncate">{resource.title}</span>
+            <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2 shrink-0">
             {(resource.type === "pdf" || resource.type === "youtube") && (
               <Button size="sm" onClick={() => setShowViewDialog(true)}>
-                <Eye className="w-4 h-4 mr-1" />
-                View
+                <Eye className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">View</span>
               </Button>
             )}
             {resource.type === "link" && (
               <Button size="sm" asChild>
                 <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  Open
+                  <ExternalLink className="w-4 h-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Open</span>
                 </a>
               </Button>
             )}
@@ -153,8 +153,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       <>
         <CardHeader>
           <div className="flex items-start justify-between gap-2">
-            <CardTitle className="text-lg">{resource.title}</CardTitle>
-            <div className="flex gap-2">
+            <CardTitle className="text-base sm:text-lg break-words">{resource.title}</CardTitle>
+            <div className="flex gap-2 shrink-0">
               <Badge className={getTypeColor()}>
                 {getIcon()}
                 <span className="ml-1 uppercase text-xs">{resource.type}</span>
@@ -189,26 +189,12 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       </Card>
 
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
+        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] w-full">
           <DialogHeader>
-            <DialogTitle>{resource.title}</DialogTitle>
+            <DialogTitle className="text-base sm:text-lg break-words pr-8">{resource.title}</DialogTitle>
           </DialogHeader>
-          <div className="mt-4">{renderResourceContent()}</div>
+          <div className="mt-4 overflow-auto">{renderResourceContent()}</div>
         </DialogContent>
-        {/* <DialogContent className="w-[95vw] h-[95vh] p-0 overflow-hidden">
-          <DialogHeader className="p-4">
-            <DialogTitle className="truncate">{resource.title}</DialogTitle>
-          </DialogHeader>
-          <div className="flex justify-center items-center w-full h-full">
-            <iframe
-              src={resource.url}
-              className="w-[90%] h-[90%] rounded-lg border border-border"
-              title={resource.title}
-              style={{ border: "none" }}
-              allowFullScreen
-            />
-          </div>
-        </DialogContent> */}
       </Dialog>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
