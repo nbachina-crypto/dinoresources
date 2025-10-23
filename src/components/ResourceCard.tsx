@@ -89,27 +89,53 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     }
   };
 
+  // const renderResourceContent = () => {
+  //   if (resource.type === "pdf") {
+  //     return (
+  //       <iframe
+  //         src={resource.url}
+  //         className="w-full h-[600px] rounded-lg border border-border"
+  //         title={resource.title}
+  //       />
+  //     );
+  //   }
+  //   if (resource.type === "youtube") {
+  //     return (
+  //       <iframe
+  //         src={getYoutubeEmbedUrl(resource.url) || resource.url}
+  //         className="w-full h-[400px] rounded-lg"
+  //         title={resource.title}
+  //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  //         allowFullScreen
+  //       />
+  //     );
+  //   }
+  //   return null;
+  // };
+
   const renderResourceContent = () => {
     if (resource.type === "pdf") {
       return (
-        <iframe
-          src={resource.url}
-          className="w-full h-[600px] rounded-lg border border-border"
-          title={resource.title}
-        />
+        <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
+          <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
+        </div>
       );
     }
+
     if (resource.type === "youtube") {
       return (
-        <iframe
-          src={getYoutubeEmbedUrl(resource.url) || resource.url}
-          className="w-full h-[400px] rounded-lg"
-          title={resource.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+        <div className="w-full aspect-[16/9] overflow-hidden rounded-lg">
+          <iframe
+            src={getYoutubeEmbedUrl(resource.url) || resource.url}
+            className="w-full h-full"
+            title={resource.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
       );
     }
+
     return null;
   };
 
@@ -188,12 +214,22 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         {viewMode === "list" ? <CardContent className="py-4">{renderContent()}</CardContent> : renderContent()}
       </Card>
 
-      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+      {/* <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] w-full">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg break-words pr-8">{resource.title}</DialogTitle>
           </DialogHeader>
           <div className="mt-4 overflow-auto">{renderResourceContent()}</div>
+        </DialogContent>
+      </Dialog> */}
+      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+        <DialogContent className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words">
+              {resource.title}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">{renderResourceContent()}</div>
         </DialogContent>
       </Dialog>
 
