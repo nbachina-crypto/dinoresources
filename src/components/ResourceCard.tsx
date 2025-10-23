@@ -41,6 +41,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
+  const [iframeInteractive, setIframeInteractive] = useState(false);
 
   // Admin can delete any resource, contributor can only delete their own
   const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
@@ -92,22 +93,64 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const renderResourceContent = () => {
     if (resource.type === "pdf") {
       return (
-        <iframe
-          src={resource.url}
-          className="w-full h-[600px] rounded-lg border border-border"
-          title={resource.title}
-        />
+        <div className="relative">
+          <iframe
+            src={resource.url}
+            className="w-full h-[600px] rounded-lg border border-border"
+            title={resource.title}
+            style={{ pointerEvents: iframeInteractive ? 'auto' : 'none' }}
+          />
+          {!iframeInteractive && (
+            <button
+              onClick={() => setIframeInteractive(true)}
+              aria-label="Enable interaction with embedded content"
+              className="absolute top-4 right-4 bg-background/90 hover:bg-background text-foreground px-4 py-2 rounded-lg shadow-lg border border-border transition-opacity text-sm font-medium"
+            >
+              Tap to interact
+            </button>
+          )}
+          {iframeInteractive && (
+            <button
+              onClick={() => setIframeInteractive(false)}
+              aria-label="Disable interaction with embedded content"
+              className="absolute top-4 right-4 bg-background/90 hover:bg-background text-foreground px-4 py-2 rounded-lg shadow-lg border border-border transition-opacity text-sm font-medium"
+            >
+              Done
+            </button>
+          )}
+        </div>
       );
     }
     if (resource.type === "youtube") {
       return (
-        <iframe
-          src={getYoutubeEmbedUrl(resource.url) || resource.url}
-          className="w-full h-[400px] rounded-lg"
-          title={resource.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+        <div className="relative">
+          <iframe
+            src={getYoutubeEmbedUrl(resource.url) || resource.url}
+            className="w-full h-[400px] rounded-lg"
+            title={resource.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ pointerEvents: iframeInteractive ? 'auto' : 'none' }}
+          />
+          {!iframeInteractive && (
+            <button
+              onClick={() => setIframeInteractive(true)}
+              aria-label="Enable interaction with embedded content"
+              className="absolute top-4 right-4 bg-background/90 hover:bg-background text-foreground px-4 py-2 rounded-lg shadow-lg border border-border transition-opacity text-sm font-medium"
+            >
+              Tap to interact
+            </button>
+          )}
+          {iframeInteractive && (
+            <button
+              onClick={() => setIframeInteractive(false)}
+              aria-label="Disable interaction with embedded content"
+              className="absolute top-4 right-4 bg-background/90 hover:bg-background text-foreground px-4 py-2 rounded-lg shadow-lg border border-border transition-opacity text-sm font-medium"
+            >
+              Done
+            </button>
+          )}
+        </div>
       );
     }
     return null;
@@ -188,12 +231,17 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         {viewMode === "list" ? <CardContent className="py-4">{renderContent()}</CardContent> : renderContent()}
       </Card>
 
-      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] w-full">
+      <Dialog open={showViewDialog} onOpenChange={(open) => {
+        setShowViewDialog(open);
+        if (!open) setIframeInteractive(false);
+      }}>
+        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[95vh] w-full">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg break-words pr-8">{resource.title}</DialogTitle>
           </DialogHeader>
-          <div className="mt-4 overflow-auto">{renderResourceContent()}</div>
+          <div className="mt-4 overflow-y-auto max-h-[80vh]" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
+            {renderResourceContent()}
+          </div>
         </DialogContent>
       </Dialog>
 
