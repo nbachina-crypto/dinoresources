@@ -10,9 +10,9 @@ import { GraduationCap } from "lucide-react";
 
 const DEPARTMENTS = [
   "CSE",
-  "CSE(AI&ML)",
-  "CSE(Cyber Security)",
-  "CSE(Data Science)",
+  "CSE (AI&ML)",
+  "CSE (Cyber Security)",
+  "CSE (Data Science)",
   "ECE",
   "Electronics",
   "Mechanical Engineering",
