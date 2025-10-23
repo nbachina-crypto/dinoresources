@@ -8,6 +8,7 @@ import { GraduationCap, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
 import { useUserRole } from "@/hooks/useUserRole";
+import { AnnouncementsSection } from "./AnnouncementsSection";
 
 interface Profile {
   department: string;
@@ -141,47 +142,55 @@ export default function Dashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold">Your Subjects</h2>
-            <p className="text-muted-foreground">
-              Click on a subject to view organized resources
-            </p>
-          </div>
-          {isContributor && (
-            <Button onClick={() => setIsUploadDialogOpen(true)}>
-              <Upload className="w-4 h-4 mr-2" />
-              Upload Resource
-            </Button>
-          )}
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Your Subjects</h2>
+                <p className="text-muted-foreground">
+                  Click on a subject to view organized resources
+                </p>
+              </div>
+              {isContributor && (
+                <Button onClick={() => setIsUploadDialogOpen(true)}>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Resource
+                </Button>
+              )}
+            </div>
 
-        {subjects.length === 0 ? (
-          <Card className="shadow-card border-border/50">
-            <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground">
-                No subjects found for your course. Contact your administrator.
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {subjects.map((subject) => (
-              <Card
-                key={subject.id}
-                className="shadow-card border-border/50 hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => handleSubjectClick(subject)}
-              >
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold">{subject.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Click to view resources
+            {subjects.length === 0 ? (
+              <Card className="shadow-card border-border/50">
+                <CardContent className="py-12 text-center">
+                  <p className="text-muted-foreground">
+                    No subjects found for your course. Contact your administrator.
                   </p>
                 </CardContent>
               </Card>
-            ))}
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {subjects.map((subject) => (
+                  <Card
+                    key={subject.id}
+                    className="shadow-card border-border/50 hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => handleSubjectClick(subject)}
+                  >
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold">{subject.name}</h3>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Click to view resources
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+
+          <div className="lg:col-span-1">
+            <AnnouncementsSection isAdmin={role === "admin"} />
+          </div>
+        </div>
       </main>
 
       {selectedSubject && (
