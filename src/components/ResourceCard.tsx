@@ -190,16 +190,16 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
       </div>
 
-      <div
+      {/* <div
         className="flex gap-1 sm:gap-2 shrink-0"
         onClick={(e) => e.stopPropagation()} // prevents triggering dialog when clicking buttons
       >
-        {/* /* {(resource.type === "pdf" || resource.type === "youtube") && (
+        {(resource.type === "pdf" || resource.type === "youtube") && (
           <Button size="sm" onClick={() => setShowViewDialog(true)}>
             <Eye className="w-4 h-4 sm:mr-1" />
             <span className="hidden sm:inline">View</span>
           </Button>
-        )} */ */}
+        )}
         {resource.type === "link" && (
           <Button size="sm" asChild>
             <a href={resource.url} target="_blank" rel="noopener noreferrer">
@@ -213,7 +213,31 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
             <Trash2 className="w-4 h-4" />
           </Button>
         )}
-      </div>
+      </div> */}
+<div
+  className="flex gap-1 sm:gap-2 shrink-0"
+  onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
+>
+  {resource.type === "link" && (
+    <Button size="sm" asChild>
+      <a href={resource.url} target="_blank" rel="noopener noreferrer">
+        <ExternalLink className="w-4 h-4 sm:mr-1" />
+        <span className="hidden sm:inline">Open</span>
+      </a>
+    </Button>
+  )}
+  {canDelete && (
+    <Button
+      size="sm"
+      variant="destructive"
+      onClick={() => setShowDeleteDialog(true)}
+    >
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  )}
+</div>
+
+           
     </div>
       );
     }
