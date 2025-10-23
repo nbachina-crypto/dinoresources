@@ -92,7 +92,7 @@ export default function SubjectDrawer({
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Left Panel - Navigation */}
-          <div className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-y-auto touch-pan-y overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
+          <div className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-y-auto touch-pan-y overscroll-contain">
             <nav className="space-y-1">
               <button
                 onClick={() => setSelectedCategory("Syllabus")}
@@ -185,7 +185,7 @@ export default function SubjectDrawer({
           </div>
 
           {/* Right Panel - Resources */}
-          <div className="flex-1 p-3 sm:p-6 overflow-y-auto touch-pan-y overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
+          <div className="flex-1 p-3 sm:p-6 overflow-y-auto touch-pan-y overscroll-contain">
             <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2">
               <h3 className="text-lg sm:text-xl font-semibold">
                 {getCategoryLabel(selectedCategory)}
