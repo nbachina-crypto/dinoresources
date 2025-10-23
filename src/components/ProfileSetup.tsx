@@ -9,13 +9,13 @@ import { toast } from "sonner";
 import { GraduationCap } from "lucide-react";
 
 const DEPARTMENTS = [
-  "Computer Science",
+  "CSE",
+  "CSE(AI&ML)",
+  "CSE(Cyber Security)",
+  "CSE(Data Science)"
+  "ECE",
   "Electronics",
-  "Mechanical",
-  "Civil",
-  "Electrical",
-  "Chemical",
-  "Information Technology",
+  "Mechanical Engineering",
   "Biotechnology",
 ];
 
