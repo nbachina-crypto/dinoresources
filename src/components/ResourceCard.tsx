@@ -140,42 +140,39 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   };
 
   const renderContent = () => {
-    // if (viewMode === "list") {
-    //   return (
-    //     <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
-    //       <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-    //         <Badge className={getTypeColor()}>
-    //           {getIcon()}
-    //           <span className="ml-1 uppercase text-xs">{resource.type}</span>
-    //         </Badge>
-    //         <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
-    //       </div>
-    //       <div className="flex gap-1 sm:gap-2 shrink-0">
-    //         {(resource.type === "pdf" || resource.type === "youtube") && (
-    //           <Button size="sm" onClick={() => setShowViewDialog(true)}>
-    //             <Eye className="w-4 h-4 sm:mr-1" />
-    //             <span className="hidden sm:inline">View</span>
-    //           </Button>
-    //         )}
-    //         {resource.type === "link" && (
-    //           <Button size="sm" asChild>
-    //             <a href={resource.url} target="_blank" rel="noopener noreferrer">
-    //               <ExternalLink className="w-4 h-4 sm:mr-1" />
-    //               <span className="hidden sm:inline">Open</span>
-    //             </a>
-    //           </Button>
-    //         )}
-    //         {canDelete && (
-    //           <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
-    //             <Trash2 className="w-4 h-4" />
-    //           </Button>
-    //         )}
-    //       </div>
-    //     </div>
-    //   );
     if (viewMode === "list") {
-  return (
-    <div
+      return (
+        // <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+        //   <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+        //     <Badge className={getTypeColor()}>
+        //       {getIcon()}
+        //       <span className="ml-1 uppercase text-xs">{resource.type}</span>
+        //     </Badge>
+        //     <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
+        //   </div>
+        //   <div className="flex gap-1 sm:gap-2 shrink-0">
+        //     {(resource.type === "pdf" || resource.type === "youtube") && (
+        //       <Button size="sm" onClick={() => setShowViewDialog(true)}>
+        //         <Eye className="w-4 h-4 sm:mr-1" />
+        //         <span className="hidden sm:inline">View</span>
+        //       </Button>
+        //     )}
+        //     {resource.type === "link" && (
+        //       <Button size="sm" asChild>
+        //         <a href={resource.url} target="_blank" rel="noopener noreferrer">
+        //           <ExternalLink className="w-4 h-4 sm:mr-1" />
+        //           <span className="hidden sm:inline">Open</span>
+        //         </a>
+        //       </Button>
+        //     )}
+        //     {canDelete && (
+        //       <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
+        //         <Trash2 className="w-4 h-4" />
+        //       </Button>
+        //     )}
+        //   </div>
+        // </div>
+         <div
       className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap cursor-pointer hover:bg-accent/50 rounded-lg px-2 sm:px-3 py-2 transition-colors"
       onClick={() => {
         if (resource.type === "pdf" || resource.type === "youtube") {
@@ -218,9 +215,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         )}
       </div>
     </div>
-  );
-}
-
+      );
     }
 
     return (
