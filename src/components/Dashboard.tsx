@@ -30,6 +30,7 @@ export default function Dashboard() {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'subjects' | 'announcements'>('subjects');
 
   useEffect(() => {
     checkAuth();
@@ -142,54 +143,90 @@ export default function Dashboard() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold">Your Subjects</h2>
-                <p className="text-muted-foreground">
-                  Click on a subject to view organized resources
-                </p>
+        <div className="space-y-6">
+          {/* Tab Navigation */}
+          <div className="grid grid-cols-2 gap-4 max-w-2xl">
+            <Card
+              className={`shadow-card border-border/50 cursor-pointer transition-all ${
+                activeTab === 'subjects' 
+                  ? 'ring-2 ring-primary bg-primary/5' 
+                  : 'hover:shadow-lg'
+              }`}
+              onClick={() => setActiveTab('subjects')}
+            >
+              <CardContent className="p-4 text-center">
+                <h3 className="font-semibold">Your Subjects</h3>
+              </CardContent>
+            </Card>
+
+            <Card
+              className={`shadow-card border-border/50 cursor-pointer transition-all ${
+                activeTab === 'announcements' 
+                  ? 'ring-2 ring-primary bg-primary/5' 
+                  : 'hover:shadow-lg'
+              }`}
+              onClick={() => setActiveTab('announcements')}
+            >
+              <CardContent className="p-4 text-center">
+                <h3 className="font-semibold">Announcements & Feedback</h3>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Subjects View */}
+          {activeTab === 'subjects' && (
+            <div className="animate-fade-in">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold">Your Subjects</h2>
+                  <p className="text-muted-foreground">
+                    Click on a subject to view organized resources
+                  </p>
+                </div>
+                {isContributor && (
+                  <Button onClick={() => setIsUploadDialogOpen(true)}>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Resource
+                  </Button>
+                )}
               </div>
-              {isContributor && (
-                <Button onClick={() => setIsUploadDialogOpen(true)}>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload Resource
-                </Button>
+
+              {subjects.length === 0 ? (
+                <Card className="shadow-card border-border/50">
+                  <CardContent className="py-12 text-center">
+                    <p className="text-muted-foreground">
+                      No subjects found for your course. Contact your administrator.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {subjects.map((subject) => (
+                    <Card
+                      key={subject.id}
+                      className="shadow-card border-border/50 hover:shadow-lg transition-shadow cursor-pointer"
+                      onClick={() => handleSubjectClick(subject)}
+                    >
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-semibold">{subject.name}</h3>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Click to view resources
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               )}
             </div>
+          )}
 
-            {subjects.length === 0 ? (
-              <Card className="shadow-card border-border/50">
-                <CardContent className="py-12 text-center">
-                  <p className="text-muted-foreground">
-                    No subjects found for your course. Contact your administrator.
-                  </p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {subjects.map((subject) => (
-                  <Card
-                    key={subject.id}
-                    className="shadow-card border-border/50 hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => handleSubjectClick(subject)}
-                  >
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold">{subject.name}</h3>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Click to view resources
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="lg:col-span-1">
-            <AnnouncementsSection isAdmin={role === "admin"} />
-          </div>
+          {/* Announcements View */}
+          {activeTab === 'announcements' && (
+            <div className="animate-fade-in max-w-4xl">
+              <h2 className="text-2xl font-bold mb-6">Announcements & Feedback</h2>
+              <AnnouncementsSection isAdmin={role === "admin"} />
+            </div>
+          )}
         </div>
       </main>
 
