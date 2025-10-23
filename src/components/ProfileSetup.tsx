@@ -12,7 +12,7 @@ const DEPARTMENTS = [
   "CSE",
   "CSE(AI&ML)",
   "CSE(Cyber Security)",
-  "CSE(Data Science)"
+  "CSE(Data Science)",
   "ECE",
   "Electronics",
   "Mechanical Engineering",
@@ -36,14 +36,12 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
   }, []);
 
   const loadCurrentProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { data } = await supabase
-      .from("profiles")
-      .select("department, semester")
-      .eq("id", user.id)
-      .single();
+    const { data } = await supabase.from("profiles").select("department, semester").eq("id", user.id).single();
 
     if (data) {
       setDepartment(data.department || "");
@@ -56,7 +54,9 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
     e.preventDefault();
     setIsLoading(true);
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     if (!user) {
       toast.error("Not authenticated");
@@ -103,9 +103,7 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
             </div>
           </div>
           <CardTitle className="text-2xl">Complete Your Profile</CardTitle>
-          <CardDescription>
-            Tell us about your course to personalize your experience
-          </CardDescription>
+          <CardDescription>Tell us about your course to personalize your experience</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -141,11 +139,7 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
               </Select>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading || !department || !semester}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading || !department || !semester}>
               {isLoading ? "Saving..." : "Continue to Dashboard"}
             </Button>
           </form>
