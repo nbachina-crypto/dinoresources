@@ -194,14 +194,12 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         className="flex gap-1 sm:gap-2 shrink-0"
         onClick={(e) => e.stopPropagation()} // prevents triggering dialog when clicking buttons
       >
-        
         {/* /* {(resource.type === "pdf" || resource.type === "youtube") && (
           <Button size="sm" onClick={() => setShowViewDialog(true)}>
             <Eye className="w-4 h-4 sm:mr-1" />
             <span className="hidden sm:inline">View</span>
           </Button>
         )} */ */}
-        
         {resource.type === "link" && (
           <Button size="sm" asChild>
             <a href={resource.url} target="_blank" rel="noopener noreferrer">
