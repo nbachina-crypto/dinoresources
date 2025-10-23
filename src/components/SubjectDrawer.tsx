@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { List, LayoutGrid } from "lucide-react";
@@ -85,21 +75,29 @@ export default function SubjectDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="h-[90vh] max-h-[90vh]">
+      {/* <DrawerContent className="h-[90vh] max-h-[90vh]"> */}
+      <DrawerContent
+        className="h-[90vh] max-h-[90vh] overflow-hidden"
+        style={{ touchAction: "manipulation" }}
+        onTouchMove={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
+      >
         <DrawerHeader>
           <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
         </DrawerHeader>
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Left Panel - Navigation */}
-          <div className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-y-auto touch-pan-y overscroll-contain">
+          {/* <div className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-y-auto touch-pan-y overscroll-contain"> */}
+          <div
+            className="w-full md:w-64 border-r border-border p-3 sm:p-4 overflow-auto touch-pan-y touch-pan-x overscroll-contain"
+            style={{ touchAction: "pan-x pan-y pinch-zoom" }}
+          >
             <nav className="space-y-1">
               <button
                 onClick={() => setSelectedCategory("Syllabus")}
                 className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
-                  selectedCategory === "Syllabus"
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent"
+                  selectedCategory === "Syllabus" ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                 }`}
               >
                 Syllabus
@@ -123,9 +121,7 @@ export default function SubjectDrawer({
                             key={unitNum}
                             onClick={() => setSelectedCategory(category)}
                             className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
-                              selectedCategory === category
-                                ? "bg-primary text-primary-foreground"
-                                : "hover:bg-accent"
+                              selectedCategory === category ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                             }`}
                           >
                             Unit {unitNum}
@@ -143,9 +139,7 @@ export default function SubjectDrawer({
               <button
                 onClick={() => setSelectedCategory("Previous Papers")}
                 className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
-                  selectedCategory === "Previous Papers"
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent"
+                  selectedCategory === "Previous Papers" ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                 }`}
               >
                 PYQs
@@ -157,9 +151,7 @@ export default function SubjectDrawer({
               <button
                 onClick={() => setSelectedCategory("All Units Resources")}
                 className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
-                  selectedCategory === "All Units Resources"
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent"
+                  selectedCategory === "All Units Resources" ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                 }`}
               >
                 All Units Resources
@@ -171,9 +163,7 @@ export default function SubjectDrawer({
               <button
                 onClick={() => setSelectedCategory("Additional Resources")}
                 className={`w-full text-left px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
-                  selectedCategory === "Additional Resources"
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent"
+                  selectedCategory === "Additional Resources" ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                 }`}
               >
                 Additional Resources
@@ -185,11 +175,15 @@ export default function SubjectDrawer({
           </div>
 
           {/* Right Panel - Resources */}
-          <div className="flex-1 p-3 sm:p-6 overflow-y-auto touch-pan-y overscroll-contain">
+          {/* <div className="flex-1 p-3 sm:p-6 overflow-y-auto touch-pan-y overscroll-contain">
+           */}
+
+          <div
+            className="flex-1 p-3 sm:p-6 overflow-auto touch-pan-y touch-pan-x overscroll-contain"
+            style={{ touchAction: "pan-x pan-y pinch-zoom" }}
+          >
             <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2">
-              <h3 className="text-lg sm:text-xl font-semibold">
-                {getCategoryLabel(selectedCategory)}
-              </h3>
+              <h3 className="text-lg sm:text-xl font-semibold">{getCategoryLabel(selectedCategory)}</h3>
               <div className="flex gap-2">
                 <Button
                   variant={viewMode === "list" ? "default" : "outline"}
@@ -215,9 +209,7 @@ export default function SubjectDrawer({
             ) : (
               <div
                 className={
-                  viewMode === "list"
-                    ? "space-y-3 sm:space-y-4"
-                    : "grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
+                  viewMode === "list" ? "space-y-3 sm:space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
                 }
               >
                 {selectedResources.map((resource) => (
