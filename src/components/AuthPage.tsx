@@ -169,22 +169,7 @@ function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="role">Account Type</Label>
-            <Select
-              value={formData.role}
-              onValueChange={(value) => handleInputChange('role', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select account type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="student">Student</SelectItem>
-                <SelectItem value="contributor">Contributor</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <input type="hidden" name="role" value="student" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -211,28 +196,16 @@ function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="password">Password *</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleInputChange('password', e.target.value)}
-                placeholder="Create a password"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
-                id="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                placeholder="Enter your phone number"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password *</Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
+              placeholder="Create a password"
+              required
+            />
           </div>
 
           {formData.role === 'student' && (
@@ -257,35 +230,6 @@ function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
                     onChange={(e) => handleInputChange('department', e.target.value)}
                     placeholder="Enter department"
                   />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="college">College *</Label>
-                <div className="flex space-x-2">
-                  <Select
-                    value={formData.collegeId}
-                    onValueChange={(value) => handleInputChange('collegeId', value)}
-                    disabled={loading.colleges}
-                  >
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select college" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {colleges.map((college) => (
-                        <SelectItem key={college.id} value={college.id}>
-                          {college.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowCustomCollege(true)}
-                  >
-                    Add Custom
-                  </Button>
                 </div>
               </div>
 
@@ -333,19 +277,6 @@ function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
             </>
           )}
 
-          {(formData.role === 'admin' || formData.role === 'contributor') && (
-            <div className="space-y-2">
-              <Label htmlFor="secretCode">Secret Code *</Label>
-              <Input
-                id="secretCode"
-                value={formData.secretCode}
-                onChange={(e) => handleInputChange('secretCode', e.target.value)}
-                placeholder="Enter secret code"
-                required
-              />
-            </div>
-          )}
-
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Creating account...' : 'Create Account'}
           </Button>
@@ -362,39 +293,6 @@ function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
             </Button>
           </div>
         </form>
-
-        {showCustomCollege && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md">
-              <CardHeader>
-                <CardTitle>Add Custom College</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="customCollege">College Name</Label>
-                  <Input
-                    id="customCollege"
-                    value={formData.customCollege}
-                    onChange={(e) => handleInputChange('customCollege', e.target.value)}
-                    placeholder="Enter college name"
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <Button onClick={handleAddCustomCollege} className="flex-1">
-                    Add College
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowCustomCollege(false)}
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
