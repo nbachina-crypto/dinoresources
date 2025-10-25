@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Upload, X } from "lucide-react";
 
 interface Subject {
   id: string;
@@ -31,6 +32,51 @@ export default function UploadResourceDialog({
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers" | "All Units Resources" | "Additional Resources">("Syllabus");
+  const [uploadMode, setUploadMode] = useState<"url" | "file">("url");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  };
+
+  const handleFileSelect = (file: File) => {
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    const allowedTypes = ['application/pdf', 'video/mp4', 'video/webm'];
+    
+    if (file.size > maxSize) {
+      toast.error("File size must be less than 50MB");
+      return;
+    }
+    
+    if (!allowedTypes.includes(file.type) && !file.type.startsWith('video/')) {
+      toast.error("Only PDF and video files are supported");
+      return;
+    }
+    
+    setSelectedFile(file);
+    setUploadMode("file");
+    if (!title) {
+      setTitle(file.name.replace(/\.[^/.]+$/, ""));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,13 +86,37 @@ export default function UploadResourceDialog({
 
     if (!user) {
       toast.error("Not authenticated");
+      setIsLoading(false);
       return;
+    }
+
+    let resourceUrl = url;
+
+    if (uploadMode === "file" && selectedFile) {
+      const fileExt = selectedFile.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError, data } = await supabase.storage
+        .from('resources')
+        .upload(fileName, selectedFile);
+
+      if (uploadError) {
+        toast.error("Failed to upload file");
+        setIsLoading(false);
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('resources')
+        .getPublicUrl(fileName);
+
+      resourceUrl = publicUrl;
     }
 
     const { error } = await supabase.from("resources").insert({
       title,
       type,
-      url,
+      url: resourceUrl,
       subject_id: subjectId,
       created_by: user.id,
       category,
@@ -62,6 +132,8 @@ export default function UploadResourceDialog({
       setUrl("");
       setSubjectId("");
       setCategory("Syllabus");
+      setSelectedFile(null);
+      setUploadMode("url");
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -73,10 +145,32 @@ export default function UploadResourceDialog({
         <DialogHeader>
           <DialogTitle>Upload Resource</DialogTitle>
           <DialogDescription>
-            Add a new resource for students to access. All fields are required.
+            Add a new resource by uploading a file or providing a link.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label>Upload Method</Label>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant={uploadMode === "file" ? "default" : "outline"}
+                onClick={() => setUploadMode("file")}
+                className="flex-1"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                File Upload
+              </Button>
+              <Button
+                type="button"
+                variant={uploadMode === "url" ? "default" : "outline"}
+                onClick={() => setUploadMode("url")}
+                className="flex-1"
+              >
+                URL Link
+              </Button>
+            </div>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="subject">Subject</Label>
             <Select value={subjectId} onValueChange={setSubjectId} required>
@@ -118,23 +212,74 @@ export default function UploadResourceDialog({
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="url">URL</Label>
-            <Input
-              id="url"
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder={
-                type === "pdf"
-                  ? "https://example.com/file.pdf"
-                  : type === "youtube"
-                  ? "https://youtube.com/watch?v=..."
-                  : "https://example.com"
-              }
-              required
-            />
-          </div>
+          {uploadMode === "file" ? (
+            <div className="space-y-2">
+              <Label>File Upload</Label>
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                  isDragging
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/50"
+                }`}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,video/*"
+                  onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
+                  className="hidden"
+                />
+                {selectedFile ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-sm">{selectedFile.name}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFile(null);
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      Drag & drop a file here, or click to browse
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      PDF or Video files, max 50MB
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Label htmlFor="url">URL</Label>
+              <Input
+                id="url"
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder={
+                  type === "pdf"
+                    ? "https://example.com/file.pdf"
+                    : type === "youtube"
+                    ? "https://youtube.com/watch?v=..."
+                    : "https://example.com"
+                }
+                required={uploadMode === "url"}
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
@@ -160,7 +305,16 @@ export default function UploadResourceDialog({
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !title || !url || !subjectId}>
+            <Button 
+              type="submit" 
+              disabled={
+                isLoading || 
+                !title || 
+                !subjectId || 
+                (uploadMode === "url" && !url) ||
+                (uploadMode === "file" && !selectedFile)
+              }
+            >
               {isLoading ? "Uploading..." : "Upload"}
             </Button>
           </div>
