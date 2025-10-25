@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,8 @@ import { Upload, X } from "lucide-react";
 interface Subject {
   id: string;
   name: string;
+  department: string;
+  semester: number;
 }
 
 interface UploadResourceDialogProps {
@@ -19,6 +21,17 @@ interface UploadResourceDialogProps {
   subjects: Subject[];
   onResourceUploaded: () => void;
 }
+
+const DEPARTMENTS = [
+  "Computer Science",
+  "Information Technology",
+  "Electronics",
+  "Mechanical",
+  "Civil",
+  "Electrical",
+];
+
+const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export default function UploadResourceDialog({
   open,
@@ -35,7 +48,35 @@ export default function UploadResourceDialog({
   const [uploadMode, setUploadMode] = useState<"url" | "file">("url");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState("");
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectedDepartment && selectedSemester) {
+      loadSubjects();
+    } else {
+      setFilteredSubjects([]);
+      setSubjectId("");
+    }
+  }, [selectedDepartment, selectedSemester]);
+
+  const loadSubjects = async () => {
+    const { data, error } = await supabase
+      .from("subjects")
+      .select("*")
+      .eq("department", selectedDepartment)
+      .eq("semester", parseInt(selectedSemester))
+      .order("name");
+
+    if (error) {
+      toast.error("Failed to load subjects");
+      return;
+    }
+
+    setFilteredSubjects(data || []);
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -134,6 +175,9 @@ export default function UploadResourceDialog({
       setCategory("Syllabus");
       setSelectedFile(null);
       setUploadMode("url");
+      setSelectedDepartment("");
+      setSelectedSemester("");
+      setFilteredSubjects([]);
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -171,14 +215,58 @@ export default function UploadResourceDialog({
               </Button>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="department">Department</Label>
+              <Select value={selectedDepartment} onValueChange={setSelectedDepartment} required>
+                <SelectTrigger id="department">
+                  <SelectValue placeholder="Select department" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DEPARTMENTS.map((dept) => (
+                    <SelectItem key={dept} value={dept}>
+                      {dept}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="semester">Semester</Label>
+              <Select value={selectedSemester} onValueChange={setSelectedSemester} required>
+                <SelectTrigger id="semester">
+                  <SelectValue placeholder="Select semester" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SEMESTERS.map((sem) => (
+                    <SelectItem key={sem} value={sem.toString()}>
+                      Semester {sem}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="subject">Subject</Label>
-            <Select value={subjectId} onValueChange={setSubjectId} required>
+            <Select 
+              value={subjectId} 
+              onValueChange={setSubjectId} 
+              required
+              disabled={!selectedDepartment || !selectedSemester}
+            >
               <SelectTrigger id="subject">
-                <SelectValue placeholder="Select subject" />
+                <SelectValue placeholder={
+                  !selectedDepartment || !selectedSemester 
+                    ? "Select department and semester first" 
+                    : "Select subject"
+                } />
               </SelectTrigger>
               <SelectContent>
-                {subjects.map((subject) => (
+                {filteredSubjects.map((subject) => (
                   <SelectItem key={subject.id} value={subject.id}>
                     {subject.name}
                   </SelectItem>
