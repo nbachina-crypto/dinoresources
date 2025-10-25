@@ -3,7 +3,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { List, LayoutGrid, ArrowLeft } from "lucide-react";
+import { List, LayoutGrid } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ResourceCard from "./ResourceCard";
@@ -83,17 +83,7 @@ export default function SubjectDrawer({
         onWheel={(e) => e.stopPropagation()}
       >
         <DrawerHeader>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="shrink-0"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
-          </div>
+          <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
         </DrawerHeader>
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">

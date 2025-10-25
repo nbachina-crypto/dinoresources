@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye, Maximize2, Minimize2 } from "lucide-react";
+import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -41,7 +41,6 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Admin can delete any resource, contributor can only delete their own
   const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
@@ -191,14 +190,14 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
       </div>
 
-      <div
+      {/* <div
         className="flex gap-1 sm:gap-2 shrink-0"
-        onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
+        onClick={(e) => e.stopPropagation()} // prevents triggering dialog when clicking buttons
       >
         {(resource.type === "pdf" || resource.type === "youtube") && (
-          <Button size="sm" variant="outline" onClick={() => setShowViewDialog(true)}>
+          <Button size="sm" onClick={() => setShowViewDialog(true)}>
             <Eye className="w-4 h-4 sm:mr-1" />
-            <span className="hidden sm:inline">Preview</span>
+            <span className="hidden sm:inline">View</span>
           </Button>
         )}
         {resource.type === "link" && (
@@ -210,15 +209,33 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           </Button>
         )}
         {canDelete && (
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => setShowDeleteDialog(true)}
-          >
+          <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
             <Trash2 className="w-4 h-4" />
           </Button>
         )}
-      </div>
+      </div> */}
+<div
+  className="flex gap-1 sm:gap-2 shrink-0"
+  onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
+>
+  {resource.type === "link" && (
+    <Button size="sm" asChild>
+      <a href={resource.url} target="_blank" rel="noopener noreferrer">
+        <ExternalLink className="w-4 h-4 sm:mr-1" />
+        <span className="hidden sm:inline">Open</span>
+      </a>
+    </Button>
+  )}
+  {canDelete && (
+    <Button
+      size="sm"
+      variant="destructive"
+      onClick={() => setShowDeleteDialog(true)}
+    >
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  )}
+</div>
 
            
     </div>
@@ -273,25 +290,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         </DialogContent>
       </Dialog> */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className={`${
-          isFullscreen 
-            ? "w-[98vw] h-[98vh] max-w-none" 
-            : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh]"
-        } overflow-y-auto p-4 rounded-xl`}>
+        <DialogContent className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl">
           <DialogHeader>
-            <div className="flex items-center justify-between gap-2">
-              <DialogTitle className="text-center flex-1 text-base sm:text-lg font-semibold break-words">
-                {resource.title}
-              </DialogTitle>
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => setIsFullscreen(!isFullscreen)}
-                className="shrink-0"
-              >
-                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-              </Button>
-            </div>
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words">
+              {resource.title}
+            </DialogTitle>
           </DialogHeader>
           <div className="mt-4">{renderResourceContent()}</div>
         </DialogContent>

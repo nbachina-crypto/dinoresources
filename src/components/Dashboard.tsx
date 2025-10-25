@@ -18,8 +18,6 @@ interface Profile {
 interface Subject {
   id: string;
   name: string;
-  department: string;
-  semester: number;
 }
 
 
