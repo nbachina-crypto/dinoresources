@@ -1,18 +1,18 @@
-```typescript
-// SignIn Page Code
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuthFlow, SignInData } from '@/hooks/useAuthFlow';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAuthFlow, SignInData, SignUpData } from '@/hooks/useAuthFlow';
+import { useContributorData } from '@/hooks/useContributorData';
 
 interface SignInFormProps {
   onSwitchToSignUp: () => void;
   onSwitchToForgotPassword: () => void;
 }
 
-export function SignInForm({ onSwitchToSignUp, onSwitchToForgotPassword }: SignInFormProps) {
+function SignInForm({ onSwitchToSignUp, onSwitchToForgotPassword }: SignInFormProps) {
   const { handleSignIn, isLoading } = useAuthFlow();
   const [formData, setFormData] = useState<SignInData>({
     email: '',
@@ -21,10 +21,7 @@ export function SignInForm({ onSwitchToSignUp, onSwitchToForgotPassword }: SignI
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await handleSignIn(formData);
-    if (success) {
-      // Form will be handled by parent component
-    }
+    await handleSignIn(formData);
   };
 
   const handleInputChange = (field: keyof SignInData, value: string) => {
@@ -97,21 +94,11 @@ export function SignInForm({ onSwitchToSignUp, onSwitchToForgotPassword }: SignI
   );
 }
 
-// SignUp Page Code
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuthFlow, SignUpData } from '@/hooks/useAuthFlow';
-import { useContributorData } from '@/hooks/useContributorData';
-
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
 }
 
-export function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
+function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
   const { handleSignUp, isLoading } = useAuthFlow();
   const { branches, semesters, colleges, loading, fetchBranches, fetchSemesters, fetchColleges } = useContributorData();
   
@@ -412,4 +399,42 @@ export function SignUpForm({ onSwitchToSignIn }: SignUpFormProps) {
     </Card>
   );
 }
-```;
+
+export default function AuthPage() {
+  const [view, setView] = useState<'signin' | 'signup' | 'forgot'>('signin');
+
+  return (
+    <div className="min-h-screen flex items-center justify-center gradient-subtle p-4">
+      <div className="w-full max-w-md">
+        {view === 'signin' && (
+          <SignInForm
+            onSwitchToSignUp={() => setView('signup')}
+            onSwitchToForgotPassword={() => setView('forgot')}
+          />
+        )}
+        {view === 'signup' && (
+          <SignUpForm onSwitchToSignIn={() => setView('signin')} />
+        )}
+        {view === 'forgot' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Reset Password</CardTitle>
+              <CardDescription>
+                Enter your email to receive a password reset link
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                variant="link"
+                onClick={() => setView('signin')}
+                className="p-0 h-auto"
+              >
+                Back to sign in
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}
