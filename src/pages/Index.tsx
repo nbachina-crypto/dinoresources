@@ -1,79 +1,39 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AuthPage from "@/components/AuthPage";
 import ProfileSetup from "@/components/ProfileSetup";
 import Dashboard from "@/components/Dashboard";
-import ResetPassword from "@/components/ResetPassword";
-import { toast } from "sonner";
 
 const Index = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
-  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
   const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
-  const isRecoveryRef = useRef(false);
 
   useEffect(() => {
-    // Set up auth listener FIRST to avoid missing PASSWORD_RECOVERY
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY") {
-        setIsPasswordRecovery(true);
-        setIsLoading(false);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        checkProfile(session.user.id);
       } else {
-        setSession(session);
-        if (session) {
-          if (!isRecoveryRef.current) {
-            checkProfile(session.user.id);
-          } else {
-            setIsLoading(false);
-          }
-        } else {
-          setIsLoading(false);
-          setNeedsProfileSetup(false);
-        }
+        setIsLoading(false);
       }
     });
 
-    // Detect recovery mode from URL (hash or search)
-    const url = new URL(window.location.href);
-    const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
-    const searchParams = new URLSearchParams(url.search);
-    const isRecoveryType = (hashParams.get("type") || searchParams.get("type")) === "recovery";
-    const hasAccessToken = !!(hashParams.get("access_token") || searchParams.get("access_token"));
-
-    if (isRecoveryType && hasAccessToken) {
-      isRecoveryRef.current = true;
-      setIsPasswordRecovery(true);
-      setIsLoading(false);
-    } else {
-      // THEN check for existing session
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session);
-        if (session) {
-          checkProfile(session.user.id);
-        } else {
-          setIsLoading(false);
-        }
-      });
-    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        checkProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+        setNeedsProfileSetup(false);
+      }
+    });
 
     return () => subscription.unsubscribe();
   }, []);
-
-  // Show success message after password reset and clean the URL
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("password_updated") === "1") {
-      toast.success("Password successfully updated. Please log in.");
-      const url = new URL(window.location.href);
-      params.delete("password_updated");
-      url.search = params.toString();
-      window.history.replaceState({}, "", url.toString());
-    }
-  }, [location.search]);
 
   const checkProfile = async (userId: string) => {
     const { data } = await supabase
@@ -102,10 +62,6 @@ const Index = () => {
         </div>
       </div>
     );
-  }
-
-  if (isPasswordRecovery) {
-    return <ResetPassword />;
   }
 
   if (!session) {
