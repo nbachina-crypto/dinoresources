@@ -309,10 +309,10 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogContent
           ref={dialogContentRef}
-          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
+          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl [&>button]:left-2 [&>button]:right-auto"
         >
           <DialogHeader className="relative">
-            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
               {resource.title}
             </DialogTitle>
             <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={toggleFullscreen}>
