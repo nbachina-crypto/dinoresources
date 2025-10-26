@@ -323,13 +323,21 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           }
         }}
       >
-        <DialogContent
+        {/* <DialogContent
           ref={dialogContentRef}
           className={`${
             isFullscreen
               ? "w-screen h-screen max-w-none max-h-none p-2 sm:p-4 rounded-none"
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
           } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
+        > */}
+        <DialogContent
+          ref={dialogContentRef}
+          className={`${
+            isFullscreen
+              ? "fixed inset-0 w-screen h-screen max-w-none max-h-none p-0 bg-background overflow-auto"
+              : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl overflow-y-auto"
+          } [&>button]:left-2 [&>button]:right-auto`}
         >
           <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
