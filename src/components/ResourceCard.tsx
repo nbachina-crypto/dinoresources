@@ -310,7 +310,20 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           <div className="mt-4 overflow-auto">{renderResourceContent()}</div>
         </DialogContent>
       </Dialog> */}
-      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+      {/* <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}> */}
+      <Dialog
+          open={showViewDialog}
+          onOpenChange={(open) => {
+            setShowViewDialog(open);
+            if (!open) {
+              setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
+              if (document.fullscreenElement) {
+                document.exitFullscreen().catch(() => {});
+              }
+            }
+          }}
+        >
+
         <DialogContent
           ref={dialogContentRef}
           className={`${
