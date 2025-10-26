@@ -312,10 +312,10 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
         >
           <DialogHeader className="relative">
-            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pl-10">
               {resource.title}
             </DialogTitle>
-            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={toggleFullscreen}>
+            <Button variant="ghost" size="icon" className="absolute left-0 top-0" onClick={toggleFullscreen}>
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
           </DialogHeader>
