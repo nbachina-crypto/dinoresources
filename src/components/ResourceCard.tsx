@@ -323,8 +323,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
             >
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
-          </DialogHeader>
-          <div className="mt-4">{renderResourceContent()}</div> */}
+          </DialogHeader> */}
           <DialogHeader className="flex items-center justify-between relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words flex-1 text-left">
               {resource.title}
