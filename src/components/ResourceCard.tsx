@@ -190,25 +190,25 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         //     )}
         //   </div>
         // </div>
-         <div
-      className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap cursor-pointer hover:bg-accent/50 rounded-lg px-2 sm:px-3 py-2 transition-colors"
-      onClick={() => {
-        if (resource.type === "pdf" || resource.type === "youtube") {
-          setShowViewDialog(true);
-        } else if (resource.type === "link") {
-          window.open(resource.url, "_blank");
-        }
-      }}
-    >
-      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-        <Badge className={getTypeColor()}>
-          {getIcon()}
-          <span className="ml-1 uppercase text-xs">{resource.type}</span>
-        </Badge>
-        <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
-      </div>
+        <div
+          className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap cursor-pointer hover:bg-accent/50 rounded-lg px-2 sm:px-3 py-2 transition-colors"
+          onClick={() => {
+            if (resource.type === "pdf" || resource.type === "youtube") {
+              setShowViewDialog(true);
+            } else if (resource.type === "link") {
+              window.open(resource.url, "_blank");
+            }
+          }}
+        >
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+            <Badge className={getTypeColor()}>
+              {getIcon()}
+              <span className="ml-1 uppercase text-xs">{resource.type}</span>
+            </Badge>
+            <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
+          </div>
 
-      {/* <div
+          {/* <div
         className="flex gap-1 sm:gap-2 shrink-0"
         onClick={(e) => e.stopPropagation()} // prevents triggering dialog when clicking buttons
       >
@@ -232,36 +232,30 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           </Button>
         )}
       </div> */}
-<div
-  className="flex gap-1 sm:gap-2 shrink-0"
-  onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
->
-  {(resource.type === "pdf" || resource.type === "youtube") && (
-    <Button size="sm" variant="ghost" onClick={() => setShowViewDialog(true)}>
-      <Eye className="w-4 h-4" />
-    </Button>
-  )}
-  {resource.type === "link" && (
-    <Button size="sm" asChild>
-      <a href={resource.url} target="_blank" rel="noopener noreferrer">
-        <ExternalLink className="w-4 h-4 sm:mr-1" />
-        <span className="hidden sm:inline">Open</span>
-      </a>
-    </Button>
-  )}
-  {canDelete && (
-    <Button
-      size="sm"
-      variant="destructive"
-      onClick={() => setShowDeleteDialog(true)}
-    >
-      <Trash2 className="w-4 h-4" />
-    </Button>
-  )}
-</div>
-
-           
-    </div>
+          <div
+            className="flex gap-1 sm:gap-2 shrink-0"
+            onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
+          >
+            {(resource.type === "pdf" || resource.type === "youtube") && (
+              <Button size="sm" variant="ghost" onClick={() => setShowViewDialog(true)}>
+                <Eye className="w-4 h-4" />
+              </Button>
+            )}
+            {resource.type === "link" && (
+              <Button size="sm" asChild>
+                <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="w-4 h-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Open</span>
+                </a>
+              </Button>
+            )}
+            {canDelete && (
+              <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+        </div>
       );
     }
 
@@ -313,11 +307,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         </DialogContent>
       </Dialog> */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent 
+        <DialogContent
           ref={dialogContentRef}
           className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
         >
-          <DialogHeader className="relative">
+          {/* <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
               {resource.title}
             </DialogTitle>
@@ -330,6 +324,35 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
           </DialogHeader>
+          <div className="mt-4">{renderResourceContent()}</div> */}
+          <DialogHeader className="flex items-center justify-between relative">
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words flex-1 text-left">
+              {resource.title}
+            </DialogTitle>
+
+            <div className="flex items-center gap-2 absolute right-2 top-2">
+              {/* Expand / Minimize Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleFullscreen}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+              </Button>
+
+              {/* Close Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowViewDialog(false)}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </DialogHeader>
+
           <div className="mt-4">{renderResourceContent()}</div>
         </DialogContent>
       </Dialog>
