@@ -82,19 +82,28 @@ export default function SubjectDrawer({
         onTouchMove={(e) => e.stopPropagation()}
         onWheel={(e) => e.stopPropagation()}
       >
+        {/* <DrawerHeader className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-2 top-0"
+            onClick={() => onOpenChange(false)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+          <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
+        </DrawerHeader> */}
+
         <DrawerHeader className="relative">
           <Button
             variant="ghost"
             size="icon"
-            {/* className="absolute left-2 top-0" */}
-            
             className="absolute left-2 -top-3 sm:-top-4"
             onClick={() => onOpenChange(false)}
           >
             <X className="h-5 w-5" />
           </Button>
-          {/* <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
-          */}
+
           <DrawerTitle className="text-xl sm:text-2xl text-center mt-1 sm:mt-2">{subjectName}</DrawerTitle>
         </DrawerHeader>
 
