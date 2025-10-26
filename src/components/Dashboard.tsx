@@ -20,7 +20,6 @@ interface Subject {
   name: string;
 }
 
-
 export default function Dashboard() {
   const navigate = useNavigate();
   const { isContributor, userId, role, isLoading: roleLoading } = useUserRole();
@@ -30,7 +29,7 @@ export default function Dashboard() {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'subjects' | 'announcements'>('subjects');
+  const [activeTab, setActiveTab] = useState<"subjects" | "announcements">("subjects");
 
   useEffect(() => {
     checkAuth();
@@ -42,20 +41,17 @@ export default function Dashboard() {
     }
   }, [profile]);
 
-
   const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
     if (!session) {
       navigate("/auth");
       return;
     }
 
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
+    const { data: profileData } = await supabase.from("profiles").select("*").eq("id", session.user.id).single();
 
     if (!profileData?.department || !profileData?.semester) {
       navigate("/setup");
@@ -78,7 +74,7 @@ export default function Dashboard() {
       .select("*")
       .eq("department", profile.department)
       .eq("semester", profile.semester)
-      .order("name");
+      .order("order_index", { ascending: true });
 
     if (error) {
       toast.error("Failed to load subjects");
@@ -130,7 +126,12 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="hidden sm:flex" onClick={() => navigate("/setup?edit=true")}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="hidden sm:flex"
+                onClick={() => navigate("/setup?edit=true")}
+              >
                 Edit Profile
               </Button>
               <Button variant="outline" size="sm" onClick={handleSignOut}>
@@ -148,11 +149,9 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-2xl">
             <Card
               className={`shadow-card border-border/50 cursor-pointer transition-all ${
-                activeTab === 'subjects' 
-                  ? 'ring-2 ring-primary bg-primary/5' 
-                  : 'hover:shadow-lg'
+                activeTab === "subjects" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
               }`}
-              onClick={() => setActiveTab('subjects')}
+              onClick={() => setActiveTab("subjects")}
             >
               <CardContent className="p-3 sm:p-4 text-center">
                 <h3 className="font-semibold text-sm sm:text-base">Your Subjects</h3>
@@ -161,11 +160,9 @@ export default function Dashboard() {
 
             <Card
               className={`shadow-card border-border/50 cursor-pointer transition-all ${
-                activeTab === 'announcements' 
-                  ? 'ring-2 ring-primary bg-primary/5' 
-                  : 'hover:shadow-lg'
+                activeTab === "announcements" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
               }`}
-              onClick={() => setActiveTab('announcements')}
+              onClick={() => setActiveTab("announcements")}
             >
               <CardContent className="p-3 sm:p-4 text-center">
                 <h3 className="font-semibold text-sm sm:text-base">Announcements & Feedback</h3>
@@ -174,7 +171,7 @@ export default function Dashboard() {
           </div>
 
           {/* Subjects View */}
-          {activeTab === 'subjects' && (
+          {activeTab === "subjects" && (
             <div className="animate-fade-in">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div>
@@ -209,9 +206,7 @@ export default function Dashboard() {
                     >
                       <CardContent className="p-6">
                         <h3 className="text-lg font-semibold">{subject.name}</h3>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          Click to view resources
-                        </p>
+                        <p className="text-sm text-muted-foreground mt-2">Click to view resources</p>
                       </CardContent>
                     </Card>
                   ))}
@@ -221,7 +216,7 @@ export default function Dashboard() {
           )}
 
           {/* Announcements View */}
-          {activeTab === 'announcements' && (
+          {activeTab === "announcements" && (
             <div className="animate-fade-in max-w-4xl">
               <h2 className="text-2xl font-bold mb-6">Announcements & Feedback</h2>
               <AnnouncementsSection isAdmin={role === "admin"} />
