@@ -6,12 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { GraduationCap } from "lucide-react";
 
 export default function AuthPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,6 +64,27 @@ export default function AuthPage() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsResettingPassword(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("reset-email") as string;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/`,
+    });
+
+    setIsResettingPassword(false);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Password reset email sent! Check your inbox.");
+      setIsForgotPasswordOpen(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center gradient-subtle p-4">
       <div className="w-full max-w-md space-y-6">
@@ -86,8 +110,8 @@ export default function AuthPage() {
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="signin">Log In</TabsTrigger>
+                <TabsTrigger value="signup">Create Account</TabsTrigger>
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4">
@@ -110,9 +134,39 @@ export default function AuthPage() {
                       type="password"
                       required
                     />
+                    <Dialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="link" className="p-0 h-auto text-sm text-muted-foreground hover:text-foreground">
+                          Forgot Password?
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Reset Password</DialogTitle>
+                          <DialogDescription>
+                            Enter your email address and we'll send you a link to reset your password.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleForgotPassword} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="reset-email">Email</Label>
+                            <Input
+                              id="reset-email"
+                              name="reset-email"
+                              type="email"
+                              placeholder="you@university.edu"
+                              required
+                            />
+                          </div>
+                          <Button type="submit" className="w-full" disabled={isResettingPassword}>
+                            {isResettingPassword ? "Sending..." : "Send Reset Link"}
+                          </Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? "Logging in..." : "Log In"}
                   </Button>
                 </form>
               </TabsContent>
