@@ -134,9 +134,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const renderResourceContent = () => {
     if (resource.type === "pdf") {
       return (
-        <div className={`w-full overflow-hidden rounded-lg border border-border ${
-          isFullscreen ? "h-full" : "aspect-[3/2] sm:aspect-[16/9]"
-        }`}>
+        <div
+          className={`w-full overflow-hidden rounded-lg border border-border ${
+            isFullscreen ? "h-full" : "aspect-[3/2] sm:aspect-[16/9]"
+          }`}
+        >
           <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
         </div>
       );
@@ -144,9 +146,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
 
     if (resource.type === "youtube") {
       return (
-        <div className={`w-full overflow-hidden rounded-lg ${
-          isFullscreen ? "h-full" : "aspect-[16/9]"
-        }`}>
+        <div className={`w-full overflow-hidden rounded-lg ${isFullscreen ? "h-full" : "aspect-[16/9]"}`}>
           <iframe
             src={getYoutubeEmbedUrl(resource.url) || resource.url}
             className="w-full h-full"
@@ -312,18 +312,17 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       </Dialog> */}
       {/* <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}> */}
       <Dialog
-          open={showViewDialog}
-          onOpenChange={(open) => {
-            setShowViewDialog(open);
-            if (!open) {
-              setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
-              if (document.fullscreenElement) {
-                document.exitFullscreen().catch(() => {});
-              }
+        open={showViewDialog}
+        onOpenChange={(open) => {
+          setShowViewDialog(open);
+          if (!open) {
+            setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
+            if (document.fullscreenElement) {
+              document.exitFullscreen().catch(() => {});
             }
-          }}
-        >
-
+          }
+        }}
+      >
         <DialogContent
           ref={dialogContentRef}
           className={`${
@@ -340,8 +339,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
           </DialogHeader>
-          <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
+          {/* <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
             <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
+          </div> */}
+          <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
+            <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div>
         </DialogContent>
       </Dialog>
