@@ -350,14 +350,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           {/* <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
             <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
           </div> */}
-          {/* <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
-          </div> */}
-
           <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            <div className={`${isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y" : ""}`}>
-              {renderResourceContent()}
-            </div>
+            <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div>
         </DialogContent>
       </Dialog>
