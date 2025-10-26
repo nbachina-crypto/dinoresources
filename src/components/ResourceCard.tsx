@@ -132,27 +132,10 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   // };
 
   const renderResourceContent = () => {
-    // if (resource.type === "pdf") {
-    //   return (
-    //     <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
-    //       <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
-    //     </div>
-    //   );
-    // }
-
     if (resource.type === "pdf") {
       return (
-        <div
-          className={`w-full ${
-            isFullscreen ? "fixed inset-0 h-screen z-50 bg-black" : "aspect-[3/2] sm:aspect-[16/9]"
-          } overflow-hidden rounded-lg border border-border flex items-center justify-center`}
-        >
-          <iframe
-            src={resource.url}
-            className={`w-full ${isFullscreen ? "h-screen" : "h-full"}`}
-            title={resource.title}
-            allowFullScreen
-          />
+        <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
+          <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
         </div>
       );
     }
