@@ -126,14 +126,29 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button
+              {/* <Button
                 variant="outline"
                 size="sm"
                 className="hidden sm:flex"
                 onClick={() => navigate("/setup?edit=true")}
               >
                 Edit Profile
+              </Button> */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center justify-center"
+                onClick={() => navigate("/setup?edit=true")}
+              >
+                {/* Icon visible only on mobile */}
+                <span className="sm:hidden">
+                  <GraduationCap className="w-4 h-4" />
+                </span>
+                
+                {/* Text visible only on larger screens */}
+                <span className="hidden sm:inline">Edit Profile</span>
               </Button>
+
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Sign Out</span>
