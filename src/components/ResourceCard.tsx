@@ -132,10 +132,27 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   // };
 
   const renderResourceContent = () => {
+    // if (resource.type === "pdf") {
+    //   return (
+    //     <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
+    //       <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
+    //     </div>
+    //   );
+    // }
+
     if (resource.type === "pdf") {
       return (
-        <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
-          <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
+        <div
+          className={`w-full ${
+            isFullscreen ? "fixed inset-0 h-screen z-50 bg-black" : "aspect-[3/2] sm:aspect-[16/9]"
+          } overflow-hidden rounded-lg border border-border flex items-center justify-center`}
+        >
+          <iframe
+            src={resource.url}
+            className={`w-full ${isFullscreen ? "h-screen" : "h-full"}`}
+            title={resource.title}
+            allowFullScreen
+          />
         </div>
       );
     }
@@ -309,10 +326,10 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogContent
           ref={dialogContentRef}
-          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl [&>button]:left-2 [&>button]:right-auto"
+          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
         >
           <DialogHeader className="relative">
-            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
               {resource.title}
             </DialogTitle>
             <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={toggleFullscreen}>
