@@ -86,7 +86,7 @@ export default function SubjectDrawer({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-2 top-2"
+            className="absolute left-2 top-0"
             onClick={() => onOpenChange(false)}
           >
             <X className="h-5 w-5" />
