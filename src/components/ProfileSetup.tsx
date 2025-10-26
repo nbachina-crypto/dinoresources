@@ -8,16 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { GraduationCap } from "lucide-react";
 
-const DEPARTMENTS = [
-  "CSE",
-  "CSE (AI&ML)",
-  "CSE (Cyber Security)",
-  "CSE (Data Science)",
-  "ECE",
-  "Electronics",
-  "Mechanical Engineering",
-  "Biotechnology",
-];
+const DEPARTMENTS = ["CSE", "ECE", "Mechanical Engineering"];
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
