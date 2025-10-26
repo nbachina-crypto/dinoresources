@@ -311,47 +311,14 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           ref={dialogContentRef}
           className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
         >
-          {/* <DialogHeader className="relative">
+          <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
               {resource.title}
             </DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-0 top-0"
-              onClick={toggleFullscreen}
-            >
+            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={toggleFullscreen}>
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
-          </DialogHeader> */}
-          <DialogHeader className="flex items-center justify-between relative">
-            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words flex-1 text-left">
-              {resource.title}
-            </DialogTitle>
-
-            <div className="flex items-center gap-2 absolute right-2 top-2">
-              {/* Expand / Minimize Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleFullscreen}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
-              </Button>
-
-              {/* Close Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowViewDialog(false)}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
           </DialogHeader>
-
           <div className="mt-4">{renderResourceContent()}</div>
         </DialogContent>
       </Dialog>
