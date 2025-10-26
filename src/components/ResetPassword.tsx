@@ -38,8 +38,9 @@ export default function ResetPassword() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Password updated successfully!");
-      navigate("/");
+      toast.success("Password updated successfully! Please log in again.");
+      await supabase.auth.signOut();
+      navigate("/auth?password_updated=1");
     }
   };
 
