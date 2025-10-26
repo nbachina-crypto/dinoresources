@@ -86,12 +86,16 @@ export default function SubjectDrawer({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-2 top-0"
+            {/* className="absolute left-2 top-0" */}
+            
+            className="absolute left-2 -top-3 sm:-top-4"
             onClick={() => onOpenChange(false)}
           >
             <X className="h-5 w-5" />
           </Button>
-          <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
+          {/* <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
+          */}
+          <DrawerTitle className="text-xl sm:text-2xl text-center mt-1 sm:mt-2">{subjectName}</DrawerTitle>
         </DrawerHeader>
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
