@@ -3,7 +3,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { List, LayoutGrid } from "lucide-react";
+import { List, LayoutGrid, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ResourceCard from "./ResourceCard";
@@ -82,7 +82,15 @@ export default function SubjectDrawer({
         onTouchMove={(e) => e.stopPropagation()}
         onWheel={(e) => e.stopPropagation()}
       >
-        <DrawerHeader>
+        <DrawerHeader className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-2 top-2"
+            onClick={() => onOpenChange(false)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
           <DrawerTitle className="text-xl sm:text-2xl">{subjectName}</DrawerTitle>
         </DrawerHeader>
 

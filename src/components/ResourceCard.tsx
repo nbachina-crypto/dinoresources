@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye } from "lucide-react";
+import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye, Maximize, Minimize } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -41,6 +41,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
 
   // Admin can delete any resource, contributor can only delete their own
   const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
@@ -86,6 +88,22 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     } else {
       toast.success("Resource deleted successfully");
       onUpdate();
+    }
+  };
+
+  const toggleFullscreen = async () => {
+    if (!dialogContentRef.current) return;
+
+    try {
+      if (!isFullscreen) {
+        await dialogContentRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error("Fullscreen error:", error);
     }
   };
 
@@ -218,6 +236,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   className="flex gap-1 sm:gap-2 shrink-0"
   onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
 >
+  {(resource.type === "pdf" || resource.type === "youtube") && (
+    <Button size="sm" variant="ghost" onClick={() => setShowViewDialog(true)}>
+      <Eye className="w-4 h-4" />
+    </Button>
+  )}
   {resource.type === "link" && (
     <Button size="sm" asChild>
       <a href={resource.url} target="_blank" rel="noopener noreferrer">
@@ -290,11 +313,22 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         </DialogContent>
       </Dialog> */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl">
-          <DialogHeader>
-            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words">
+        <DialogContent 
+          ref={dialogContentRef}
+          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl"
+        >
+          <DialogHeader className="relative">
+            <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words pr-10">
               {resource.title}
             </DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-0 top-0"
+              onClick={toggleFullscreen}
+            >
+              {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+            </Button>
           </DialogHeader>
           <div className="mt-4">{renderResourceContent()}</div>
         </DialogContent>
