@@ -134,7 +134,9 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const renderResourceContent = () => {
     if (resource.type === "pdf") {
       return (
-        <div className="w-full aspect-[3/2] sm:aspect-[16/9] overflow-hidden rounded-lg border border-border">
+        <div className={`w-full overflow-hidden rounded-lg border border-border ${
+          isFullscreen ? "h-full" : "aspect-[3/2] sm:aspect-[16/9]"
+        }`}>
           <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
         </div>
       );
@@ -142,7 +144,9 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
 
     if (resource.type === "youtube") {
       return (
-        <div className="w-full aspect-[16/9] overflow-hidden rounded-lg">
+        <div className={`w-full overflow-hidden rounded-lg ${
+          isFullscreen ? "h-full" : "aspect-[16/9]"
+        }`}>
           <iframe
             src={getYoutubeEmbedUrl(resource.url) || resource.url}
             className="w-full h-full"
@@ -309,7 +313,11 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogContent
           ref={dialogContentRef}
-          className="w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] overflow-y-auto p-4 rounded-xl [&>button]:left-2 [&>button]:right-auto"
+          className={`${
+            isFullscreen
+              ? "w-screen h-screen max-w-none max-h-none p-2 sm:p-4 rounded-none"
+              : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
+          } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
         >
           <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
@@ -319,7 +327,9 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
           </DialogHeader>
-          <div className="mt-4">{renderResourceContent()}</div>
+          <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
+            <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
+          </div>
         </DialogContent>
       </Dialog>
 
