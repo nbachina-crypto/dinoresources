@@ -23,7 +23,7 @@ interface AnnouncementsSectionProps {
 export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const feedbackUrl = "https://forms.google.com/your-form-url"; // Customize this URL
+  const feedbackUrl = "https://forms.gle/vvqruVcKQdGSpgWh8"; // Customize this URL
 
   const loadAnnouncements = async () => {
     try {
