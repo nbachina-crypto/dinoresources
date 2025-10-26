@@ -4,12 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import AuthPage from "@/components/AuthPage";
 import ProfileSetup from "@/components/ProfileSetup";
 import Dashboard from "@/components/Dashboard";
+import ResetPassword from "@/components/ResetPassword";
 
 const Index = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
   const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
 
   useEffect(() => {
@@ -22,13 +24,19 @@ const Index = () => {
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        checkProfile(session.user.id);
-      } else {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setIsPasswordRecovery(true);
         setIsLoading(false);
-        setNeedsProfileSetup(false);
+      } else {
+        setIsPasswordRecovery(false);
+        setSession(session);
+        if (session) {
+          checkProfile(session.user.id);
+        } else {
+          setIsLoading(false);
+          setNeedsProfileSetup(false);
+        }
       }
     });
 
@@ -62,6 +70,10 @@ const Index = () => {
         </div>
       </div>
     );
+  }
+
+  if (isPasswordRecovery) {
+    return <ResetPassword />;
   }
 
   if (!session) {
