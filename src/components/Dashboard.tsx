@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { User, LogOut, Upload } from "lucide-react";
+import { User,GraduationCap, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
 import { useUserRole } from "@/hooks/useUserRole";
