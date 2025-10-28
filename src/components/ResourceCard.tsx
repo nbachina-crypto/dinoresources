@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,8 +44,16 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const [isFullscreen, setIsFullscreen] = useState(false);
   const dialogContentRef = useRef<HTMLDivElement>(null);
 
-  // Admin can delete any resource, contributor can only delete their own
   const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
 
   const getIcon = () => {
     switch (resource.type) {
@@ -97,10 +105,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     try {
       if (!isFullscreen) {
         await dialogContentRef.current.requestFullscreen();
-        setIsFullscreen(true);
       } else {
         await document.exitFullscreen();
-        setIsFullscreen(false);
       }
     } catch (error) {
       console.error("Fullscreen error:", error);
@@ -135,9 +141,10 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     if (resource.type === "pdf") {
       return (
         <div
-          className={`w-full overflow-hidden rounded-lg border border-border ${
-            isFullscreen ? "h-full" : "aspect-[3/2] sm:aspect-[16/9]"
+          className={`w-full rounded-lg border border-border ${
+            isFullscreen ? "h-full overflow-auto touch-auto" : "aspect-[3/2] sm:aspect-[16/9] overflow-hidden"
           }`}
+          style={isFullscreen ? { touchAction: "pan-x pan-y pinch-zoom" } : undefined}
         >
           <iframe src={resource.url} className="w-full h-full" title={resource.title} allowFullScreen />
         </div>
@@ -146,7 +153,12 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
 
     if (resource.type === "youtube") {
       return (
-        <div className={`w-full overflow-hidden rounded-lg ${isFullscreen ? "h-full" : "aspect-[16/9]"}`}>
+        <div
+          className={`w-full rounded-lg ${
+            isFullscreen ? "h-full overflow-auto touch-auto" : "aspect-[16/9] overflow-hidden"
+          }`}
+          style={isFullscreen ? { touchAction: "pan-x pan-y pinch-zoom" } : undefined}
+        >
           <iframe
             src={getYoutubeEmbedUrl(resource.url) || resource.url}
             className="w-full h-full"
@@ -164,36 +176,6 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const renderContent = () => {
     if (viewMode === "list") {
       return (
-        // <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
-        //   <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-        //     <Badge className={getTypeColor()}>
-        //       {getIcon()}
-        //       <span className="ml-1 uppercase text-xs">{resource.type}</span>
-        //     </Badge>
-        //     <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
-        //   </div>
-        //   <div className="flex gap-1 sm:gap-2 shrink-0">
-        //     {(resource.type === "pdf" || resource.type === "youtube") && (
-        //       <Button size="sm" onClick={() => setShowViewDialog(true)}>
-        //         <Eye className="w-4 h-4 sm:mr-1" />
-        //         <span className="hidden sm:inline">View</span>
-        //       </Button>
-        //     )}
-        //     {resource.type === "link" && (
-        //       <Button size="sm" asChild>
-        //         <a href={resource.url} target="_blank" rel="noopener noreferrer">
-        //           <ExternalLink className="w-4 h-4 sm:mr-1" />
-        //           <span className="hidden sm:inline">Open</span>
-        //         </a>
-        //       </Button>
-        //     )}
-        //     {canDelete && (
-        //       <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
-        //         <Trash2 className="w-4 h-4" />
-        //       </Button>
-        //     )}
-        //   </div>
-        // </div>
         <div
           className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap cursor-pointer hover:bg-accent/50 rounded-lg px-2 sm:px-3 py-2 transition-colors"
           onClick={() => {
@@ -211,34 +193,9 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
             </Badge>
             <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
           </div>
-
-          {/* <div
-        className="flex gap-1 sm:gap-2 shrink-0"
-        onClick={(e) => e.stopPropagation()} // prevents triggering dialog when clicking buttons
-      >
-        {(resource.type === "pdf" || resource.type === "youtube") && (
-          <Button size="sm" onClick={() => setShowViewDialog(true)}>
-            <Eye className="w-4 h-4 sm:mr-1" />
-            <span className="hidden sm:inline">View</span>
-          </Button>
-        )}
-        {resource.type === "link" && (
-          <Button size="sm" asChild>
-            <a href={resource.url} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="w-4 h-4 sm:mr-1" />
-              <span className="hidden sm:inline">Open</span>
-            </a>
-          </Button>
-        )}
-        {canDelete && (
-          <Button size="sm" variant="destructive" onClick={() => setShowDeleteDialog(true)}>
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        )}
-      </div> */}
           <div
             className="flex gap-1 sm:gap-2 shrink-0"
-            onClick={(e) => e.stopPropagation()} // prevent triggering dialog when clicking buttons
+            onClick={(e) => e.stopPropagation()}
           >
             {(resource.type === "pdf" || resource.type === "youtube") && (
               <Button size="sm" variant="ghost" onClick={() => setShowViewDialog(true)}>
@@ -305,30 +262,12 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       <Dialog
         open={showViewDialog}
         onOpenChange={(open) => {
-          setShowViewDialog(open);
-          if (!open) {
-            if (document.fullscreenElement) {
-              document
-                .exitFullscreen()
-                .then(() => {
-                  // 🧩 Delay unmount slightly so browser finishes fullscreen exit
-                  setTimeout(() => setIsFullscreen(false), 150);
-                })
-                .catch(() => setIsFullscreen(false));
-            } else {
-              setIsFullscreen(false);
-            }
+          if (!open && document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
           }
+          setShowViewDialog(open);
         }}
       >
-        {/* <DialogContent
-          ref={dialogContentRef}
-          className={`${
-            isFullscreen
-              ? "w-screen h-screen max-w-none max-h-none p-2 sm:p-4 rounded-none"
-              : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
-          } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
-        >  */}
         <DialogContent
           ref={dialogContentRef}
           className={`${
@@ -345,9 +284,6 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </Button>
           </DialogHeader>
-          {/* <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
-            <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
-          </div> */}
           <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
             <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div>
