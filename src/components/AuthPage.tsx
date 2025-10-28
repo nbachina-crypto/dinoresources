@@ -78,23 +78,9 @@ export default function AuthPage() {
     const formData = new FormData(e.currentTarget);
     const email = formData.get("reset-email") as string;
 
-    // const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    //   redirectTo: `${window.location.origin}/`,
-    // });
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/`,
     });
-
-    // Supabase sometimes returns a harmless "missing fields" message even when successful.
-    // We ignore that specific one but still catch genuine errors.
-    setIsResettingPassword(false);
-
-    if (error && !error.message.includes("missing fields")) {
-      toast.error(error.message);
-    } else {
-      toast.success("Password reset link sent! Check your inbox.");
-      setIsForgotPasswordOpen(false);
-    }
 
     setIsResettingPassword(false);
 
