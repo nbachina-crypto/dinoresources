@@ -12,45 +12,48 @@ const Index = () => {
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
   const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
 
- useEffect(() => {
-  const handleSession = async (session: any) => {
-    const params = new URLSearchParams(window.location.search);
-    const isRecovery = params.get("type") === "recovery" || params.has("access_token");
+  useEffect(() => {
+    const handleSession = async (session: any) => {
+      const params = new URLSearchParams(window.location.search);
+      const isRecovery =
+        params.get("type") === "recovery" ||
+        params.has("access_token") ||
+        window.location.pathname === "/reset-password";
 
-    if (session && !isRecovery && window.location.pathname !== "/reset-password") {
-      // Normal login flow → check profile
-      checkProfile(session.user.id);
-    } else if (isRecovery || window.location.pathname === "/reset-password") {
-      // Recovery flow → don't redirect or check profile
-      setIsLoading(false);
-    } else {
-      // No session
-      setIsLoading(false);
-    }
-  };
+      if (isRecovery) {
+        // Recovery flow → stay on reset-password page
+        setIsLoading(false);
+        return;
+      }
 
-  // Initial session load
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    setSession(session);
-    handleSession(session);
-  });
+      if (session) {
+        // Normal login flow → check profile
+        await checkProfile(session.user.id);
+      } else {
+        // No session at all
+        setIsLoading(false);
+      }
+    };
 
-  // Listen to auth state changes
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-    setSession(session);
-    handleSession(session);
-  });
+    // Initial session load
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      handleSession(session);
+    });
 
-  return () => subscription.unsubscribe();
-}, []);
+    // Listen to auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      handleSession(session);
+    });
 
+    return () => subscription.unsubscribe();
+  }, []);
 
   const checkProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("department, semester")
-      .eq("id", userId)
-      .single();
+    const { data } = await supabase.from("profiles").select("department, semester").eq("id", userId).single();
 
     const needsSetup = !data?.department || !data?.semester;
     setNeedsProfileSetup(needsSetup);
