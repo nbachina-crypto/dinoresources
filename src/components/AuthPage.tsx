@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { GraduationCap } from "lucide-react";
+import dinoLogo from "@/assets/dino-logo.png";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -97,8 +97,8 @@ export default function AuthPage() {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center shadow-card">
-              <GraduationCap className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-2xl bg-background flex items-center justify-center shadow-card">
+              <img src={dinoLogo} alt="Team Dino Logo" className="w-12 h-12" />
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Team Dino</h1>
