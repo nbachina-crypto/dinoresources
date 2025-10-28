@@ -337,14 +337,28 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
           } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
         > */}
-        <DialogContent
+        {/* <DialogContent
           ref={dialogContentRef}
           className={`${
             isFullscreen
               ? "fixed inset-0 w-screen h-screen max-w-none max-h-none p-0 bg-background overflow-auto"
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl overflow-y-auto"
           } [&>button]:left-2 [&>button]:right-auto`}
+        > */}
+        <DialogContent
+          ref={dialogContentRef}
+          className={`transition-all duration-300 ease-in-out ${
+            isFullscreen
+              ? "!fixed !inset-0 !m-0 w-screen h-screen max-w-none max-h-none bg-background p-0 overflow-auto"
+              : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl overflow-y-auto"
+          }`}
+          style={{
+            transform: isFullscreen ? "none" : undefined, // removes translate(-50%, -50%)
+            top: isFullscreen ? 0 : undefined,
+            left: isFullscreen ? 0 : undefined,
+          }}
         >
+
           <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
               {resource.title}
@@ -360,14 +374,34 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
             <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div> */}
           <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            <div
+            {/* <div
               className={`${
                 isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom" : ""
               }`}
             >
               {renderResourceContent()}
             </div>
-          </div>
+          </div> */}
+            <div
+                className={`mt-4 ${
+                  isFullscreen ? "flex justify-center items-center h-[calc(100vh-60px)]" : ""
+                }`}
+              >
+                <div
+                  className={`${
+                    isFullscreen
+                      ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom"
+                      : ""
+                  }`}
+                  style={{
+                    overscrollBehavior: "contain", // prevent weird bounce
+                    WebkitOverflowScrolling: "touch", // smoother scroll on iOS
+                  }}
+                >
+                  {renderResourceContent()}
+                </div>
+              </div>
+
         </DialogContent>
       </Dialog>
 
