@@ -325,16 +325,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           //   }
           // }
           if (!open) {
-            if (document.fullscreenElement) {
-              document
-                .exitFullscreen()
-                .then(() => {
-                  setTimeout(() => setIsFullscreen(false), 150); // 🧩 small delay for smoother close
-                })
-                .catch(() => setIsFullscreen(false));
-            } else {
-              setIsFullscreen(false);
-            }
+            setIsFullscreen(false);
           }
         }}
       >
