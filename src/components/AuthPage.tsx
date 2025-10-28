@@ -101,7 +101,7 @@ export default function AuthPage() {
               <GraduationCap className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Campus Resources</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Team Dino</h1>
           <p className="text-muted-foreground">Access all your study materials in one place</p>
         </div>
 
