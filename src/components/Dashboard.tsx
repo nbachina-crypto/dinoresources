@@ -117,7 +117,7 @@ export default function Dashboard() {
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">Campus Resources</h1>
+                <h1 className="text-xl font-bold">Team Dino</h1>
                 {profile && (
                   <p className="text-sm text-muted-foreground">
                     {profile.department} • Sem {profile.semester}
