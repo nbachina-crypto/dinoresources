@@ -84,10 +84,10 @@ export default function AuthPage() {
 
     setIsResettingPassword(false);
 
-    if (error && !error.message.toLowerCase().includes("invalid") && !error.message.toLowerCase().includes("missing")) {
+    if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Password reset link sent! Check your inbox.");
+      toast.success("Password reset email sent! Check your inbox.");
       setIsForgotPasswordOpen(false);
     }
   };
@@ -121,7 +121,7 @@ export default function AuthPage() {
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
-                    <Input id="signin-email" name="email" type="email" placeholder="you@university.edu" required />
+                    <Input id="signin-email" name="email" type="email" placeholder="example@gmail.com" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">Password</Label>
@@ -149,7 +149,7 @@ export default function AuthPage() {
                               id="reset-email"
                               name="reset-email"
                               type="email"
-                              placeholder="you@university.edu"
+                              placeholder="example@gmail.com"
                               required
                             />
                           </div>
@@ -170,7 +170,7 @@ export default function AuthPage() {
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input id="signup-email" name="email" type="email" placeholder="you@university.edu" required />
+                    <Input id="signup-email" name="email" type="email" placeholder="example@gmail.com" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
