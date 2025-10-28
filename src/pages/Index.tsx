@@ -13,24 +13,37 @@ const Index = () => {
   const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        checkProfile(session.user.id);
-      } else {
-        setIsLoading(false);
-      }
-    });
+  const handleSession = async (session: any) => {
+    const params = new URLSearchParams(window.location.search);
+    const isRecovery = params.get("type") === "recovery" || params.has("access_token");
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        checkProfile(session.user.id);
-      } else {
-        setIsLoading(false);
-        setNeedsProfileSetup(false);
-      }
-    });
+    if (session && !isRecovery && window.location.pathname !== "/reset-password") {
+      // Normal login flow → check profile
+      checkProfile(session.user.id);
+    } else if (isRecovery || window.location.pathname === "/reset-password") {
+      // Recovery flow → don't redirect or check profile
+      setIsLoading(false);
+    } else {
+      // No session
+      setIsLoading(false);
+    }
+  };
+
+  // Initial session load
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setSession(session);
+    handleSession(session);
+  });
+
+  // Listen to auth state changes
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    setSession(session);
+    handleSession(session);
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
+
 
     return () => subscription.unsubscribe();
   }, []);
