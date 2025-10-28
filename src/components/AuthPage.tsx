@@ -84,10 +84,10 @@ export default function AuthPage() {
 
     setIsResettingPassword(false);
 
-    if (error) {
+    if (error && !error.message.toLowerCase().includes("invalid") && !error.message.toLowerCase().includes("missing")) {
       toast.error(error.message);
     } else {
-      toast.success("Password reset email sent! Check your inbox.");
+      toast.success("Password reset link sent! Check your inbox.");
       setIsForgotPasswordOpen(false);
     }
   };
