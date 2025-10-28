@@ -358,7 +358,6 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
             left: isFullscreen ? 0 : undefined,
           }}
         >
-
           <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
               {resource.title}
@@ -373,8 +372,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           {/* <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
             <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div> */}
-          <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            {/* <div
+          {/* <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
+            <div
               className={`${
                 isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom" : ""
               }`}
@@ -382,26 +381,20 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {renderResourceContent()}
             </div>
           </div> */}
-            <div
-                className={`mt-4 ${
-                  isFullscreen ? "flex justify-center items-center h-[calc(100vh-60px)]" : ""
-                }`}
-              >
-                <div
-                  className={`${
-                    isFullscreen
-                      ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom"
-                      : ""
-                  }`}
-                  style={{
-                    overscrollBehavior: "contain", // prevent weird bounce
-                    WebkitOverflowScrolling: "touch", // smoother scroll on iOS
-                  }}
-                >
-                  {renderResourceContent()}
-                </div>
-              </div>
 
+          <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[calc(100vh-60px)]" : ""}`}>
+            <div
+              className={`${
+                isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom" : ""
+              }`}
+              style={{
+                overscrollBehavior: "contain", // prevent weird bounce
+                WebkitOverflowScrolling: "touch", // smoother scroll on iOS
+              }}
+            >
+              {renderResourceContent()}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
