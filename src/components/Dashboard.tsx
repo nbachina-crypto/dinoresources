@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { GraduationCap, LogOut, Upload } from "lucide-react";
+import { User, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -142,9 +142,9 @@ export default function Dashboard() {
               >
                 {/* Icon visible only on mobile */}
                 <span className="sm:hidden">
-                  <GraduationCap className="w-4 h-4" />
+                  <User className="w-4 h-4" />
                 </span>
-                
+
                 {/* Text visible only on larger screens */}
                 <span className="hidden sm:inline">Edit Profile</span>
               </Button>
