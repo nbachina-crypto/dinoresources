@@ -12,7 +12,7 @@ const Index = () => {
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
   const isEditMode = new URLSearchParams(location.search).get("edit") === "true";
 
-  useEffect(() => {
+ useEffect(() => {
   const handleSession = async (session: any) => {
     const params = new URLSearchParams(window.location.search);
     const isRecovery = params.get("type") === "recovery" || params.has("access_token");
@@ -44,9 +44,6 @@ const Index = () => {
   return () => subscription.unsubscribe();
 }, []);
 
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const checkProfile = async (userId: string) => {
     const { data } = await supabase
