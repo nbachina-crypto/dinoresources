@@ -41,10 +41,16 @@ export default function AuthPage() {
 
     setIsLoading(false);
 
-    if (error) {
+    // if (error) {
+    //   toast.error(error.message);
+    // } else {
+    //   toast.success("Account created! Please check your email to verify.");
+    // }
+    if (error && !error.message.includes("missing fields")) {
       toast.error(error.message);
     } else {
-      toast.success("Account created! Please check your email to verify.");
+      toast.success("Password reset link sent! Check your inbox.");
+      setIsForgotPasswordOpen(false);
     }
   };
 
