@@ -173,7 +173,7 @@ export default function AuthPage() {
                     <Input id="signup-email" name="email" type="email" placeholder="example@gmail.com" required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">Create Password</Label>
                     <Input id="signup-password" name="password" type="password" minLength={6} required />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
