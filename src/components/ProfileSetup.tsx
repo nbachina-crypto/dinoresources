@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { GraduationCap } from "lucide-react";
+import dinoLogo from "@/assets/dino-logo.png";
 
 const DEPARTMENTS = ["CSE", "ECE", "Mechanical Engineering"];
 
@@ -89,8 +89,8 @@ export default function ProfileSetup({ onProfileUpdated }: ProfileSetupProps) {
       <Card className="w-full max-w-md shadow-card border-border/50">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center shadow-card">
-              <GraduationCap className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-2xl bg-background flex items-center justify-center shadow-card">
+              <img src={dinoLogo} alt="Team Dino Logo" className="w-12 h-12" />
             </div>
           </div>
           <CardTitle className="text-2xl">Complete Your Profile</CardTitle>

@@ -4,11 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { User,GraduationCap, LogOut, Upload } from "lucide-react";
+import { User, LogOut, Upload } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AnnouncementsSection } from "./AnnouncementsSection";
+import dinoLogo from "@/assets/dino-logo.png";
 
 interface Profile {
   department: string;
@@ -98,8 +99,8 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center shadow-card mx-auto animate-pulse">
-            <GraduationCap className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 rounded-2xl bg-background flex items-center justify-center shadow-card mx-auto animate-pulse">
+            <img src={dinoLogo} alt="Team Dino Logo" className="w-12 h-12" />
           </div>
           <p className="text-muted-foreground">Loading...</p>
         </div>
@@ -113,8 +114,8 @@ export default function Dashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-card">
-                <GraduationCap className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center shadow-card">
+                <img src={dinoLogo} alt="Team Dino Logo" className="w-8 h-8" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Team Dino</h1>
