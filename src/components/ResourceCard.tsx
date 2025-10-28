@@ -302,23 +302,21 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         {viewMode === "list" ? <CardContent className="py-4">{renderContent()}</CardContent> : renderContent()}
       </Card>
 
-      {/* <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] w-full">
-          <DialogHeader>
-            <DialogTitle className="text-base sm:text-lg break-words pr-8">{resource.title}</DialogTitle>
-          </DialogHeader>
-          <div className="mt-4 overflow-auto">{renderResourceContent()}</div>
-        </DialogContent>
-      </Dialog> */}
-      {/* <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}> */}
       <Dialog
         open={showViewDialog}
         onOpenChange={(open) => {
           setShowViewDialog(open);
           if (!open) {
-            setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
             if (document.fullscreenElement) {
-              document.exitFullscreen().catch(() => {});
+              document
+                .exitFullscreen()
+                .then(() => {
+                  // 🧩 Delay unmount slightly so browser finishes fullscreen exit
+                  setTimeout(() => setIsFullscreen(false), 150);
+                })
+                .catch(() => setIsFullscreen(false));
+            } else {
+              setIsFullscreen(false);
             }
           }
         }}
@@ -330,7 +328,7 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               ? "w-screen h-screen max-w-none max-h-none p-2 sm:p-4 rounded-none"
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
           } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
-        > */}
+        >  */}
         <DialogContent
           ref={dialogContentRef}
           className={`${
