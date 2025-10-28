@@ -91,20 +91,23 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     }
   };
 
-  const toggleFullscreen = async () => {
-    if (!dialogContentRef.current) return;
+  // const toggleFullscreen = async () => {
+  //   if (!dialogContentRef.current) return;
 
-    try {
-      if (!isFullscreen) {
-        await dialogContentRef.current.requestFullscreen();
-        setIsFullscreen(true);
-      } else {
-        await document.exitFullscreen();
-        setIsFullscreen(false);
-      }
-    } catch (error) {
-      console.error("Fullscreen error:", error);
-    }
+  //   try {
+  //     if (!isFullscreen) {
+  //       await dialogContentRef.current.requestFullscreen();
+  //       setIsFullscreen(true);
+  //     } else {
+  //       await document.exitFullscreen();
+  //       setIsFullscreen(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Fullscreen error:", error);
+  //   }
+  // };
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => !prev);
   };
 
   // const renderResourceContent = () => {
@@ -315,11 +318,14 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
         open={showViewDialog}
         onOpenChange={(open) => {
           setShowViewDialog(open);
+          // if (!open) {
+          //   setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
+          //   if (document.fullscreenElement) {
+          //     document.exitFullscreen().catch(() => {});
+          //   }
+          // }
           if (!open) {
-            setIsFullscreen(false); // ✅ Reset fullscreen when dialog closes
-            if (document.fullscreenElement) {
-              document.exitFullscreen().catch(() => {});
-            }
+            setIsFullscreen(false);
           }
         }}
       >
@@ -350,8 +356,17 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           {/* <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
             <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
           </div> */}
-          <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
+          {/* <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
             <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
+          </div> */}
+          <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
+            <div
+              className={`${
+                isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom" : ""
+              }`}
+            >
+              {renderResourceContent()}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
