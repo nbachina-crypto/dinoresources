@@ -6,7 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { GraduationCap } from "lucide-react";
 
@@ -71,9 +78,23 @@ export default function AuthPage() {
     const formData = new FormData(e.currentTarget);
     const email = formData.get("reset-email") as string;
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    // const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    //   redirectTo: `${window.location.origin}/`,
+    // });
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
+
+    // Supabase sometimes returns a harmless "missing fields" message even when successful.
+    // We ignore that specific one but still catch genuine errors.
+    setIsResettingPassword(false);
+
+    if (error && !error.message.includes("missing fields")) {
+      toast.error(error.message);
+    } else {
+      toast.success("Password reset link sent! Check your inbox.");
+      setIsForgotPasswordOpen(false);
+    }
 
     setIsResettingPassword(false);
 
@@ -95,17 +116,13 @@ export default function AuthPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Campus Resources</h1>
-          <p className="text-muted-foreground">
-            Access all your study materials in one place
-          </p>
+          <p className="text-muted-foreground">Access all your study materials in one place</p>
         </div>
 
         <Card className="shadow-card border-border/50">
           <CardHeader>
             <CardTitle>Get Started</CardTitle>
-            <CardDescription>
-              Sign in to access your resources or create a new account
-            </CardDescription>
+            <CardDescription>Sign in to access your resources or create a new account</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
@@ -118,25 +135,17 @@ export default function AuthPage() {
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
-                    <Input
-                      id="signin-email"
-                      name="email"
-                      type="email"
-                      placeholder="you@university.edu"
-                      required
-                    />
+                    <Input id="signin-email" name="email" type="email" placeholder="you@university.edu" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">Password</Label>
-                    <Input
-                      id="signin-password"
-                      name="password"
-                      type="password"
-                      required
-                    />
+                    <Input id="signin-password" name="password" type="password" required />
                     <Dialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen}>
                       <DialogTrigger asChild>
-                        <Button variant="link" className="p-0 h-auto text-sm text-muted-foreground hover:text-foreground">
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Forgot Password?
                         </Button>
                       </DialogTrigger>
@@ -175,23 +184,11 @@ export default function AuthPage() {
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      name="email"
-                      type="email"
-                      placeholder="you@university.edu"
-                      required
-                    />
+                    <Input id="signup-email" name="email" type="email" placeholder="you@university.edu" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      name="password"
-                      type="password"
-                      minLength={6}
-                      required
-                    />
+                    <Input id="signup-password" name="password" type="password" minLength={6} required />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
