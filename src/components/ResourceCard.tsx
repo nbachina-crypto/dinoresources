@@ -91,23 +91,20 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
     }
   };
 
-  // const toggleFullscreen = async () => {
-  //   if (!dialogContentRef.current) return;
+  const toggleFullscreen = async () => {
+    if (!dialogContentRef.current) return;
 
-  //   try {
-  //     if (!isFullscreen) {
-  //       await dialogContentRef.current.requestFullscreen();
-  //       setIsFullscreen(true);
-  //     } else {
-  //       await document.exitFullscreen();
-  //       setIsFullscreen(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Fullscreen error:", error);
-  //   }
-  // };
-  const toggleFullscreen = () => {
-    setIsFullscreen((prev) => !prev);
+    try {
+      if (!isFullscreen) {
+        await dialogContentRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error("Fullscreen error:", error);
+    }
   };
 
   // const renderResourceContent = () => {
@@ -324,9 +321,6 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               document.exitFullscreen().catch(() => {});
             }
           }
-          // if (!open) {
-          //   setIsFullscreen(false);
-          // }
         }}
       >
         {/* <DialogContent
@@ -337,24 +331,13 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl"
           } overflow-y-auto [&>button]:left-2 [&>button]:right-auto`}
         > */}
-        {/* <DialogContent
+        <DialogContent
           ref={dialogContentRef}
           className={`${
             isFullscreen
               ? "fixed inset-0 w-screen h-screen max-w-none max-h-none p-0 bg-background overflow-auto"
               : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl overflow-y-auto"
           } [&>button]:left-2 [&>button]:right-auto`}
-        > */}
-        <DialogContent
-          ref={dialogContentRef}
-          className={`${
-            isFullscreen
-              ? "w-screen h-screen max-w-none max-h-none p-0 bg-background overflow-auto rounded-none"
-              : "w-[95vw] sm:w-[90vw] md:w-[80vw] max-w-4xl max-h-[85vh] p-4 rounded-xl overflow-y-auto"
-          } [&>button]:left-2 [&>button]:right-auto`}
-          style={{
-            transform: isFullscreen ? "none" : undefined,
-          }}
         >
           <DialogHeader className="relative">
             <DialogTitle className="text-center text-base sm:text-lg font-semibold break-words px-10">
@@ -367,17 +350,8 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
           {/* <div className={`mt-4 ${isFullscreen ? "h-[calc(100vh-80px)]" : ""}`}>
             <div className={isFullscreen ? "h-full" : ""}>{renderResourceContent()}</div>
           </div> */}
-          {/* <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
-          </div> */}
           <div className={`mt-4 ${isFullscreen ? "flex justify-center items-center h-[100vh]" : ""}`}>
-            <div
-              className={`${
-                isFullscreen ? "w-full h-full overflow-auto touch-pan-x touch-pan-y touch-pinch-zoom" : ""
-              }`}
-            >
-              {renderResourceContent()}
-            </div>
+            <div className={`${isFullscreen ? "w-full h-full overflow-auto" : ""}`}>{renderResourceContent()}</div>
           </div>
         </DialogContent>
       </Dialog>
