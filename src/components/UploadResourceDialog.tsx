@@ -132,14 +132,14 @@ export default function UploadResourceDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Upload Resource</DialogTitle>
           <DialogDescription>
             Add a new resource for students to access. All fields are required.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto pr-2">
           <div className="space-y-2">
             <Label htmlFor="subject">Subject</Label>
             <Select value={subjectId} onValueChange={setSubjectId} required>
