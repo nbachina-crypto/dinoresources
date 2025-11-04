@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Upload } from "lucide-react";
 
 interface Subject {
   id: string;
@@ -31,6 +32,67 @@ export default function UploadResourceDialog({
   const [url, setUrl] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers" | "All Units Resources" | "Additional Resources">("Syllabus");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleFileUpload = async (file: File) => {
+    if (file.type !== "application/pdf") {
+      toast.error("Only PDF files are allowed");
+      return;
+    }
+
+    setIsLoading(true);
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast.error("Not authenticated");
+      setIsLoading(false);
+      return;
+    }
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+
+    const { error: uploadError, data } = await supabase.storage
+      .from("resources")
+      .upload(fileName, file);
+
+    setIsLoading(false);
+
+    if (uploadError) {
+      toast.error("Failed to upload file");
+      return;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("resources")
+      .getPublicUrl(fileName);
+
+    setUrl(publicUrl);
+    setUploadedFile(file);
+    if (!title) {
+      setTitle(file.name.replace(/\.pdf$/i, ""));
+    }
+    toast.success("File uploaded successfully!");
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,6 +124,7 @@ export default function UploadResourceDialog({
       setUrl("");
       setSubjectId("");
       setCategory("Syllabus");
+      setUploadedFile(null);
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -118,8 +181,53 @@ export default function UploadResourceDialog({
             </Select>
           </div>
 
+          {type === "pdf" && (
+            <div className="space-y-2">
+              <Label>Upload PDF File</Label>
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                  isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"
+                }`}
+              >
+                <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-2">
+                  Drag and drop a PDF file here, or click to browse
+                </p>
+                <Input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileUpload(file);
+                  }}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById("file-upload")?.click()}
+                >
+                  Browse Files
+                </Button>
+                {uploadedFile && (
+                  <p className="text-sm text-primary mt-2">
+                    ✓ {uploadedFile.name}
+                  </p>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                Or enter a URL manually below
+              </p>
+            </div>
+          )}
+
           <div className="space-y-2">
-            <Label htmlFor="url">URL</Label>
+            <Label htmlFor="url">{type === "pdf" ? "URL (optional if file uploaded)" : "URL"}</Label>
             <Input
               id="url"
               type="url"
@@ -132,7 +240,7 @@ export default function UploadResourceDialog({
                   ? "https://youtube.com/watch?v=..."
                   : "https://example.com"
               }
-              required
+              required={type !== "pdf" || !uploadedFile}
             />
           </div>
 
