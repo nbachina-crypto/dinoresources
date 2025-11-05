@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye, Maximize, Minimize } from "lucide-react";
+import { ExternalLink, FileText, Video, Link2, Trash2, Edit, Eye, Maximize, Minimize, Pencil } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { UserRole } from "@/hooks/useUserRole";
 
 interface Resource {
@@ -42,6 +43,9 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
   const [isDeleting, setIsDeleting] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(resource.title);
+  const [isUpdating, setIsUpdating] = useState(false);
   const dialogContentRef = useRef<HTMLDivElement>(null);
 
   const canDelete = userRole === "admin" || (userRole === "contributor" && resource.created_by === userId);
@@ -95,6 +99,31 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
       toast.error("Failed to delete resource");
     } else {
       toast.success("Resource deleted successfully");
+      onUpdate();
+    }
+  };
+
+  const handleRename = async () => {
+    if (!editedTitle.trim() || editedTitle === resource.title) {
+      setIsEditingTitle(false);
+      setEditedTitle(resource.title);
+      return;
+    }
+
+    setIsUpdating(true);
+    const { error } = await supabase
+      .from("resources")
+      .update({ title: editedTitle.trim() })
+      .eq("id", resource.id);
+
+    setIsUpdating(false);
+    setIsEditingTitle(false);
+
+    if (error) {
+      toast.error("Failed to rename resource");
+      setEditedTitle(resource.title);
+    } else {
+      toast.success("Resource renamed successfully");
       onUpdate();
     }
   };
@@ -191,7 +220,43 @@ export default function ResourceCard({ resource, viewMode, userRole, userId, onU
               {getIcon()}
               <span className="ml-1 uppercase text-xs">{resource.type}</span>
             </Badge>
-            <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
+            {isEditingTitle ? (
+              <Input
+                value={editedTitle}
+                onChange={(e) => setEditedTitle(e.target.value)}
+                onBlur={handleRename}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleRename();
+                  } else if (e.key === 'Escape') {
+                    setIsEditingTitle(false);
+                    setEditedTitle(resource.title);
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="h-8 text-sm flex-1"
+                autoFocus
+                disabled={isUpdating}
+              />
+            ) : (
+              <>
+                <span className="font-medium truncate text-sm sm:text-base">{resource.title}</span>
+                {canDelete && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsEditingTitle(true);
+                    }}
+                    className="h-8 w-8 p-0 shrink-0"
+                    title="Rename resource"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </>
+            )}
           </div>
           <div
             className="flex gap-1 sm:gap-2 shrink-0"
