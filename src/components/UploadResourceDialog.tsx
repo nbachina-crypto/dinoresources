@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload } from "lucide-react";
+import { Upload, Pencil } from "lucide-react";
 
 interface Subject {
   id: string;
@@ -34,6 +34,8 @@ export default function UploadResourceDialog({
   const [category, setCategory] = useState<"Syllabus" | "Unit 1" | "Unit 2" | "Unit 3" | "Unit 4" | "Unit 5" | "Previous Papers" | "All Units Resources" | "Additional Resources">("Syllabus");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isEditingFilename, setIsEditingFilename] = useState(false);
+  const [editedFilename, setEditedFilename] = useState("");
 
   const handleFileUpload = async (file: File) => {
     if (file.type !== "application/pdf") {
@@ -70,8 +72,10 @@ export default function UploadResourceDialog({
 
     setUrl(publicUrl);
     setUploadedFile(file);
+    const fileNameWithoutExt = file.name.replace(/\.pdf$/i, "");
+    setEditedFilename(fileNameWithoutExt);
     if (!title) {
-      setTitle(file.name.replace(/\.pdf$/i, ""));
+      setTitle(fileNameWithoutExt);
     }
     toast.success("File uploaded successfully!");
   };
@@ -125,6 +129,8 @@ export default function UploadResourceDialog({
       setSubjectId("");
       setCategory("Syllabus");
       setUploadedFile(null);
+      setEditedFilename("");
+      setIsEditingFilename(false);
       onOpenChange(false);
       onResourceUploaded();
     }
@@ -215,9 +221,45 @@ export default function UploadResourceDialog({
                   Browse Files
                 </Button>
                 {uploadedFile && (
-                  <p className="text-sm text-primary mt-2">
-                    ✓ {uploadedFile.name}
-                  </p>
+                  <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                    <div className="flex items-center justify-between gap-2">
+                      {isEditingFilename ? (
+                        <Input
+                          value={editedFilename}
+                          onChange={(e) => setEditedFilename(e.target.value)}
+                          onBlur={() => {
+                            setIsEditingFilename(false);
+                            if (editedFilename.trim()) {
+                              setTitle(editedFilename);
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              setIsEditingFilename(false);
+                              if (editedFilename.trim()) {
+                                setTitle(editedFilename);
+                              }
+                            }
+                          }}
+                          className="h-8 text-sm"
+                          autoFocus
+                        />
+                      ) : (
+                        <p className="text-sm text-primary font-medium flex-1">
+                          ✓ {editedFilename}.pdf
+                        </p>
+                      )}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsEditingFilename(!isEditingFilename)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
               <p className="text-xs text-muted-foreground text-center">
