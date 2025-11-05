@@ -221,8 +221,8 @@ export default function UploadResourceDialog({
                   Browse Files
                 </Button>
                 {uploadedFile && (
-                  <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                    <div className="flex items-center justify-between gap-2">
+                  <div className="mt-3 p-3 bg-primary/10 rounded-lg border border-primary/30">
+                    <div className="flex items-center gap-3">
                       {isEditingFilename ? (
                         <Input
                           value={editedFilename}
@@ -241,22 +241,24 @@ export default function UploadResourceDialog({
                               }
                             }
                           }}
-                          className="h-8 text-sm"
+                          className="flex-1"
                           autoFocus
                         />
                       ) : (
-                        <p className="text-sm text-primary font-medium flex-1">
+                        <p className="text-sm font-medium flex-1 text-primary">
                           ✓ {editedFilename}.pdf
                         </p>
                       )}
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         onClick={() => setIsEditingFilename(!isEditingFilename)}
-                        className="h-8 w-8 p-0"
+                        className="shrink-0"
+                        title="Rename file"
                       >
-                        <Pencil className="h-3.5 w-3.5" />
+                        <Pencil className="h-4 w-4 mr-1" />
+                        Rename
                       </Button>
                     </div>
                   </div>
