@@ -57,6 +57,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        toast: {
+          DEFAULT: "hsl(var(--toast))",
+          foreground: "hsl(var(--toast-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

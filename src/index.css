@@ -35,6 +35,9 @@ All colors MUST be HSL.
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 217 91% 60%;
+    
+    --toast: 210 100% 95%;
+    --toast-foreground: 222 47% 11%;
 
     --radius: 0.75rem;
 
@@ -72,6 +75,9 @@ All colors MUST be HSL.
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 217 91% 60%;
+    
+    --toast: 200 90% 35%;
+    --toast-foreground: 210 40% 98%;
 
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(262 83% 58%));
     --gradient-subtle: linear-gradient(180deg, hsl(222 47% 11%), hsl(217 33% 14%));
