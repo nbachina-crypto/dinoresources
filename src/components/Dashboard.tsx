@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { User, LogOut, Upload } from "lucide-react";
+import { User, LogOut, Upload, BookPlus } from "lucide-react";
 import UploadResourceDialog from "./UploadResourceDialog";
 import SubjectDrawer from "./SubjectDrawer";
+import AddSubjectDialog from "./AddSubjectDialog";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AnnouncementsSection } from "./AnnouncementsSection";
 import dinoLogo from "@/assets/dino-logo.png";
@@ -28,6 +29,7 @@ export default function Dashboard() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isAddSubjectDialogOpen, setIsAddSubjectDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"subjects" | "announcements">("subjects");
@@ -197,10 +199,16 @@ export default function Dashboard() {
                   </p>
                 </div>
                 {isContributor && (
-                  <Button onClick={() => setIsUploadDialogOpen(true)} size="sm" className="w-full sm:w-auto">
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload Resource
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Button onClick={() => setIsAddSubjectDialogOpen(true)} size="sm" variant="outline" className="w-full sm:w-auto">
+                      <BookPlus className="w-4 h-4 mr-2" />
+                      Add Subject
+                    </Button>
+                    <Button onClick={() => setIsUploadDialogOpen(true)} size="sm" className="w-full sm:w-auto">
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Resource
+                    </Button>
+                  </div>
                 )}
               </div>
 
@@ -261,6 +269,16 @@ export default function Dashboard() {
             // Drawer will reload its own resources
             setIsUploadDialogOpen(false);
           }}
+        />
+      )}
+
+      {isContributor && profile && (
+        <AddSubjectDialog
+          open={isAddSubjectDialogOpen}
+          onOpenChange={setIsAddSubjectDialogOpen}
+          currentDepartment={profile.department}
+          currentSemester={profile.semester}
+          onSubjectAdded={loadSubjects}
         />
       )}
     </div>
