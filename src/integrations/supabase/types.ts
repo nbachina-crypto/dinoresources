@@ -121,6 +121,7 @@ export type Database = {
           department: string
           id: string
           name: string
+          order_index: number | null
           semester: number
         }
         Insert: {
@@ -128,6 +129,7 @@ export type Database = {
           department: string
           id?: string
           name: string
+          order_index?: number | null
           semester: number
         }
         Update: {
@@ -135,6 +137,7 @@ export type Database = {
           department?: string
           id?: string
           name?: string
+          order_index?: number | null
           semester?: number
         }
         Relationships: []
