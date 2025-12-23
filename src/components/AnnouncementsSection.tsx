@@ -64,18 +64,18 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-auto md:overflow-x-visible">
         <ScrollArea className="h-[400px] pr-2 sm:pr-4 touch-pan-y">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">Loading announcements...</div>
           ) : announcements.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground text-sm">No announcements yet</div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 min-w-[280px]">
               {announcements.map((announcement) => (
                 <div
                   key={announcement.id}
-                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors"
+                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors min-w-[280px]"
                 >
                   <div className="flex items-start justify-between gap-2 flex-wrap">
                     <h3 className="font-semibold text-base sm:text-lg">{announcement.title}</h3>
