@@ -5,9 +5,17 @@ import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import gpayQr from "@/assets/gpay_qr.jpeg";
 
+const upiApps = [
+  { name: "Google Pay", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" },
+  { name: "PhonePe", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" },
+  { name: "Paytm", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png" },
+  { name: "NaviPay", icon: "https://play-lh.googleusercontent.com/B5cNBA15IxjCT-8UTwWlhMy1JOmj4R5Jph0lQFmVTkPj2s5gRwekU2IxJxUeJU9ctg=w240-h480-rw" },
+];
+
 export function SupportSection() {
   const [copied, setCopied] = useState(false);
   const upiId = "narenbachina22@okhdfcbank";
+  const upiLink = `upi://pay?pa=${upiId}&pn=Team%20Dino&cu=INR`;
 
   const handleCopy = async () => {
     try {
@@ -18,6 +26,10 @@ export function SupportSection() {
     } catch {
       toast.error("Failed to copy UPI ID");
     }
+  };
+
+  const handleUpiAppClick = () => {
+    window.location.href = upiLink;
   };
 
   return (
@@ -59,6 +71,34 @@ export function SupportSection() {
             </div>
             <p className="text-xs text-muted-foreground text-center">
               Scan the QR or copy the UPI ID and pay using any UPI app.
+            </p>
+          </div>
+
+          {/* UPI App Buttons */}
+          <div className="w-full space-y-3 pt-2">
+            <div className="flex justify-center gap-3 flex-wrap">
+              {upiApps.map((app) => (
+                <button
+                  key={app.name}
+                  onClick={handleUpiAppClick}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors min-w-[70px]"
+                  title={`Pay with ${app.name}`}
+                >
+                  <div className="w-10 h-10 rounded-lg bg-white p-1.5 shadow-sm flex items-center justify-center">
+                    <img
+                      src={app.icon}
+                      alt={app.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <span className="text-[10px] text-muted-foreground font-medium">
+                    {app.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground text-center">
+              Tap your preferred UPI app to pay instantly
             </p>
           </div>
 
