@@ -10,6 +10,7 @@ import SubjectDrawer from "./SubjectDrawer";
 import AddSubjectDialog from "./AddSubjectDialog";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AnnouncementsSection } from "./AnnouncementsSection";
+import { SupportSection } from "./SupportSection";
 import dinoLogo from "@/assets/dino-logo.png";
 
 interface Profile {
@@ -32,7 +33,7 @@ export default function Dashboard() {
   const [isAddSubjectDialogOpen, setIsAddSubjectDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"subjects" | "announcements">("subjects");
+  const [activeTab, setActiveTab] = useState<"subjects" | "announcements" | "support">("subjects");
 
   useEffect(() => {
     checkAuth();
@@ -164,7 +165,7 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
           {/* Tab Navigation */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-2xl">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-3xl">
             <Card
               className={`shadow-card border-border/50 cursor-pointer transition-all ${
                 activeTab === "subjects" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
@@ -172,7 +173,7 @@ export default function Dashboard() {
               onClick={() => setActiveTab("subjects")}
             >
               <CardContent className="p-3 sm:p-4 text-center">
-                <h3 className="font-semibold text-sm sm:text-base">Your Subjects</h3>
+                <h3 className="font-semibold text-xs sm:text-base">Your Subjects</h3>
               </CardContent>
             </Card>
 
@@ -183,7 +184,18 @@ export default function Dashboard() {
               onClick={() => setActiveTab("announcements")}
             >
               <CardContent className="p-3 sm:p-4 text-center">
-                <h3 className="font-semibold text-sm sm:text-base">Announcements & Feedback</h3>
+                <h3 className="font-semibold text-xs sm:text-base">Announcements & Feedback</h3>
+              </CardContent>
+            </Card>
+
+            <Card
+              className={`shadow-card border-border/50 cursor-pointer transition-all ${
+                activeTab === "support" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
+              }`}
+              onClick={() => setActiveTab("support")}
+            >
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="font-semibold text-xs sm:text-base">Support Team Dino</h3>
               </CardContent>
             </Card>
           </div>
@@ -244,6 +256,13 @@ export default function Dashboard() {
             <div className="animate-fade-in max-w-4xl">
               <h2 className="text-2xl font-bold mb-6">Announcements & Feedback</h2>
               <AnnouncementsSection isAdmin={role === "admin"} />
+            </div>
+          )}
+
+          {/* Support View */}
+          {activeTab === "support" && (
+            <div className="animate-fade-in max-w-4xl">
+              <SupportSection />
             </div>
           )}
         </div>
