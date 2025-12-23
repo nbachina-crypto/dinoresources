@@ -15,7 +15,6 @@ const upiApps = [
 export function SupportSection() {
   const [copied, setCopied] = useState(false);
   const upiId = "narenbachina22@okhdfcbank";
-  const upiLink = `upi://pay?pa=${upiId}&pn=Team%20Dino&tn=Support%20Team%20Dino&cu=INR`;
 
   const handleCopy = async () => {
     try {
@@ -26,10 +25,6 @@ export function SupportSection() {
     } catch {
       toast.error("Failed to copy UPI ID");
     }
-  };
-
-  const handleUpiAppClick = () => {
-    window.location.href = upiLink;
   };
 
   return (
@@ -74,15 +69,13 @@ export function SupportSection() {
             </p>
           </div>
 
-          {/* UPI App Buttons */}
+          {/* UPI App Icons */}
           <div className="w-full space-y-3 pt-2">
             <div className="flex justify-center gap-3 flex-wrap">
               {upiApps.map((app) => (
-                <button
+                <div
                   key={app.name}
-                  onClick={handleUpiAppClick}
-                  className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors min-w-[70px]"
-                  title={`Pay with ${app.name}`}
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-muted/30 min-w-[70px]"
                 >
                   <div className="w-10 h-10 rounded-lg bg-white p-1.5 shadow-sm flex items-center justify-center">
                     <img
@@ -94,11 +87,11 @@ export function SupportSection() {
                   <span className="text-[10px] text-muted-foreground font-medium">
                     {app.name}
                   </span>
-                </button>
+                </div>
               ))}
             </div>
             <p className="text-xs text-muted-foreground text-center">
-              Tap your preferred UPI app to pay instantly
+              Copy the UPI ID and paste it in your preferred payment app to complete your donation.
             </p>
           </div>
 
