@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import gpayQr from "@/assets/gpay_qr.jpeg";
+import navipayLogo from "@/assets/navipay_logo.png";
 
 const upiApps = [
-  { name: "Google Pay", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" },
-  { name: "PhonePe", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" },
-  { name: "Paytm", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png" },
-  { name: "NaviPay", icon: "https://play-lh.googleusercontent.com/B5cNBA15IxjCT-8UTwWlhMy1JOmj4R5Jph0lQFmVTkPj2s5gRwekU2IxJxUeJU9ctg=w240-h480-rw" },
+  { name: "Google Pay", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png", url: "https://pay.google.com/" },
+  { name: "PhonePe", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png", url: "https://www.phonepe.com/app/" },
+  { name: "Paytm", icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png", url: "https://paytm.com/download" },
+  { name: "NaviPay", icon: navipayLogo, url: "https://www.navipay.in/" },
 ];
 
 export function SupportSection() {
@@ -73,9 +74,13 @@ export function SupportSection() {
           <div className="w-full space-y-3 pt-2">
             <div className="flex justify-center gap-3 flex-wrap">
               {upiApps.map((app) => (
-                <div
+                <a
                   key={app.name}
-                  className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-muted/30 min-w-[70px]"
+                  href={app.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors min-w-[70px] cursor-pointer"
+                  title={`Visit ${app.name}`}
                 >
                   <div className="w-10 h-10 rounded-lg bg-white p-1.5 shadow-sm flex items-center justify-center">
                     <img
@@ -87,7 +92,7 @@ export function SupportSection() {
                   <span className="text-[10px] text-muted-foreground font-medium">
                     {app.name}
                   </span>
-                </div>
+                </a>
               ))}
             </div>
             <p className="text-xs text-muted-foreground text-center">
