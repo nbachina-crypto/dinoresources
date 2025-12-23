@@ -15,7 +15,7 @@ const upiApps = [
 export function SupportSection() {
   const [copied, setCopied] = useState(false);
   const upiId = "narenbachina22@okhdfcbank";
-  const upiLink = `upi://pay?pa=${upiId}&pn=Team%20Dino&cu=INR`;
+  const upiLink = `upi://pay?pa=${upiId}&pn=Team%20Dino&tn=Support%20Team%20Dino&cu=INR`;
 
   const handleCopy = async () => {
     try {
