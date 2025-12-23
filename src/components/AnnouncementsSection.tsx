@@ -64,18 +64,18 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="overflow-x-auto md:overflow-x-visible">
+      <CardContent>
         <ScrollArea className="h-[400px] pr-2 sm:pr-4 touch-pan-y">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">Loading announcements...</div>
           ) : announcements.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground text-sm">No announcements yet</div>
           ) : (
-            <div className="space-y-4 min-w-[280px]">
+            <div className="space-y-4">
               {announcements.map((announcement) => (
                 <div
                   key={announcement.id}
-                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors min-w-[280px]"
+                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-2 flex-wrap">
                     <h3 className="font-semibold text-base sm:text-lg">{announcement.title}</h3>
@@ -83,7 +83,9 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                       {announcement.tag}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground break-words">{announcement.content}</p>
+                  <div className="overflow-x-auto">
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap min-w-0">{announcement.content}</p>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(announcement.created_at), { addSuffix: true })}
                   </p>
