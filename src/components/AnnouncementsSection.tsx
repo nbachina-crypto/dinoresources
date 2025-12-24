@@ -83,9 +83,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                       {announcement.tag}
                     </Badge>
                   </div>
-                  <div className="overflow-x-auto">
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap min-w-0">{announcement.content}</p>
-                  </div>
+                  <p className="text-sm text-muted-foreground break-words">{announcement.content}</p>
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(announcement.created_at), { addSuffix: true })}
                   </p>

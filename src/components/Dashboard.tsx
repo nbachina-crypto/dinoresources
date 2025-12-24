@@ -10,7 +10,6 @@ import SubjectDrawer from "./SubjectDrawer";
 import AddSubjectDialog from "./AddSubjectDialog";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AnnouncementsSection } from "./AnnouncementsSection";
-import { SupportSection } from "./SupportSection";
 import dinoLogo from "@/assets/dino-logo.png";
 
 interface Profile {
@@ -33,7 +32,7 @@ export default function Dashboard() {
   const [isAddSubjectDialogOpen, setIsAddSubjectDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"subjects" | "announcements" | "support">("subjects");
+  const [activeTab, setActiveTab] = useState<"subjects" | "announcements">("subjects");
 
   useEffect(() => {
     checkAuth();
@@ -165,58 +164,47 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
           {/* Tab Navigation */}
-          <div className="w-full flex justify-center">
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-3xl">
-              <Card
-                className={`shadow-card border-border/50 cursor-pointer transition-all ${
-                  activeTab === "subjects" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
-                }`}
-                onClick={() => setActiveTab("subjects")}
-              >
-                <CardContent className="p-3 sm:p-4 text-center">
-                  <h3 className="font-semibold text-xs sm:text-base">Your Subjects</h3>
-                </CardContent>
-              </Card>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-2xl">
+            <Card
+              className={`shadow-card border-border/50 cursor-pointer transition-all ${
+                activeTab === "subjects" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
+              }`}
+              onClick={() => setActiveTab("subjects")}
+            >
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="font-semibold text-sm sm:text-base">Your Subjects</h3>
+              </CardContent>
+            </Card>
 
-              <Card
-                className={`shadow-card border-border/50 cursor-pointer transition-all ${
-                  activeTab === "announcements" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
-                }`}
-                onClick={() => setActiveTab("announcements")}
-              >
-                <CardContent className="p-3 sm:p-4 text-center">
-                  <h3 className="font-semibold text-xs sm:text-base">Announcements & Feedback</h3>
-                </CardContent>
-              </Card>
-
-              <Card
-                className={`shadow-card border-border/50 cursor-pointer transition-all ${
-                  activeTab === "support" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
-                }`}
-                onClick={() => setActiveTab("support")}
-              >
-                <CardContent className="p-3 sm:p-4 text-center">
-                  <h3 className="font-semibold text-xs sm:text-base">Support Team Dino</h3>
-                </CardContent>
-              </Card>
-            </div>
+            <Card
+              className={`shadow-card border-border/50 cursor-pointer transition-all ${
+                activeTab === "announcements" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
+              }`}
+              onClick={() => setActiveTab("announcements")}
+            >
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="font-semibold text-sm sm:text-base">Announcements & Feedback</h3>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Subjects View */}
           {activeTab === "subjects" && (
             <div className="animate-fade-in">
-              <div className="w-full text-center mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold">Your Subjects</h2>
-                <p className="text-sm sm:text-base text-muted-foreground">
-                  Click on a subject to view organized resources
-                </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold">Your Subjects</h2>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    Click on a subject to view organized resources
+                  </p>
+                </div>
                 {isContributor && (
-                  <div className="flex flex-col sm:flex-row gap-2 justify-center mt-4">
-                    <Button onClick={() => setIsAddSubjectDialogOpen(true)} size="sm" variant="outline">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Button onClick={() => setIsAddSubjectDialogOpen(true)} size="sm" variant="outline" className="w-full sm:w-auto">
                       <BookPlus className="w-4 h-4 mr-2" />
                       Add Subject
                     </Button>
-                    <Button onClick={() => setIsUploadDialogOpen(true)} size="sm">
+                    <Button onClick={() => setIsUploadDialogOpen(true)} size="sm" className="w-full sm:w-auto">
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Resource
                     </Button>
@@ -253,20 +241,9 @@ export default function Dashboard() {
 
           {/* Announcements View */}
           {activeTab === "announcements" && (
-            <div className="animate-fade-in w-full flex flex-col items-center">
-              <h2 className="text-2xl font-bold mb-6 w-full text-center">Announcements & Feedback</h2>
-              <div className="max-w-4xl w-full">
-                <AnnouncementsSection isAdmin={role === "admin"} />
-              </div>
-            </div>
-          )}
-
-          {/* Support View */}
-          {activeTab === "support" && (
-            <div className="animate-fade-in w-full flex flex-col items-center">
-              <div className="max-w-4xl w-full">
-                <SupportSection />
-              </div>
+            <div className="animate-fade-in max-w-4xl">
+              <h2 className="text-2xl font-bold mb-6">Announcements & Feedback</h2>
+              <AnnouncementsSection isAdmin={role === "admin"} />
             </div>
           )}
         </div>
