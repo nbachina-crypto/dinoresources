@@ -16,32 +16,46 @@ export function SupportSection() {
       setCopied(true);
       toast.success("UPI ID copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       toast.error("Failed to copy UPI ID");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex justify-center">
       <Card className="shadow-card border-border/50 w-full max-w-md">
         <CardContent className="p-6 flex flex-col items-center text-center space-y-6">
+          
+          {/* Title */}
+          <h2 className="text-xl font-bold">
+            Support Our Mission
+          </h2>
+
+          {/* Mission text */}
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Our domain and database costs are increasing.
+            If Team Dino has helped you in your exam preparation,
+            consider supporting us so we can keep everything free
+            for all students.
+          </p>
+
           {/* QR Code */}
-          <div className="rounded-xl overflow-hidden bg-background p-2 shadow-lg">
-            <img 
-              src={gpayQr} 
-              alt="GPay QR Code" 
+          <div className="rounded-xl overflow-hidden bg-background p-3 shadow-lg">
+            <img
+              src={gpayQr}
+              alt="UPI QR Code"
               className="w-56 h-56 sm:w-64 sm:h-64 object-contain"
             />
           </div>
 
-          {/* UPI ID with Copy Button */}
+          {/* UPI ID with copy */}
           <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-4 py-3 w-full justify-center">
-            <span className="font-mono text-sm sm:text-base text-foreground break-all">
+            <span className="font-mono text-sm sm:text-base break-all">
               {UPI_ID}
             </span>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleCopy}
               className="shrink-0 h-8 w-8"
             >
@@ -53,12 +67,14 @@ export function SupportSection() {
             </Button>
           </div>
 
-          {/* Helper Text */}
+          {/* Helper text */}
           <p className="text-sm text-muted-foreground">
-            Copy the UPI ID and paste it in your preferred UPI app to complete your support.
+            Copy the UPI ID and paste it in your preferred UPI app
+            to complete your support.
           </p>
         </CardContent>
       </Card>
     </div>
   );
 }
+
