@@ -54,18 +54,36 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
             <CardDescription className="text-sm">Stay updated with the latest news</CardDescription>
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
-            <Button variant="outline" size="sm" asChild className="flex-1 sm:flex-initial">
-              <a href={feedbackUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                <span className="truncate">Give Feedback</span>
-              </a>
-            </Button>
-            {isAdmin && <AddAnnouncementDialog onAnnouncementAdded={loadAnnouncements} />}
-          </div>
+              <Button
+                variant="outline"
+                size="icon"
+                asChild
+                className="sm:hidden"
+              >
+                <a href={feedbackUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
+            
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="hidden sm:flex"
+              >
+                <a href={feedbackUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Give Feedback
+                </a>
+              </Button>
+            
+              {isAdmin && <AddAnnouncementDialog onAnnouncementAdded={loadAnnouncements} />}
+            </div>
+
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] pr-2 sm:pr-4 overflow-x-auto">
+        <ScrollArea className="h-[400px] pr-2 sm:pr-4">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">Loading announcements...</div>
           ) : announcements.length === 0 ? (
@@ -83,7 +101,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                       {announcement.tag}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground break-words whitespace-pre-wrap">{announcement.content}</p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-wrap break-all">{announcement.content}</p>
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(announcement.created_at), { addSuffix: true })}
                   </p>
