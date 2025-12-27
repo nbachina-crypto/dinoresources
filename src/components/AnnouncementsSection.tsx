@@ -54,37 +54,37 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
 
   return (
     <Card className="mx-auto max-w-4xl">
-      <CardHeader>
-        <div className="flex items-center justify-between gap-2">
-          <div>
-            <CardTitle className="text-lg sm:text-xl">
+      <CardHeader className="px-3 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="min-w-0">
+            <CardTitle className="text-base sm:text-xl truncate">
               Announcements & Feedback
             </CardTitle>
-            <CardDescription className="text-sm">
+            <CardDescription className="text-xs sm:text-sm">
               Stay updated with the latest news
             </CardDescription>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Give Feedback – icon + text (always visible) */}
-            <Button variant="outline" size="sm" asChild>
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Give Feedback – icon only on mobile, with text on larger screens */}
+            <Button variant="outline" size="sm" asChild className="shrink-0">
               <a
                 href={feedbackUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2"
+                className="flex items-center gap-1.5"
               >
                 <ExternalLink className="h-4 w-4" />
-                <span>Feedback</span>
+                <span className="hidden xs:inline sm:inline">Feedback</span>
               </a>
             </Button>
 
-            {/* Add Announcement – ONLY + icon, admin only */}
+            {/* Add Announcement – icon only, admin only */}
             {isAdmin && (
               <AddAnnouncementDialog
                 onAnnouncementAdded={loadAnnouncements}
                 trigger={
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" className="shrink-0 h-9 w-9">
                     <Plus className="h-4 w-4" />
                   </Button>
                 }
@@ -94,7 +94,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-3 sm:px-6">
         <ScrollArea className="h-[420px] pr-2">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">
@@ -105,23 +105,23 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
               No announcements yet
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {announcements.map((announcement) => (
                 <div
                   key={announcement.id}
-                  className="border rounded-lg p-4 space-y-2 hover:bg-accent/50 transition-colors"
+                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors overflow-hidden"
                 >
-                  <div className="flex items-start justify-between gap-2 flex-wrap">
-                    <h3 className="font-semibold text-base sm:text-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1.5 sm:gap-2">
+                    <h3 className="font-semibold text-sm sm:text-lg break-words min-w-0">
                       {announcement.title}
                     </h3>
-                    <Badge variant="secondary" className="text-xs shrink-0">
+                    <Badge variant="secondary" className="text-xs shrink-0 w-fit">
                       {announcement.tag}
                     </Badge>
                   </div>
 
                   {/* Content wraps vertically, no cutoff */}
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
+                  <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap break-words overflow-hidden">
                     {announcement.content}
                   </p>
 
