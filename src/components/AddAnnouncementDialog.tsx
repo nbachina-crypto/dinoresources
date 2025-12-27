@@ -18,9 +18,10 @@ import { Plus } from "lucide-react";
 
 interface AddAnnouncementDialogProps {
   onAnnouncementAdded: () => void;
+  trigger?: React.ReactNode;
 }
 
-export function AddAnnouncementDialog({ onAnnouncementAdded }: AddAnnouncementDialogProps) {
+export function AddAnnouncementDialog({ onAnnouncementAdded, trigger }: AddAnnouncementDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -63,10 +64,12 @@ export function AddAnnouncementDialog({ onAnnouncementAdded }: AddAnnouncementDi
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus className="mr-2 h-4 w-4" />
-          Add Announcement
-        </Button>
+        {trigger || (
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Announcement
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <form onSubmit={handleSubmit}>
