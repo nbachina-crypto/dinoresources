@@ -65,7 +65,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] pr-2 sm:pr-4 touch-pan-y">
+        <ScrollArea className="h-[400px] pr-2 sm:pr-4 overflow-x-auto">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">Loading announcements...</div>
           ) : announcements.length === 0 ? (
@@ -75,7 +75,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
               {announcements.map((announcement) => (
                 <div
                   key={announcement.id}
-                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors"
+                  className="border rounded-lg p-3 sm:p-4 space-y-2 hover:bg-accent/50 transition-colors min-w-0"
                 >
                   <div className="flex items-start justify-between gap-2 flex-wrap">
                     <h3 className="font-semibold text-base sm:text-lg">{announcement.title}</h3>
@@ -83,7 +83,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                       {announcement.tag}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground break-words">{announcement.content}</p>
+                  <p className="text-sm text-muted-foreground break-words whitespace-pre-wrap">{announcement.content}</p>
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(announcement.created_at), { addSuffix: true })}
                   </p>
