@@ -66,7 +66,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            {/* Give Feedback – icon only on mobile, with text on larger screens */}
+            {/* Give Feedback – always visible with text */}
             <Button variant="outline" size="sm" asChild className="shrink-0">
               <a
                 href={feedbackUrl}
@@ -75,7 +75,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                 className="flex items-center gap-1.5"
               >
                 <ExternalLink className="h-4 w-4" />
-                <span className="hidden xs:inline sm:inline">Feedback</span>
+                <span>Feedback</span>
               </a>
             </Button>
 
@@ -120,10 +120,12 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                     </Badge>
                   </div>
 
-                  {/* Content wraps vertically, no cutoff */}
-                  <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap break-words overflow-hidden">
-                    {announcement.content}
-                  </p>
+                  {/* Content with horizontal scroll on mobile for long lines */}
+                  <div className="overflow-x-auto">
+                    <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap">
+                      {announcement.content}
+                    </p>
+                  </div>
 
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(
