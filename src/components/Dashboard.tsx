@@ -255,7 +255,7 @@ export default function Dashboard() {
 
           {/* Announcements View */}
           {activeTab === "announcements" && (
-            <div className="animate-fade-in max-w-4xl">
+            <div className="animate-fade-in max-w-4xl mx-auto">
               <h2 className="text-2xl font-bold mb-6">Announcements & Feedback</h2>
               <AnnouncementsSection isAdmin={role === "admin"} />
             </div>
