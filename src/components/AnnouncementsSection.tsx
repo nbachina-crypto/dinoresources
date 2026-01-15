@@ -53,7 +53,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
   }, []);
 
   return (
-    <Card className="mx-auto max-w-4xl">
+    <Card className="mx-auto max-w-4xl w-full">
       <CardHeader className="px-3 sm:px-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="min-w-0">
@@ -95,7 +95,7 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
       </CardHeader>
 
       <CardContent className="px-3 sm:px-6">
-        <ScrollArea className="h-[420px] pr-2">
+        <ScrollArea className="sm:h-[420px] pr-2">
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground text-sm">
               Loading announcements…
@@ -121,11 +121,11 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
                   </div>
 
                   {/* Content with horizontal scroll on mobile for long lines */}
-                  <div className="overflow-x-auto">
+                  {/* <div className="overflow-x-auto"> */}
                     <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap">
                       {announcement.content}
                     </p>
-                  </div>
+                  {/* </div> */}
 
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(
