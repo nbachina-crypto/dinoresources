@@ -157,6 +157,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { AddAnnouncementDialog } from "./AddAnnouncementDialog";
 import { ExternalLink, Plus } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import Linkify from "linkify-react";
+
 
 interface Announcement {
   id: string;
@@ -226,9 +228,21 @@ export function AnnouncementsSection({ isAdmin }: AnnouncementsSectionProps) {
               </div>
 
               {/* IMPORTANT: vertical flow, no clipping */}
-              <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap break-words">
+              {/* <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap break-words">
                 {announcement.content}
-              </p>
+              </p> */}
+              <Linkify
+                options={{
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className: "text-primary underline break-all",
+                }}
+              >
+                <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap break-words">
+                  {announcement.content}
+                </p>
+              </Linkify>
+
 
               <p className="text-xs text-muted-foreground">
                 {formatDistanceToNow(new Date(announcement.created_at), {
