@@ -25,11 +25,6 @@ export function SupportSection() {
     <div className="flex justify-center">
       <Card className="shadow-card border-border/50 w-full max-w-md">
         <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-          
-          {/* Title */}
-          {/* <h2 className="text-xl font-bold">
-            Support Our Mission
-          </h2> */}
 
           {/* Mission text */}
           <p className="text-sm text-muted-foreground leading-relaxed">
