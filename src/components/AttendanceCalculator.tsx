@@ -739,7 +739,7 @@ export default function AttendanceCalculator() {
         return;
       }
 
-      const attendedTillNow = (percent / 100) * totalTillToday;
+      const attendedTillNow = Math.round((percent / 100) * totalTillToday);
       conductedTillYesterday = totalTillToday - ct;
       attendedTillYesterday = attendedTillNow - at;
     } else {
@@ -754,8 +754,12 @@ export default function AttendanceCalculator() {
     const totalEnd = conductedTillYesterday + remaining;
     const required = Math.ceil(totalEnd * 0.75);
 
-    const mustAttend = Math.max(0, required - attendedTillYesterday);
+    const mustAttend = Math.max(0,Math.ceil(required - Math.round(attendedTillYesterday)));
     const canBunk = Math.max(0, remaining - mustAttend);
+    if (remaining === 0) {
+      mustAttend = 0;
+      canBunk = 0;
+    }
     const projected =
       ((attendedTillYesterday + remaining) / totalEnd) * 100;
 
