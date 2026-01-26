@@ -145,6 +145,9 @@ export default function AttendanceCalculator() {
     session1Remaining: number;
     session2Needed: number;
     session2Remaining: number;
+    isOverallPossible: boolean;
+    isSession1Possible: boolean;
+    isSession2Possible: boolean;
   }>(null);
 
   /* ------------------ Load Timetable ------------------ */
@@ -283,6 +286,10 @@ export default function AttendanceCalculator() {
     const requiredFor75 = Math.ceil(totalBySemesterEnd * 0.75);
     const mustAttend = Math.max(0, requiredFor75 - attendedSoFar);
     const canBunk = Math.max(0, remaining - mustAttend);
+    const isOverallPossible = mustAttend <= remaining;
+    const isSession1Possible = session1Needed <= session1Remaining;
+    const isSession2Possible = session2Needed <= session2Remaining;
+
 
     // Calculate for Session 1 (Feb 3, 2026)
     let session1Needed = 0;
@@ -336,6 +343,9 @@ export default function AttendanceCalculator() {
       session1Remaining,
       session2Needed,
       session2Remaining,
+      isOverallPossible,
+      isSession1Possible,
+      isSession2Possible,
     });
   };
   
@@ -493,9 +503,18 @@ export default function AttendanceCalculator() {
                 <p className="text-sm text-muted-foreground mt-1">Classes Remaining</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-amber-600">{result.mustAttend}</p>
+                <p className="text-3xl font-bold text-amber-600">
+                  {result.mustAttend}
+                </p>
                 <p className="text-sm text-muted-foreground mt-1">Must Attend</p>
+              
+                {!result.isOverallPossible && (
+                  <p className="mt-1 text-xs font-semibold text-red-500">
+                    Almost Not Possible
+                  </p>
+                )}
               </div>
+
               <div>
                 <p className="text-3xl font-bold text-green-600">{result.canBunk}</p>
                 <p className="text-sm text-muted-foreground mt-1">Can Skip</p>
@@ -519,7 +538,18 @@ export default function AttendanceCalculator() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Must attend:</span>
-                    <span className="text-xl font-bold text-amber-600">{result.session1Needed}</span>
+                    <div className="text-right">
+                      <span className="text-xl font-bold text-amber-600">
+                        {result.session1Needed}
+                      </span>
+                    
+                      {!result.isSession1Possible && (
+                        <p className="text-xs font-semibold text-red-500">
+                          Almost Not Possible
+                        </p>
+                      )}
+                    </div>
+
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Can Skip:</span>
@@ -544,7 +574,18 @@ export default function AttendanceCalculator() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Must attend:</span>
-                  <span className="text-xl font-bold text-amber-600">{result.session2Needed}</span>
+                 <div className="text-right">
+                    <span className="text-xl font-bold text-amber-600">
+                      {result.session2Needed}
+                    </span>
+                  
+                    {!result.isSession2Possible && (
+                      <p className="text-xs font-semibold text-red-500">
+                        Not Possible
+                      </p>
+                    )}
+                  </div>
+
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Can Skip:</span>
