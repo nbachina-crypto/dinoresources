@@ -714,7 +714,16 @@ export default function AttendanceCalculator() {
     setIsSaving(false);
   };
 
-  /* ------------------ Calculation ------------------ */
+  /* ------------------ Helpers ------------------ */
+
+  // Helper to get yesterday's date
+  const getYesterday = (date: Date) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() - 1);
+    return d;
+  };
+
+ /* ------------------ Calculation ------------------ */
 
   const calculateAttendance = () => {
     if (!savedTimetable) return;
@@ -725,61 +734,81 @@ export default function AttendanceCalculator() {
       return;
     }
 
-    const totalTillToday = calculateConductedTill(today, savedTimetable);
+    // 1. Calculate Historic Data (Start Date -> Yesterday)
+    // This is the stable baseline that doesn't change regardless of today's input
+    const yesterday = getYesterday(today);
+    const classesHistoric = calculateConductedTill(yesterday, savedTimetable);
 
-    let conductedTillYesterday: number;
-    let attendedTillYesterday: number;
+    // 2. Calculate Future Data (Tomorrow -> End Date)
+    // calculateRemaining automatically starts counting from the day AFTER the date passed
+    const classesFuture = calculateRemaining(today, savedTimetable);
+
+    // 3. Get Today's Full Schedule (e.g., 5 classes)
+    const classesTodayFull = isWorkingDay(today) ? getClassesForDay(today, savedTimetable) : 0;
+
+    // Variables to hold the "Current Reality"
+    let currentConducted = 0;
+    let currentAttended = 0;
+    let remainingClasses = 0;
 
     if (shouldAskToday && attendedToday === "yes") {
-      const ct = parseInt(classesConductedToday) || 0;
-      const at = parseInt(classesAttendedToday) || 0;
+      // SCENARIO A: Portal includes today's partial data
+      const todayConductedPartial = parseInt(classesConductedToday) || 0;
+      const todayAttendedPartial = parseInt(classesAttendedToday) || 0;
 
-      if (at > ct) {
-        toast.error("Attended > Conducted");
+      if (todayAttendedPartial > todayConductedPartial) {
+        toast.error("Attended classes cannot exceed conducted classes today");
         return;
       }
 
-      const attendedTillNow = Math.round((percent / 100) * totalTillToday);
-      conductedTillYesterday = totalTillToday - ct;
-      attendedTillYesterday = attendedTillNow - at;
+      // The Base for the % is: Historic + What happened so far today
+      currentConducted = classesHistoric + todayConductedPartial;
+      
+      // We calculate exact attended classes based on the user's input % and the specific base
+      currentAttended = Math.round((percent / 100) * currentConducted);
+
+      // Remaining = (The rest of today) + (All of future)
+      const classesLeftToday = Math.max(0, classesTodayFull - todayConductedPartial);
+      remainingClasses = classesLeftToday + classesFuture;
+
     } else {
-      conductedTillYesterday = calculateConductedTill(
-        new Date(today.getTime() - 86400000),
-        savedTimetable
-      );
-      attendedTillYesterday = (percent / 100) * conductedTillYesterday;
+      // SCENARIO B: Portal NOT updated for today (or today is holiday/weekend)
+      // The Base for the % is strictly Historic
+      currentConducted = classesHistoric;
+      currentAttended = Math.round((percent / 100) * currentConducted);
+
+      // Remaining = (All of today) + (All of future)
+      // Since portal doesn't know about today yet, we treat today as "remaining" to be attended
+      remainingClasses = classesTodayFull + classesFuture;
     }
 
-    const remaining = calculateRemaining(today, savedTimetable);
-    const totalEnd = conductedTillYesterday + remaining;
-    const required = Math.ceil(totalEnd * 0.75);
+    // 4. Final Projections
+    const totalSemesterClasses = currentConducted + remainingClasses;
+    
+    // Target: 75% of the FINAL total
+    const requiredFor75 = Math.ceil(0.75 * totalSemesterClasses);
 
-     const normalizedAttended = Math.round(attendedTillYesterday);
+    // Must Attend
+    const mustAttend = Math.max(0, requiredFor75 - currentAttended);
 
-    let mustAttend = Math.max(0, Math.ceil(required - Math.round(attendedTillYesterday)) );
-      
-      let canBunk = Math.max(0, remaining - mustAttend);
-      
-      if (remaining === 0) {
-        mustAttend = 0;
-        canBunk = 0;
-      }
+    // Can Bunk
+    // Logic: If I attend ALL remaining classes, what is my surplus above the requirement?
+    const maxPossibleAttended = currentAttended + remainingClasses;
+    const canBunk = Math.max(0, maxPossibleAttended - requiredFor75);
 
-    const projected =
-      totalEnd > 0
-        ? ((normalizedAttended + remaining) / totalEnd) * 100
-        : 0;
-
-
+    // Projected (If I attend 100% of remaining)
+    const projected = totalSemesterClasses > 0 
+      ? (maxPossibleAttended / totalSemesterClasses) * 100 
+      : 0;
 
     setResult({
-      remaining,
+      remaining: remainingClasses,
       mustAttend,
       canBunk,
       projected,
     });
   };
-
+  
   if (loading) return null;
 
   /* ------------------ UI ------------------ */
