@@ -196,7 +196,7 @@ export default function Dashboard() {
                 onClick={() => setActiveTab("support")}
               >
                 <CardContent className="p-3 sm:p-4 text-center">
-                  <h3 className="font-semibold text-sm sm:text-base whitespace-nowrap">Support Team Dino</h3>
+                  <h3 className="font-semibold text-sm sm:text-base whitespace-nowrap">Buy me a coffee ☕</h3>
                 </CardContent>
               </Card>
             </div>
@@ -264,7 +264,7 @@ export default function Dashboard() {
           {/* Support Team Dino View */}
           {activeTab === "support" && (
             <div className="animate-fade-in max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 text-center">Support Team Dino</h2>
+              {/* <h2 className="text-2xl font-bold mb-6 text-center">Buy me a coffee ☕</h2> */}
               <SupportSection />
             </div>
           )}
