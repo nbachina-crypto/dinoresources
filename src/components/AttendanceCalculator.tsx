@@ -754,14 +754,23 @@ export default function AttendanceCalculator() {
     const totalEnd = conductedTillYesterday + remaining;
     const required = Math.ceil(totalEnd * 0.75);
 
-    const mustAttend = Math.max(0,Math.ceil(required - Math.round(attendedTillYesterday)));
-    const canBunk = Math.max(0, remaining - mustAttend);
-    if (remaining === 0) {
-      mustAttend = 0;
-      canBunk = 0;
-    }
+     const normalizedAttended = Math.round(attendedTillYesterday);
+
+    let mustAttend = Math.max(0, Math.ceil(required - Math.round(attendedTillYesterday)) );
+      
+      let canBunk = Math.max(0, remaining - mustAttend);
+      
+      if (remaining === 0) {
+        mustAttend = 0;
+        canBunk = 0;
+      }
+
     const projected =
-      ((attendedTillYesterday + remaining) / totalEnd) * 100;
+      totalEnd > 0
+        ? ((normalizedAttended + remaining) / totalEnd) * 100
+        : 0;
+
+
 
     setResult({
       remaining,
