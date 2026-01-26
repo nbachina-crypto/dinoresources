@@ -11,6 +11,7 @@ import AddSubjectDialog from "./AddSubjectDialog";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AnnouncementsSection } from "./AnnouncementsSection";
 import { SupportSection } from "./SupportSection";
+import AttendanceCalculator from "./AttendanceCalculator";
 import dinoLogo from "@/assets/dino-logo.png";
 
 interface Profile {
@@ -33,7 +34,7 @@ export default function Dashboard() {
   const [isAddSubjectDialogOpen, setIsAddSubjectDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"subjects" | "announcements" | "support">("subjects");
+  const [activeTab, setActiveTab] = useState<"subjects" | "attendance" | "announcements" | "support">("subjects");
 
   useEffect(() => {
     checkAuth();
@@ -180,6 +181,17 @@ export default function Dashboard() {
 
               <Card
                 className={`shadow-card border-border/50 cursor-pointer transition-all flex-shrink-0 ${
+                  activeTab === "attendance" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
+                }`}
+                onClick={() => setActiveTab("attendance")}
+              >
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <h3 className="font-semibold text-sm sm:text-base whitespace-nowrap">Attendance Calculator</h3>
+                </CardContent>
+              </Card>
+
+              <Card
+                className={`shadow-card border-border/50 cursor-pointer transition-all flex-shrink-0 ${
                   activeTab === "announcements" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
                 }`}
                 onClick={() => setActiveTab("announcements")}
@@ -250,6 +262,14 @@ export default function Dashboard() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Attendance Calculator View */}
+          {activeTab === "attendance" && (
+            <div className="animate-fade-in max-w-4xl mx-auto">
+              <h2 className="text-2xl font-bold mb-6">Attendance Calculator</h2>
+              <AttendanceCalculator />
             </div>
           )}
 
