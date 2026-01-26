@@ -286,9 +286,7 @@ export default function AttendanceCalculator() {
     const requiredFor75 = Math.ceil(totalBySemesterEnd * 0.75);
     const mustAttend = Math.max(0, requiredFor75 - attendedSoFar);
     const canBunk = Math.max(0, remaining - mustAttend);
-    const isOverallPossible = mustAttend <= remaining;
-    const isSession1Possible = session1Needed <= session1Remaining;
-    const isSession2Possible = session2Needed <= session2Remaining;
+    
 
 
     // Calculate for Session 1 (Feb 3, 2026)
@@ -334,6 +332,9 @@ export default function AttendanceCalculator() {
     // Session 2 is same as semester end
     const session2Needed = mustAttend;
     const session2Remaining = remaining;
+    const isOverallPossible = mustAttend <= remaining;
+    const isSession1Possible = session1Needed <= session1Remaining;
+    const isSession2Possible = session2Needed <= session2Remaining;
 
     setResult({
       remaining,
