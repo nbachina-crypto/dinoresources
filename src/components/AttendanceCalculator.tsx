@@ -354,7 +354,7 @@ export default function AttendanceCalculator() {
         <CardContent>
           {(isEditing || !savedTimetable) && (
             <div className="space-y-4">
-              <div className="grid grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
                 {Object.keys(timetable).map((day) => (
                   <div key={day}>
                     <Label className="capitalize text-sm mb-2 block">{day}</Label>
@@ -498,7 +498,7 @@ export default function AttendanceCalculator() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-green-600">{result.canBunk}</p>
-                <p className="text-sm text-muted-foreground mt-1">Can Bunk</p>
+                <p className="text-sm text-muted-foreground mt-1">Can Skip</p>
               </div>
             </CardContent>
           </Card>
@@ -522,7 +522,7 @@ export default function AttendanceCalculator() {
                     <span className="text-xl font-bold text-amber-600">{result.session1Needed}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Can bunk:</span>
+                    <span className="text-sm text-muted-foreground">Can Skip:</span>
                     <span className="text-xl font-bold text-green-600">
                       {Math.max(0, result.session1Remaining - result.session1Needed)}
                     </span>
@@ -547,7 +547,7 @@ export default function AttendanceCalculator() {
                   <span className="text-xl font-bold text-amber-600">{result.session2Needed}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Can bunk:</span>
+                  <span className="text-sm text-muted-foreground">Can Skip:</span>
                   <span className="text-xl font-bold text-green-600">
                     {Math.max(0, result.session2Remaining - result.session2Needed)}
                   </span>
