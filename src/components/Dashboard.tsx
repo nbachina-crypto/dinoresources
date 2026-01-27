@@ -268,7 +268,7 @@ export default function Dashboard() {
           {/* Attendance Calculator View */}
           {activeTab === "attendance" && (
             <div className="animate-fade-in max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6">Attendance Calculator</h2>
+              <h2 className="text-2xl font-bold mb-6">Only for 2,3rd Year Students</h2>
               <AttendanceCalculator />
             </div>
           )}
