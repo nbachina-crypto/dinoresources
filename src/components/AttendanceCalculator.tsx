@@ -266,7 +266,13 @@ export default function AttendanceCalculator() {
       }
 
       // Remaining is from tomorrow (since today is already counted)
-      remaining = calculateRemaining(today, savedTimetable);
+      // remaining = calculateRemaining(today, savedTimetable);
+
+      const remainingToday = Math.max(0, classesToday - ct);
+
+        // Remaining = remaining classes today + all future classes
+        remaining = remainingToday + calculateRemaining(today, savedTimetable);
+
       
     } else {
       // Today's attendance is NOT yet reflected
