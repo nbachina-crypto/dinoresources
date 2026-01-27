@@ -302,22 +302,38 @@ export default function AttendanceCalculator() {
     if (today <= SESSION_1_END) {
       let totalBySession1: number;
       
-      if (shouldAskToday && attendedToday === "yes") {
-        // Today is already counted
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
+      // if (shouldAskToday && attendedToday === "yes") {
+      //   // Today is already counted
+      //   const tomorrow = new Date(today);
+      //   tomorrow.setDate(tomorrow.getDate() + 1);
         
-        totalBySession1 = conductedSoFar + calculateConductedBetween(
-          tomorrow,
-          SESSION_1_END,
-          savedTimetable
-        );
-        session1Remaining = calculateConductedBetween(
-          tomorrow,
-          SESSION_1_END,
-          savedTimetable
-        );
-      } else {
+      //   totalBySession1 = conductedSoFar + calculateConductedBetween(
+      //     tomorrow,
+      //     SESSION_1_END,
+      //     savedTimetable
+      //   );
+      //   session1Remaining = calculateConductedBetween(
+      //     tomorrow,
+      //     SESSION_1_END,
+      //     savedTimetable
+      //   );
+      // } 
+      if (shouldAskToday && attendedToday === "yes") {
+            const remainingToday = Math.max(0, classesToday - ct);
+          
+            const futureUntilSession1 = calculateConductedBetween(
+              new Date(today.getTime() + 86400000), // tomorrow
+              SESSION_1_END,
+              savedTimetable
+            );
+          
+            session1Remaining = remainingToday + futureUntilSession1;
+          
+            totalBySession1 = conductedSoFar + session1Remaining;
+          }
+
+      
+      else {
         // Today is not counted yet - include it
         totalBySession1 = conductedSoFar + calculateConductedBetween(
           today,
