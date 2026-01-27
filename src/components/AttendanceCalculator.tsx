@@ -233,6 +233,9 @@ export default function AttendanceCalculator() {
       return;
     }
 
+     const ct = parseInt(classesConductedToday) || 0;
+      const at = parseInt(classesAttendedToday) || 0;
+    
     let conductedSoFar: number;
     let attendedSoFar: number;
     let remaining: number;
@@ -240,9 +243,6 @@ export default function AttendanceCalculator() {
     if (shouldAskToday && attendedToday === "yes") {
       // Today's attendance IS reflected in the portal
       conductedSoFar = calculateConductedTill(today, savedTimetable);
-      
-      const ct = parseInt(classesConductedToday) || 0;
-      const at = parseInt(classesAttendedToday) || 0;
 
       if (at > ct) {
         toast.error("Attended classes cannot exceed conducted classes");
@@ -302,22 +302,7 @@ export default function AttendanceCalculator() {
     if (today <= SESSION_1_END) {
       let totalBySession1: number;
       
-      // if (shouldAskToday && attendedToday === "yes") {
-      //   // Today is already counted
-      //   const tomorrow = new Date(today);
-      //   tomorrow.setDate(tomorrow.getDate() + 1);
-        
-      //   totalBySession1 = conductedSoFar + calculateConductedBetween(
-      //     tomorrow,
-      //     SESSION_1_END,
-      //     savedTimetable
-      //   );
-      //   session1Remaining = calculateConductedBetween(
-      //     tomorrow,
-      //     SESSION_1_END,
-      //     savedTimetable
-      //   );
-      // } 
+  
       if (shouldAskToday && attendedToday === "yes") {
             const remainingToday = Math.max(0, classesToday - ct);
           
