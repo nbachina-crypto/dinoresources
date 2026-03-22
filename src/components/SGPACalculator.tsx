@@ -80,14 +80,27 @@ function SubjectRow({
         </span>
 
         {/* Name + Details */}
-        <div className="flex flex-col flex-1 min-w-0">
-          <span className="text-sm font-medium truncate">
-            {sub.name}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {sub.s1Grade} · {sub.leGrade} · {sub.s2Grade} • {sub.credits}cr
-          </span>
-        </div>
+        <div className="flex items-center gap-2 flex-1 min-w-0 text-sm">
+            <span className="font-medium truncate max-w-[80px]">
+              {sub.name}
+            </span>
+          
+            <span className="text-muted-foreground">
+              {sub.s1Grade}
+            </span>
+          
+            <span className="text-muted-foreground">
+              {sub.leGrade}
+            </span>
+          
+            <span className="text-muted-foreground">
+              {sub.s2Grade}
+            </span>
+          
+            <span className="text-muted-foreground">
+              {sub.credits} credits
+            </span>
+          </div>
 
         {/* GP Badge (CENTER IMPORTANCE) */}
         <span
@@ -250,7 +263,10 @@ export default function SGPACalculator() {
   /* ---------- ACTIONS ---------- */
 
   const addSubject = () => {
-    if (!s1 || !le || !s2) return;
+      if (!s1 || !le || !s2) {
+        alert("Please select all grades");
+        return;
+    }
 
     setSubjects([
       ...subjects,
@@ -297,8 +313,17 @@ export default function SGPACalculator() {
               </SelectContent>
             </Select>
           )}
-          <button onClick={() => setHasCLAD(!hasCLAD)}>
-            Toggle
+          <button
+            onClick={() => setHasCLAD((v) => !v)}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+              hasCLAD ? "bg-primary" : "bg-gray-400"
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                hasCLAD ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
           </button>
         </div>
       </div>
@@ -370,13 +395,19 @@ export default function SGPACalculator() {
 
       {/* RESULT */}
       <div className="flex justify-between p-3 border rounded-lg">
-        <span>
-          {subjects.length} subject{subjects.length !== 1 ? "s" : ""} • {totalCredits} credits
-        </span>
-        <span className="font-bold text-xl">
-          {sgpa.toFixed(2)}
-        </span>
-      </div>
+          <span>
+            {subjects.length} subject{subjects.length !== 1 ? "s" : ""} • {totalCredits} credits
+          </span>
+        
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground uppercase">
+              SGPA
+            </span>
+            <span className="font-bold text-xl">
+              {sgpa.toFixed(2)}
+            </span>
+          </div>
+        </div>
     </div>
   );
 }
