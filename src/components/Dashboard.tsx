@@ -193,6 +193,17 @@ export default function Dashboard() {
 
               <Card
                 className={`shadow-card border-border/50 cursor-pointer transition-all flex-shrink-0 ${
+                  activeTab === "sgpa" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
+                }`}
+                onClick={() => setActiveTab("sgpa")}
+              >
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <h3 className="font-semibold text-sm sm:text-base whitespace-nowrap">SGPA Calculator</h3>
+                </CardContent>
+              </Card>
+
+              <Card
+                className={`shadow-card border-border/50 cursor-pointer transition-all flex-shrink-0 ${
                   activeTab === "announcements" ? "ring-2 ring-primary bg-primary/5" : "hover:shadow-lg"
                 }`}
                 onClick={() => setActiveTab("announcements")}
