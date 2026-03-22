@@ -85,17 +85,11 @@ function SubjectRow({
               {sub.name}
             </span>
           
-            <span className="text-muted-foreground">
-              {sub.s1Grade}
-            </span>
-          
-            <span className="text-muted-foreground">
-              {sub.leGrade}
-            </span>
-          
-            <span className="text-muted-foreground">
-              {sub.s2Grade}
-            </span>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <span>S1:{sub.s1Grade}</span>
+              <span>LE:{sub.leGrade}</span>
+              <span>S2:{sub.s2Grade}</span>
+            </div>
           
             <span className="text-muted-foreground">
               {sub.credits} credits
@@ -300,9 +294,9 @@ export default function SGPACalculator() {
     <div className="max-w-xl mx-auto space-y-3">
 
       {/* CLAD */}
-      <div className="flex justify-between p-3 border rounded-lg">
+      <div className="flex items-center justify-between p-3 border rounded-lg">
         <span>CLAD (1 credit)</span>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-3">
           {hasCLAD && (
             <Select value={cladGrade} onValueChange={setCladGrade}>
               <SelectTrigger><SelectValue /></SelectTrigger>
@@ -330,6 +324,9 @@ export default function SGPACalculator() {
 
       {/* INPUT CARD */}
       <div className="p-3 border rounded-lg space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">
+            Add Subject
+          </p>
         <Input
           placeholder="Subject name"
           value={name}
@@ -394,18 +391,26 @@ export default function SGPACalculator() {
       </div>
 
       {/* RESULT */}
-      <div className="flex justify-between p-3 border rounded-lg">
-          <span>
-            {subjects.length} subject{subjects.length !== 1 ? "s" : ""} • {totalCredits} credits
-          </span>
+      <div className="p-4 border rounded-lg">
+          <p className="text-sm text-muted-foreground mb-2">
+            Semester Summary
+          </p>
         
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground uppercase">
-              SGPA
-            </span>
-            <span className="font-bold text-xl">
-              {sgpa.toFixed(2)}
-            </span>
+          <div className="flex justify-between text-center">
+            <div>
+              <p className="text-xl font-bold">{subjects.length}</p>
+              <p className="text-xs text-muted-foreground">Subjects</p>
+            </div>
+        
+            <div>
+              <p className="text-xl font-bold">{totalCredits}</p>
+              <p className="text-xs text-muted-foreground">Credits</p>
+            </div>
+        
+            <div>
+              <p className="text-xl font-bold">{sgpa.toFixed(2)}</p>
+              <p className="text-xs text-muted-foreground">SGPA</p>
+            </div>
           </div>
         </div>
     </div>
