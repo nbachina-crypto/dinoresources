@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, BrainCircuit, Zap, ChevronRight, BookOpen, Sparkles } from "lucide-react";
 import { PracticeCard } from "./PracticeCard";
 
-export function GeneratePanel({ activeUnit, subjectName, subjectTopics, onClose }) {
+export function TopicDetail({ activeUnit, subjectName, subjectTopics, onClose }) {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [genPhase, setGenPhase] = useState(0); 
   const [revealedAnswers, setRevealedAnswers] = useState({});
