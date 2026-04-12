@@ -1,38 +1,66 @@
+// src/components/ai/SubjectDrawerAi.tsx
 import { useState } from "react";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerClose } from "@/components/ui/drawer";
+import {
+  Drawer, DrawerContent, DrawerHeader, DrawerTitle,
+  DrawerDescription, DrawerClose,
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles } from "lucide-react";
 
-import { aiSyllabus } from "@/data/aiSyllabus";
-import { TopicGrid } from "./TopicGrid";
-import { TopicDetail } from "./TopicDetail";
+import { aiSyllabus }    from "@/data/aiSyllabus";
+import { TopicGrid }     from "./TopicGrid";
+import { TopicDetail }   from "./TopicDetail";
 import { GeneratePanel } from "./GeneratePanel";
+import { useSubscription } from "@/hooks/useSubscription";
 
-export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
+type SubjectDrawerAiProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  subjectId: string;
+  subjectName: string;
+  userRole: any;
+  userId: string | null;
+};
+
+export default function SubjectDrawerAi({
+  open, onOpenChange, subjectId, subjectName, userRole, userId,
+}: SubjectDrawerAiProps) {
   const UNITS = [3, 4, 5];
-  const [activeUnit, setActiveUnit] = useState(3);
-  const [activeTopic, setActiveTopic] = useState(null);
-  const [showGenerate, setShowGenerate] = useState(false);
 
-  // 1. ADD THIS: State to track live progress updates
-  const [liveProgress, setLiveProgress] = useState({});
+  const [activeUnit, setActiveUnit]     = useState(3);
+  const [activeTopic, setActiveTopic]   = useState<any>(null);
+  const [showGenerate, setShowGenerate] = useState(false);
+  const [liveProgress, setLiveProgress] = useState<Record<string, { progress: number; status: string }>>({});
+
+  // ── Subscription — read from Supabase, cached in localStorage ────────────
+  const { isSubscribed, refresh: refreshSubscription } = useSubscription();
+
+  /**
+   * Called by PracticeCard after the payment is server-verified.
+   * `useSubscription` keeps Supabase as the source of truth, but we also
+   * trigger a manual refresh to flip the UI immediately without waiting for
+   * the next focus event.
+   */
+  const handlePaymentSuccess = () => {
+    refreshSubscription();
+  };
+  // ─────────────────────────────────────────────────────────────────────────
 
   const subjectTopics = aiSyllabus[subjectName] || {};
-  
-  // 2. UPDATE THIS: Merge static syllabus data with live progress
-  const currentTopics = (subjectTopics[activeUnit.toString()] || []).map(topic => ({
+
+  const currentTopics = (subjectTopics[activeUnit.toString()] || []).map((topic) => ({
     ...topic,
     progress: liveProgress[topic.id]?.progress ?? topic.progress,
-    status: liveProgress[topic.id]?.status ?? topic.status
+    status:   liveProgress[topic.id]?.status   ?? topic.status,
   }));
 
-  const handleUnitChange = (unit) => {
+  const handleUnitChange = (unit: number) => {
     setActiveUnit(unit);
     setActiveTopic(null);
     setShowGenerate(false);
   };
 
-  const handleTopicBack = (action, nextTopic) => {
+  const handleTopicBack = (action: string, nextTopic: any) => {
     if (action === "next" && nextTopic) {
       setActiveTopic(nextTopic);
     } else {
@@ -40,27 +68,23 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
     }
   };
 
-  // 3. ADD THIS: Function to receive real-time updates
-  const updateTopicProgress = (topicId, progress, status) => {
-    setLiveProgress(prev => ({
-      ...prev,
-      [topicId]: { progress, status }
-    }));
+  const updateTopicProgress = (topicId: string, progress: number, status: string) => {
+    setLiveProgress((prev) => ({ ...prev, [topicId]: { progress, status } }));
   };
 
-  const isTopicView = !!activeTopic;
+  const isTopicView    = !!activeTopic;
   const isGenerateView = showGenerate && !isTopicView;
 
   return (
     <>
       <style>{`
         @keyframes shimmer {
-          0% { background-position: 200% 0; }
+          0%   { background-position:  200% 0; }
           100% { background-position: -200% 0; }
         }
         @keyframes blink {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
+          50%       { opacity: 0; }
         }
       `}</style>
 
@@ -73,6 +97,7 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
             AI Study Tools for {subjectName}
           </DrawerDescription>
 
+          {/* ── Drawer header ── */}
           <DrawerHeader className="relative shrink-0 border-b border-white/5 bg-[#0a0a0c] z-20 pb-4 pt-5 flex flex-col items-center">
             <DrawerClose asChild>
               <Button
@@ -94,6 +119,8 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
           </DrawerHeader>
 
           <div className="flex flex-col md:flex-row flex-1 overflow-hidden bg-[#0a0a0c]">
+
+            {/* ── Unit sidebar ── */}
             <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/5 bg-[#0d0d10] p-4 flex-shrink-0 z-10">
               <p className="text-xs font-bold tracking-widest uppercase text-zinc-600 mb-3 hidden md:block px-2">
                 Curriculum
@@ -123,6 +150,7 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
               </nav>
             </div>
 
+            {/* ── Main content area ── */}
             <div className="flex-1 overflow-hidden bg-gradient-to-br from-[#0a0a0c] to-[#0e0e14] flex flex-col relative z-0">
               {isTopicView ? (
                 <TopicDetail
@@ -131,8 +159,9 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
                   activeUnit={activeUnit}
                   currentTopics={currentTopics}
                   onBack={handleTopicBack}
-                  subjectName={subjectName}
-                  onUpdateProgress={updateTopicProgress} // 4. ADD THIS: Pass down the updater
+                  onUpdateProgress={updateTopicProgress}
+                  isSubscribed={isSubscribed}
+                  onPaymentSuccess={handlePaymentSuccess}
                 />
               ) : isGenerateView ? (
                 <GeneratePanel
@@ -140,6 +169,8 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
                   subjectName={subjectName}
                   subjectTopics={subjectTopics}
                   onClose={() => setShowGenerate(false)}
+                  isSubscribed={isSubscribed}
+                  onPaymentSuccess={handlePaymentSuccess}
                 />
               ) : (
                 <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800">
@@ -153,7 +184,7 @@ export default function SubjectDrawerAi({ open, onOpenChange, subjectName }) {
                 </div>
               )}
             </div>
-            
+
           </div>
         </DrawerContent>
       </Drawer>

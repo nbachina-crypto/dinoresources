@@ -26,7 +26,7 @@ export default function AboutPage() {
     },
     {
       name: "Vishnu",
-      roles: ["Review", "R&D Guide"],
+      roles: ["Web Developer", "R&D Guide"],
       icon: Lightbulb,
       color: "text-amber-400",
       bgSoft: "bg-amber-400/10",

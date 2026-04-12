@@ -1,10 +1,10 @@
-import { CheckCircle2, PlayCircle, Lock, ChevronRight, BrainCircuit, Sparkles } from "lucide-react";
+import { CheckCircle2, PlayCircle, Lock, BrainCircuit, Sparkles } from "lucide-react";
 
 export function TopicGrid({ topics, activeUnit, subjectName, onSelectTopic, onGenerate }) {
   const statusIcon = {
-    completed: <CheckCircle2 className="w-6 h-6 text-emerald-400" />,
+    completed:   <CheckCircle2 className="w-6 h-6 text-emerald-400" />,
     "in-progress": <PlayCircle className="w-6 h-6 text-indigo-400" />,
-    locked: <Lock className="w-6 h-6 text-zinc-600" />,
+    locked:      <Lock        className="w-6 h-6 text-zinc-600" />,
   };
 
   return (
@@ -14,14 +14,16 @@ export function TopicGrid({ topics, activeUnit, subjectName, onSelectTopic, onGe
           Unit {activeUnit} Pathway
         </h3>
         <p className="text-zinc-400 text-sm sm:text-base">
-          {topics.length} topic{topics.length !== 1 ? "s" : ""} required to master this unit.
+          {topics.length} part{topics.length !== 1 ? "s" : ""} required to master this unit.
         </p>
       </div>
 
       {topics.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-3xl bg-[#111113]">
           <Sparkles className="w-10 h-10 text-zinc-600 mb-4" />
-          <p className="text-zinc-400 font-medium text-center px-6">No topics assigned to Unit {activeUnit} yet.</p>
+          <p className="text-zinc-400 font-medium text-center px-6">
+            No parts assigned to Unit {activeUnit} yet.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -32,9 +34,14 @@ export function TopicGrid({ topics, activeUnit, subjectName, onSelectTopic, onGe
               className="group text-left bg-[#111113] border border-white/5 hover:border-indigo-500/40 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:bg-[#18181b] hover:shadow-[0_12px_40px_-12px_rgba(99,102,241,0.15)] relative overflow-hidden flex flex-col"
             >
               <div className="flex items-start gap-4 mb-6">
-                <div className="shrink-0 mt-1">{statusIcon[topic.status] || statusIcon.locked}</div>
+                <div className="shrink-0 mt-1">
+                  {statusIcon[topic.status] || statusIcon.locked}
+                </div>
                 <div>
-                  <span className="text-xs font-mono text-zinc-500 mb-1 block">Topic {String(idx + 1).padStart(2, "0")}</span>
+                  {/* ← "Topic" renamed to "Part" */}
+                  <span className="text-xs font-mono text-zinc-500 mb-1 block">
+                    Part {String(idx + 1).padStart(2, "0")}
+                  </span>
                   <h4 className="text-lg font-semibold text-white leading-snug pr-6">
                     {topic.title}
                   </h4>
@@ -46,7 +53,9 @@ export function TopicGrid({ topics, activeUnit, subjectName, onSelectTopic, onGe
                   <span className={topic.progress > 0 ? "text-indigo-400" : "text-zinc-600"}>
                     {topic.progress > 0 ? `${topic.progress}% Complete` : "Not Started"}
                   </span>
-                  <span className="text-zinc-500">{topic.questions?.length || 0} practice Qs</span>
+                  <span className="text-zinc-500">
+                    {topic.questions?.length || 0} practice Qs
+                  </span>
                 </div>
                 <div className="h-1.5 w-full bg-black/50 rounded-full overflow-hidden border border-white/5">
                   <div
@@ -58,7 +67,7 @@ export function TopicGrid({ topics, activeUnit, subjectName, onSelectTopic, onGe
             </button>
           ))}
 
-          {/* Generate Questions CTA */}
+          {/* Generate Practice Exam CTA */}
           <button
             onClick={onGenerate}
             className="xl:col-span-2 group relative rounded-2xl p-px overflow-hidden cursor-pointer mt-4 focus:outline-none"
