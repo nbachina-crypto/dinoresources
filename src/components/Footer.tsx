@@ -23,6 +23,10 @@ export default function Footer() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="mt-16 border-t border-white/10 bg-black pt-12 pb-6 relative overflow-hidden">
       {/* Sleek, minimal top border glow */}
@@ -34,7 +38,7 @@ export default function Footer() {
           
           {/* Left: Brand & Tagline */}
           <div className="max-w-sm text-left">
-            <Link to="/" className="flex items-center gap-3 mb-3 hover:opacity-90 transition-opacity w-fit">
+            <Link to="/" onClick={scrollToTop} className="flex items-center gap-3 mb-3 hover:opacity-90 transition-opacity w-fit">
               <div className="w-8 h-8 rounded-lg bg-zinc-200 flex items-center justify-center p-1 shadow-sm shrink-0">
                 <img src={dinoLogo} alt="Team Dino" className="w-full h-full object-contain" />
               </div>
@@ -49,6 +53,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
             <Link 
               to="/about" 
+              onClick={scrollToTop}
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-sm font-medium transition-all"
             >
               <Users className="w-4 h-4" />
@@ -113,7 +118,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-zinc-500 text-xs font-medium">
             <p>© {new Date().getFullYear()} Team Dino. All rights reserved.</p>
             <span className="hidden md:inline">•</span>
-            <Link to="/about" className="hover:text-zinc-400 transition-colors">About Us</Link>
+            <Link to="/about" onClick={scrollToTop} className="hover:text-zinc-400 transition-colors">About Us</Link>
           </div>
           <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-medium">
             <span>Crafted with</span>
