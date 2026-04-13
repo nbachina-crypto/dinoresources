@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 
 import UploadResourceDialog from "./UploadResourceDialog";
-// Updated import for the AI Icon
 import genai from "@/assets/aiWhite.png";
 import SubjectDrawer from "./SubjectDrawer";
 import SubjectDrawerAi from "./ai/SubjectDrawerAi"; 
@@ -71,6 +70,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (profile) {
       loadSubjects();
+      checkLatestAnnouncement(); // Trigger the announcement check when profile loads
     }
   }, [profile]);
 
@@ -104,6 +104,41 @@ export default function Dashboard() {
       });
     }, 100);
   };
+
+  // --- NEW FEATURE: Check for the latest announcement ---
+  const checkLatestAnnouncement = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("announcements")
+        .select("id, title")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error || !data) return;
+
+      const lastSeenId = localStorage.getItem("last_seen_announcement");
+      
+      // If the ID in localStorage doesn't match the newest DB entry, show the popup
+      if (lastSeenId !== data.id) {
+        toast("New Update 📢", {
+          description: data.title,
+          position: "bottom-right", // Pops up on the bottom right corner
+          duration: 10000, // Stays on screen for 10 seconds
+          action: {
+            label: "Check out now",
+            onClick: () => handleTabClick("announcements"),
+          },
+        });
+        
+        // Save the ID so we don't spam them with the same message
+        localStorage.setItem("last_seen_announcement", data.id);
+      }
+    } catch (err) {
+      console.error("Error fetching latest announcement:", err);
+    }
+  };
+  // ----------------------------------------------------
 
   const checkAuth = async () => {
     try {
@@ -218,20 +253,9 @@ export default function Dashboard() {
       desc: "Access smart AI tools, summaries, and personalized help for your subjects.", 
       icon: GenAIIcon, 
       bgGradient: "from-indigo-900/40 to-purple-900/40",
-      iconTint: "opacity-10 grayscale", // Adjusted for image icon
+      iconTint: "opacity-10 grayscale",
       glow: "shadow-[0_0_30px_-5px_rgba(99,102,241,0.15)]",
       buttonText: "Get AI Assistance"
-    },
-    { 
-      id: "attendance", 
-      overline: "TRACKING", 
-      title: "Attendance", 
-      desc: "Calculate your required classes.", 
-      icon: CalendarDays,
-      bgGradient: "from-teal-900/40 to-emerald-900/40",
-      iconTint: "text-emerald-400/20",
-      glow: "shadow-[0_0_30px_-5px_rgba(16,185,129,0.15)]",
-      buttonText: "Start Checking Now"
     },
     { 
       id: "foliofyx", 
@@ -246,17 +270,6 @@ export default function Dashboard() {
       buttonText: "Create Now Free"
     },
     { 
-      id: "sgpa", 
-      overline: "PERFORMANCE", 
-      title: "SGPA Calc", 
-      desc: "Estimate your semester grades easily.", 
-      icon: Calculator,
-      bgGradient: "from-violet-900/40 to-purple-900/40",
-      iconTint: "text-purple-400/20",
-      glow: "shadow-[0_0_30px_-5px_rgba(168,85,247,0.15)]",
-      buttonText: "Start Checking Now"
-    },
-    { 
       id: "announcements", 
       overline: "UPDATES", 
       title: "Announcements", 
@@ -268,15 +281,25 @@ export default function Dashboard() {
       buttonText: "View Updates"
     },
     { 
-      id: "support", 
-      overline: "DONATE", 
-      title: "Support Us", 
-      desc: "Buy the team a coffee ☕", 
-      icon: Coffee,
-      bgGradient: "from-rose-900/40 to-pink-900/40",
-      iconTint: "text-rose-400/20",
-      glow: "shadow-[0_0_30px_-5px_rgba(244,63,94,0.15)]",
-      buttonText: "Show Support"
+      id: "attendance", 
+      overline: "TRACKING", 
+      title: "Attendance", 
+      desc: "Calculate your required classes.", 
+      icon: CalendarDays,
+      bgGradient: "from-teal-900/40 to-emerald-900/40",
+      iconTint: "text-emerald-400/20",
+      glow: "shadow-[0_0_30px_-5px_rgba(16,185,129,0.15)]",
+      buttonText: "Start Checking Now"
+    },{ 
+      id: "sgpa", 
+      overline: "PERFORMANCE", 
+      title: "SGPA Calc", 
+      desc: "Estimate your semester grades easily.", 
+      icon: Calculator,
+      bgGradient: "from-violet-900/40 to-purple-900/40",
+      iconTint: "text-purple-400/20",
+      glow: "shadow-[0_0_30px_-5px_rgba(168,85,247,0.15)]",
+      buttonText: "Start Checking Now"
     },
   ] as const;
 
@@ -290,8 +313,8 @@ export default function Dashboard() {
             
             {/* Logo Area */}
             <div className="flex items-center gap-4 shrink-0">
-              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center border">
-                <img src={dinoLogo} alt="Team Dino" className="w-8 h-8 rounded-xl" />
+              <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                <img src={dinoLogo} alt="Team Dino" className="w-10 h-10 opacity-90 rounded-xl" />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-xl font-semibold tracking-tight text-white">Team Dino</h1>
@@ -607,18 +630,6 @@ export default function Dashboard() {
               </div>
               <div className="bg-[#09090b] rounded-[32px] p-6 border border-white/5">
                 <AnnouncementsSection isAdmin={role === "admin"} />
-              </div>
-            </div>
-          )}
-
-          {activeTab === "support" && (
-            <div className="animate-in fade-in duration-500 max-w-4xl mx-auto">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-bold tracking-tight text-white">Support the Project</h2>
-                <p className="text-zinc-400 mt-2">Help keep the servers running.</p>
-              </div>
-              <div className="bg-[#09090b] rounded-[32px] p-6 border border-white/5">
-                <SupportSection />
               </div>
             </div>
           )}
