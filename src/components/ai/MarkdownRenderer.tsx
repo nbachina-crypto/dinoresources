@@ -228,7 +228,7 @@ function LineBlock({
   // Unordered list
   if (line.startsWith("- ") || line.startsWith("* ")) {
     return (
-      <div className="flex items-start gap-3 my-2 ml-2">
+      <div className="flex items-start gap-3 my-2 ml-8">
         <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2.5 shrink-0" />
         <p className="flex-1">{renderInline(line.slice(2))}</p>
       </div>

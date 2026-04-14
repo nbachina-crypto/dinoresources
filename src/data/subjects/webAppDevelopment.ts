@@ -1,20 +1,19 @@
 import type { AiTopic } from "../aiSyllabus";
-
 // ── Uncomment each import as you create the .md file ──────────────────────
-// import u3t1q1Detailed   from "../answers/wad/u3-t1-q1-detailed.md?raw";
-// import u3t1q1Simplified from "../answers/wad/u3-t1-q1-simplified.md?raw";
-// import u3t1q2Detailed   from "../answers/wad/u3-t1-q2-detailed.md?raw";
-// import u3t1q2Simplified from "../answers/wad/u3-t1-q2-simplified.md?raw";
-// import u3t1q3Detailed   from "../answers/wad/u3-t1-q3-detailed.md?raw";
-// import u3t1q3Simplified from "../answers/wad/u3-t1-q3-simplified.md?raw";
-// import u3t1q4Detailed   from "../answers/wad/u3-t1-q4-detailed.md?raw";
-// import u3t1q4Simplified from "../answers/wad/u3-t1-q4-simplified.md?raw";
-// import u3t1q5Detailed   from "../answers/wad/u3-t1-q5-detailed.md?raw";
-// import u3t1q5Simplified from "../answers/wad/u3-t1-q5-simplified.md?raw";
-// import u3t1q6Detailed   from "../answers/wad/u3-t1-q6-detailed.md?raw";
-// import u3t1q6Simplified from "../answers/wad/u3-t1-q6-simplified.md?raw";
-// import u3t1q7Detailed   from "../answers/wad/u3-t1-q7-detailed.md?raw";
-// import u3t1q7Simplified from "../answers/wad/u3-t1-q7-simplified.md?raw";
+import u3t1q1Detailed   from "../wadAnswers/u3-t1-q1-detailed.md?raw";
+import u3t1q1Simplified from "../wadAnswers/u3-t1-q1-simplified.md?raw";
+import u3t1q2Detailed   from "../wadAnswers/u3-t1-q2-detailed.md?raw";
+import u3t1q2Simplified from "../wadAnswers/u3-t1-q2-simplified.md?raw";
+import u3t1q3Detailed   from "../wadAnswers/u3-t1-q3-detailed.md?raw";
+import u3t1q3Simplified from "../wadAnswers/u3-t1-q3-simplified.md?raw";
+import u3t1q4Detailed   from "../wadAnswers/u3-t1-q4-detailed.md?raw";
+import u3t1q4Simplified from "../wadAnswers/u3-t1-q4-simplified.md?raw";
+import u3t1q5Detailed   from "../wadAnswers/u3-t1-q5-detailed.md?raw";
+import u3t1q5Simplified from "../wadAnswers/u3-t1-q5-simplified.md?raw";
+import u3t1q6Detailed   from "../wadAnswers/u3-t1-q6-detailed.md?raw";
+import u3t1q6Simplified from "../wadAnswers/u3-t1-q6-simplified.md?raw";
+import u3t1q7Detailed   from "../wadAnswers/u3-t1-q7-detailed.md?raw";
+import u3t1q7Simplified from "../wadAnswers/u3-t1-q7-simplified.md?raw";
 
 export const webAppDevelopment: Record<string, AiTopic[]> = {
   "1": [],
@@ -37,26 +36,26 @@ export const webAppDevelopment: Record<string, AiTopic[]> = {
           id: "wad-u3-t1-q1",
           question: "Explain the syntax and basic document structure of XML.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q1Detailed,
+            simplified: u3t1q1Simplified,
           },
           isFree: true,
         },
         {
           id: "wad-u3-t1-q2",
-          question: "Explain the role of Document Type Definition (DTD) and XML Schemas in XML.",
+          question: "Explain the concept of Namespaces and the Document Object Model (DOM) in XML.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q3Detailed,
+            simplified: u3t1q3Simplified,
           },
           isFree: false,
         },
         {
           id: "wad-u3-t1-q3",
-          question: "Explain the concept of Namespaces and the Document Object Model (DOM) in XML.",
+          question: "Explain the role of Document Type Definition (DTD) and XML Schemas in XML.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q2Detailed,
+            simplified: u3t1q2Simplified,
           },
           isFree: false,
         },
@@ -64,8 +63,8 @@ export const webAppDevelopment: Record<string, AiTopic[]> = {
           id: "wad-u3-t1-q4",
           question: "Explain how to present XML data using CSS and XSLT.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q4Detailed,
+            simplified: u3t1q4Simplified,
           },
           isFree: false,
         },
@@ -73,8 +72,8 @@ export const webAppDevelopment: Record<string, AiTopic[]> = {
           id: "wad-u3-t1-q5",
           question: "Explain the usage of XPath, XQuery, and the FLOWR expression.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q5Detailed,
+            simplified: u3t1q5Simplified,
           },
           isFree: false,
         },
@@ -82,8 +81,8 @@ export const webAppDevelopment: Record<string, AiTopic[]> = {
           id: "wad-u3-t1-q6",
           question: "Explain the features of JSON and provide a detailed comparison between JSON and XML.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q6Detailed,
+            simplified: u3t1q6Simplified,
           },
           isFree: false,
         },
@@ -91,8 +90,8 @@ export const webAppDevelopment: Record<string, AiTopic[]> = {
           id: "wad-u3-t1-q7",
           question: "Explain JSON data types, objects, and arrays with suitable examples.",
           answers: {
-            detailed:   "placeholder",
-            simplified: "placeholder",
+            detailed:   u3t1q7Detailed,
+            simplified: u3t1q7Simplified,
           },
           isFree: false,
         },

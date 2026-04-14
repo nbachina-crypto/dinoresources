@@ -9,7 +9,7 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
-const PRICE_LABEL = "₹49";
+const PRICE_LABEL = "₹11";
 
 interface Question {
   id: string;
@@ -155,7 +155,7 @@ export function PracticeCard({
       const options = {
         key:         keyId,
         order_id:    orderId,
-        amount:      4900,
+        amount:      1100,
         currency:    "INR",
         name:        "StudyAI Pro",
         description: "Unlock all questions & parts",
@@ -274,7 +274,7 @@ export function PracticeCard({
       {/* ── Answer / paywall ── */}
       {revealed && (
         <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-white/5 animate-in slide-in-from-top-2 duration-300">
-          <div className="ml-10 sm:ml-11 pl-4 border-l-2 border-indigo-500/40">
+          <div className="pl-0">
 
             {isLocked ? (
               /* ── PAYWALL ── */
@@ -331,7 +331,7 @@ export function PracticeCard({
                           : "bg-white/10 text-zinc-400 hover:bg-white/15"
                       }`}
                     >
-                      {m}
+                      {m=== "simplified" ? "Summary" : m}
                     </button>
                   ))}
                 </div>

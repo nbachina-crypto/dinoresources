@@ -1,7 +1,7 @@
 import type { AiTopic } from "../aiSyllabus";
 
-import u3t1q1Detailed   from "../answers/ai/u3-t1-q1-detailed.md?raw";
-import u3t1q1Simplified from "../answers/ai/u3-t1-q1-simplified.md?raw";
+import u3t1q1Detailed   from "../aiAnswers/u3-t1-q1-detailed.md?raw";
+import u3t1q1Simplified from "../aiAnswers/u3-t1-q1-simplified.md?raw";
 
 export const artificialIntelligence: Record<string, AiTopic[]> = {
   "1": [],

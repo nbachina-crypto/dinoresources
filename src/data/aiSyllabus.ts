@@ -21,7 +21,7 @@ export interface AiTopic {
 
 import { artificialIntelligence } from "./subjects/artificialIntelligence";
 import { compilerDesign }         from "./subjects/compilerDesign";
-import { webAppDevelopment } from "./subjects/wad";
+import { webAppDevelopment } from "./subjects/webAppDevelopment";
 
 export const aiSyllabus: Record<string, Record<string, AiTopic[]>> = {
   "Artificial intelligence": artificialIntelligence,
