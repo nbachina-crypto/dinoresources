@@ -6,7 +6,7 @@ import ProfileSetup from "@/components/ProfileSetup";
 import Dashboard from "@/components/Dashboard";
 import LandingPage from "@/components/LandingPage"; // Import the new Landing Page
 
-import dinoLogo from "@/assets/image.png";
+import dinoLogo from "@/assets/dinosaurWhite.png";
 
 const Index = () => {
   const location = useLocation();

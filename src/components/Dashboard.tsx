@@ -22,6 +22,42 @@ import dinoLogo from "@/assets/dinosaurWhite.png";
 
 type TabType = "subjects" | "ai_subjects" | "attendance" | "sgpa" | "announcements" | "support";
 
+// 🔥 SMART SEARCH LOGIC 🔥
+const smartSearch = (subjectName: string, query: string) => {
+  const name = subjectName.toLowerCase();
+  const q = query.toLowerCase().trim();
+
+  if (!q) return true;
+
+  // 1. Direct match (e.g. typing "artific" matches "Artificial Intelligence")
+  if (name.includes(q)) return true;
+
+  // 2. Remove spaces match (e.g. typing "machinelearning" matches "Machine Learning")
+  if (name.replace(/\s+/g, '').includes(q.replace(/\s+/g, ''))) return true;
+
+  // 3. Acronym match (e.g. "Artificial Intelligence" becomes "ai", so searching "ai" works)
+  const acronym = name.split(/[\s_.-]+/).map(w => w[0]).join('');
+  if (acronym.includes(q)) return true;
+
+  // 4. Common Alias matching (Catching specific tech slang)
+  const aliases: Record<string, string[]> = {
+    "ai": ["artificial intelligence"],
+    "ml": ["machine learning"],
+    "dl": ["deep learning"],
+    "os": ["operating system", "operating systems"],
+    "cn": ["computer network", "computer networks"],
+    "dbms": ["database", "database management"],
+    "cd": ["compiler design"],
+    "se": ["software engineering"],
+    "oops": ["object oriented"],
+    "dsa": ["data structures"],
+  };
+
+  if (aliases[q] && aliases[q].some(alias => name.includes(alias))) return true;
+
+  return false;
+};
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const { isContributor, userId, role, isLoading: roleLoading } = useUserRole();
@@ -113,19 +149,22 @@ export default function Dashboard() {
     );
   }
 
-  const filteredSubjects = subjects.filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  // 🔥 Using our new Smart Search to filter subjects 🔥
+  const filteredSubjects = subjects.filter((s) => smartSearch(s.name, searchQuery));
   const firstName = profile?.full_name?.trim() ? profile.full_name.split(" ")[0] : "Buddy";
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 font-sans selection:bg-white/20 flex flex-col">
-      
-      <DashboardHeader 
-        profile={profile} activeTab={activeTab} searchQuery={searchQuery} 
-        setSearchQuery={setSearchQuery} handleTabClick={handleTabClick} handleSignOut={handleSignOut} 
+
+      <DashboardHeader
+        profile={profile}
+        activeTab={activeTab}
+        handleTabClick={handleTabClick}
+        handleSignOut={handleSignOut}
       />
 
       <main className="container mx-auto px-4 py-8 space-y-12 flex-1">
-        
+
         <DashboardNav firstName={firstName} activeTab={activeTab} handleTabClick={handleTabClick} />
 
         <div ref={contentAreaRef} className="bg-[#121214] border border-white/5 rounded-[40px] p-6 sm:p-10 min-h-[500px] scroll-mt-24 transition-all duration-500 animate-in slide-in-from-bottom-12 shadow-2xl relative overflow-hidden">
@@ -134,12 +173,18 @@ export default function Dashboard() {
           {/* TAB RENDERER */}
           {(activeTab === "subjects" || activeTab === "ai_subjects") && (
             <SubjectGrid 
-              activeTab={activeTab} isContributor={isContributor} searchQuery={searchQuery} 
-              filteredSubjects={filteredSubjects} setIsAddSubjectDialogOpen={setIsAddSubjectDialogOpen} 
-              setIsUploadDialogOpen={setIsUploadDialogOpen} handleSubjectClick={(sub) => { setSelectedSubject(sub); setIsDrawerOpen(true); }} 
+              activeTab={activeTab} 
+              isContributor={isContributor} 
+              searchQuery={searchQuery} 
+              
+              setSearchQuery={setSearchQuery} 
+              filteredSubjects={filteredSubjects} 
+              setIsAddSubjectDialogOpen={setIsAddSubjectDialogOpen} 
+              setIsUploadDialogOpen={setIsUploadDialogOpen} 
+              handleSubjectClick={(sub) => { setSelectedSubject(sub); setIsDrawerOpen(true); }} 
             />
           )}
-          
+
           {activeTab === "attendance" && (
             <div className="animate-in fade-in duration-500 max-w-4xl mx-auto">
               <div className="mb-8"><h2 className="text-2xl font-bold text-white">Attendance Calculator</h2><p className="text-zinc-400 mt-2">Only for 2nd/3rd Year Students.</p></div>

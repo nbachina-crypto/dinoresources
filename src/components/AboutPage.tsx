@@ -5,6 +5,7 @@ import { ChevronLeft, Code, Database, Lightbulb, Zap, Rocket } from "lucide-reac
 // Import your custom logos
 import dinoWhite from "@/assets/dinosaurWhite.png";
 import genai from "@/assets/aiWhite.png";
+import fyxLogo from "@/assets/fyx.png"; // <-- Added FolioFYX import
 import Footer from "./Footer";
 
 export default function AboutPage() {
@@ -16,7 +17,7 @@ export default function AboutPage() {
       roles: ["Frontend Engineer", "System Architect", "UI/UX"],
       icon: Code,
       color: "text-blue-400",
-      bgSoft: "bg-blue-400/10", // Added this back
+      bgSoft: "bg-blue-400/10", 
       bgHover: "group-hover:bg-blue-400/5",
       borderHover: "group-hover:border-blue-400/30",
       glow: "from-blue-400/20 via-transparent to-transparent",
@@ -26,7 +27,7 @@ export default function AboutPage() {
       roles: ["Backend Developer", "Product Engineer"],
       icon: Database,
       color: "text-emerald-400",
-      bgSoft: "bg-emerald-400/10", // Added this back
+      bgSoft: "bg-emerald-400/10", 
       bgHover: "group-hover:bg-emerald-400/5",
       borderHover: "group-hover:border-emerald-400/30",
       glow: "from-emerald-400/20 via-transparent to-transparent",
@@ -36,7 +37,7 @@ export default function AboutPage() {
       roles: ["CMO", "R&D Guide", "Web 3 Specialist"],
       icon: Lightbulb,
       color: "text-amber-400",
-      bgSoft: "bg-amber-400/10", // Added this back
+      bgSoft: "bg-amber-400/10", 
       bgHover: "group-hover:bg-amber-400/5",
       borderHover: "group-hover:border-amber-400/30",
       glow: "from-amber-400/20 via-transparent to-transparent",
@@ -104,6 +105,27 @@ export default function AboutPage() {
           <p className="text-base sm:text-lg text-zinc-400/80 max-w-2xl mx-auto leading-relaxed font-light mt-6">
             We realized that finding reliable study materials, tracking attendance, and adapting to syllabus changes was broken. We built the definitive platform to fix it.
           </p>
+
+          {/* 🔥 NEW: Premium FolioFYX Collaboration Badge 🔥 */}
+          <div className="mt-10 flex justify-center animate-in fade-in duration-1000 delay-150">
+            <a
+              href="https://www.foliofyx.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)] transition-all duration-300 overflow-hidden"
+            >
+              <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:animate-[shimmer_2s_infinite]" />
+              <span className="relative z-10 text-sm text-zinc-400 font-medium tracking-wide group-hover:text-zinc-200 transition-colors">
+                Crafted in collaboration with
+              </span>
+              <img
+                src={fyxLogo}
+                alt="FolioFYX"
+                className="relative z-10 h-4 sm:h-5 w-auto brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+              />
+            </a>
+          </div>
+
         </div>
 
         {/* Minimal Bento Box Features */}
