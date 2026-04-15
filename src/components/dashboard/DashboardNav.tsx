@@ -1,7 +1,16 @@
-// src/components/dashboard/DashboardNav.tsx
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft,Lock, ChevronRight, BookOpen, CalendarDays, Globe, Calculator, Megaphone, X, EyeOff } from "lucide-react";
+import {
+  ChevronLeft,
+  Lock,
+  ChevronRight,
+  BookOpen,
+  CalendarDays,
+  Globe,
+  Calculator,
+  Megaphone,
+  X,
+} from "lucide-react";
 import genai from "@/assets/aiWhite.png";
 import { PremiumUnlockDialog } from "../premiumUnlockDialog";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -89,10 +98,14 @@ const navCards = [
     glow: "shadow-[0_0_30px_-5px_rgba(249,115,22,0.15)]",
     buttonText: "View Updates",
     requiresSubscription: false,
-  }
+  },
 ];
 
-export function DashboardNav({ firstName, activeTab, handleTabClick }: DashboardNavProps) {
+export function DashboardNav({
+  firstName,
+  activeTab,
+  handleTabClick,
+}: DashboardNavProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const aiCardRef = useRef<HTMLDivElement>(null);
 
@@ -106,80 +119,76 @@ export function DashboardNav({ firstName, activeTab, handleTabClick }: Dashboard
   const [showTutorial, setShowTutorial] = useState(false);
 
   const handleProtectedCardClick = (card: any) => {
-      const isExternal = "externalLink" in card;
+    const isExternal = "externalLink" in card;
 
-      if (isExternal) {
-        window.open(card.externalLink, "_blank");
-        return;
-      }
+    if (isExternal) {
+      window.open(card.externalLink, "_blank");
+      return;
+    }
 
-      if (card.requiresSubscription && !isSubscribed) {
-        setLockedFeatureName(card.title);
-        setIsPremiumDialogOpen(true);
-        return;
-      }
+    if (card.requiresSubscription && !isSubscribed) {
+      setLockedFeatureName(card.title);
+      setIsPremiumDialogOpen(true);
+      return;
+    }
 
-      handleTabClick(card.id);
-    };
+    handleTabClick(card.id);
+  };
 
-  // ── ONBOARDING TUTORIAL LOGIC ──
+  // ── AI TUTORIAL POPUP LOGIC (updated from second file, keeping live structure intact) ──
   useEffect(() => {
-    const hasSeenPermanent = localStorage.getItem("has_seen_ai_tutorial") === "true";
-    const hasSeenSession = sessionStorage.getItem("hide_ai_tutorial_session") === "true";
+    const hasSeenPermanent =
+      localStorage.getItem("has_seen_ai_onboarding_v5") === "true";
+    const hasSeenSession =
+      sessionStorage.getItem("hide_ai_tutorial_session") === "true";
 
-    // FOR TESTING: Comment this line out to see the popup every refresh while building
-    // if (hasSeenPermanent || hasSeenSession) return;
+    if (hasSeenPermanent || hasSeenSession) return;
 
-    let initTimer: ReturnType<typeof setTimeout>;
-    let endTimer: ReturnType<typeof setTimeout>;
-
-    initTimer = setTimeout(() => {
+    const timer = setTimeout(() => {
       setShowTutorial(true);
 
       if (aiCardRef.current && scrollContainerRef.current) {
-        const isMobile = window.innerWidth < 640;
-        // Perfectly center the 240px card on mobile.
-        const scrollOffset = isMobile ? (window.innerWidth - 240) / 2 : 40;
-        
+        const rect = aiCardRef.current.getBoundingClientRect();
+        const containerRect = scrollContainerRef.current.getBoundingClientRect();
+        const scrollLeft =
+          aiCardRef.current.offsetLeft -
+          containerRect.width / 2 +
+          rect.width / 2;
+
         scrollContainerRef.current.scrollTo({
-          left: aiCardRef.current.offsetLeft - scrollOffset,
+          left: scrollLeft,
           behavior: "smooth",
         });
       }
-    }, 1000);
+    }, 800);
 
-    endTimer = setTimeout(() => {
-      dismissTutorial();
-    }, 15000);
-
-    return () => {
-      clearTimeout(initTimer);
-      clearTimeout(endTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (showTutorial) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "unset";
-    return () => { document.body.style.overflow = "unset"; };
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [showTutorial]);
 
-  const dismissTutorial = () => setShowTutorial(false);
+  const dismissTutorial = () => {
+    localStorage.setItem("has_seen_ai_onboarding_v5", "true");
+    setShowTutorial(false);
+  };
 
   const muteForSession = (e: React.MouseEvent) => {
     e.stopPropagation();
     sessionStorage.setItem("hide_ai_tutorial_session", "true");
-    dismissTutorial();
-  };
-
-  const mutePermanently = () => {
-    localStorage.setItem("has_seen_ai_tutorial", "true");
-    dismissTutorial();
+    setShowTutorial(false);
   };
 
   const checkScroll = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
     }
@@ -194,23 +203,31 @@ export function DashboardNav({ firstName, activeTab, handleTabClick }: Dashboard
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const isMobile = window.innerWidth < 640;
-      const scrollAmount = direction === "left" ? (isMobile ? -260 : -320) : (isMobile ? 260 : 320);
-      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      const scrollAmount =
+        direction === "left"
+          ? isMobile
+            ? -260
+            : -320
+          : isMobile
+            ? 260
+            : 320;
+
+      scrollContainerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
   return (
     <div className="space-y-4 relative">
-
-      {/* ── BLURRED BACKDROP OVERLAY ── */}
       {showTutorial && (
         <div
-          className="fixed inset-0 z-[60] bg-[#09090b]/80 backdrop-blur-xl animate-in fade-in duration-700 pointer-events-auto"
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-md animate-in fade-in duration-500"
           onClick={dismissTutorial}
         />
       )}
 
-      {/* ── HEADER ── */}
       <div className="flex items-start sm:items-center justify-between px-2 animate-in slide-in-from-bottom-4 fade-in duration-700 gap-4 relative z-[50]">
         <h2 className="text-xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
           Hey {firstName},{" "}
@@ -221,32 +238,37 @@ export function DashboardNav({ firstName, activeTab, handleTabClick }: Dashboard
 
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 pt-1 sm:pt-0">
           <Button
-            variant="outline" size="icon"
+            variant="outline"
+            size="icon"
             className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-zinc-900/50 border-white/10 text-white hover:bg-white hover:text-black disabled:opacity-30 transition-all"
-            onClick={() => scroll("left")} disabled={!canScrollLeft}
+            onClick={() => scroll("left")}
+            disabled={!canScrollLeft}
           >
             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
           <Button
-            variant="outline" size="icon"
+            variant="outline"
+            size="icon"
             className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-zinc-900/50 border-white/10 text-white hover:bg-white hover:text-black disabled:opacity-30 transition-all"
-            onClick={() => scroll("right")} disabled={!canScrollRight}
+            onClick={() => scroll("right")}
+            disabled={!canScrollRight}
           >
             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
       </div>
 
-      {/* ── CARD SCROLL CONTAINER ── */}
-      <div className={`relative animate-in slide-in-from-bottom-8 fade-in duration-700 delay-150 fill-mode-both ${showTutorial ? 'z-[65]' : 'z-10'}`}>
+      <div
+        className={`relative animate-in slide-in-from-bottom-8 fade-in duration-700 delay-150 fill-mode-both ${
+          showTutorial ? "z-[65]" : "z-10"
+        }`}
+      >
         <div
           ref={scrollContainerRef}
           onScroll={checkScroll}
-          /* Added extra bottom padding on mobile (pb-[200px]) so the attached popup isn't clipped by overflow */
-          className="flex overflow-x-auto pt-8 pb-[200px] sm:py-12 -mt-8 -mb-[200px] sm:-my-8 -mx-4 px-4 sm:px-6 gap-4 sm:gap-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex overflow-x-auto pt-6 pb-[260px] sm:pb-12 -mx-4 px-4 sm:px-6 gap-5 snap-x snap-mandatory mb-[-260px] sm:mb-0 items-start overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           {navCards.map((card) => {
-
             const isLocked = !!card.requiresSubscription && !isSubscribed;
             const isExternal = "externalLink" in card;
             const isActive = activeTab === card.id && !isExternal;
@@ -259,113 +281,124 @@ export function DashboardNav({ firstName, activeTab, handleTabClick }: Dashboard
               <div
                 key={card.id}
                 ref={isAiCard ? aiCardRef : null}
-                className={`
-                  snap-center shrink-0 relative transition-all duration-700
-                  ${isDimmed ? "opacity-20 blur-[4px] scale-95 pointer-events-none" : "z-20"}
+                className={`snap-center shrink-0 relative transition-all duration-500 will-change-transform
+                  ${isDimmed ? "opacity-20 blur-sm scale-95 pointer-events-none" : "z-20"}
                   ${isSpotlit ? "z-[100]" : ""}
                 `}
               >
-
-                {/* ── THE TUTORIAL POPUP (Attached below on Mobile, Right on Desktop) ── */}
                 {isSpotlit && (
-                  <div className="absolute top-[calc(100%+16px)] left-0 right-0 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:left-[calc(100%+2rem)] sm:translate-x-0 sm:w-[320px] z-[110] animate-in zoom-in-95 slide-in-from-bottom-4 fade-in duration-500 fill-mode-both drop-shadow-2xl">
-                    <div className="bg-[#121216]/85 backdrop-blur-3xl border border-white/15 rounded-[20px] sm:rounded-[28px] p-3.5 sm:p-5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
-
-                      <div className="flex items-start justify-between mb-2.5 sm:mb-3">
-                        <div className="flex items-center gap-2.5 sm:gap-3">
-                          {/* Premium Frosted Glass Icon Box - Scaled down for mobile */}
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-[10px] sm:rounded-[14px] bg-gradient-to-b from-white/10 to-transparent border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center shrink-0 backdrop-blur-md">
-                            <img src={genai} alt="AI" className="w-3.5 h-3.5 sm:w-5 sm:h-5 opacity-90 drop-shadow-md" />
-                          </div>
-
-                          <div>
-                            <span className="text-[8px] sm:text-[10px] font-bold tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 to-zinc-600">
-                              Intelligence
-                            </span>
-                            <h4 className="text-[13px] sm:text-base font-extrabold leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-200 to-zinc-500">
-                              Your Personal AI Tutor
-                            </h4>
-                          </div>
+                  <div className="absolute top-[calc(100%+20px)] left-1/2 -translate-x-1/2 w-[290px] sm:w-[320px] sm:left-[calc(100%+24px)] sm:top-0 sm:translate-x-0 z-[110] animate-in zoom-in-95 fade-in slide-in-from-top-2 duration-300 pointer-events-auto">
+                    <div className="bg-[#121218]/95 backdrop-blur-3xl border border-white/20 rounded-[28px] p-5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-2 px-2.5 py-1.5 bg-white/10 rounded-full border border-white/20">
+                          <img src={genai} alt="AI" className="w-4 h-4" />
+                          <span className="text-[10px] tracking-widest text-indigo-200 uppercase">
+                            Introducing
+                          </span>
                         </div>
 
-                        {/* Refined Close Button */}
                         <button
                           onClick={dismissTutorial}
-                          className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/[0.03] hover:bg-white/10 flex items-center justify-center text-zinc-500 hover:text-zinc-300 transition-all border border-transparent hover:border-white/10 shrink-0 mt-0.5"
+                          className="p-1.5 hover:bg-white/10 rounded-full text-zinc-500 hover:text-white transition-all"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X className="w-4 h-4" />
                         </button>
                       </div>
 
-                      <p className="text-zinc-400 text-[10px] sm:text-xs leading-relaxed mb-3 sm:mb-5">
-                        Generate custom framed questions, get concept breakdowns, and test your knowledge instantly.
+                      <h4 className="text-white font-bold text-lg mb-1 leading-tight">
+                        AI Study Buddy
+                      </h4>
+
+                      <p className="text-zinc-400 text-xs leading-relaxed mb-5 opacity-90">
+                        Get instant concept breakdowns and personalized summaries
+                        for your specific subjects.
                       </p>
 
-                      <div className="space-y-1.5 sm:space-y-3">
+                      <div className="space-y-2">
                         <Button
-                          onClick={() => { mutePermanently(); handleTabClick("ai_subjects"); }}
-                          className="w-full bg-white text-black hover:bg-zinc-200 font-bold h-8 sm:h-10 rounded-md sm:rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all active:scale-95 text-[11px] sm:text-sm"
+                          onClick={() => {
+                            dismissTutorial();
+                            handleTabClick("ai_subjects");
+                          }}
+                          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl h-12 transition-all active:scale-95 shadow-lg shadow-indigo-600/20"
                         >
-                          Try it out
+                          Try it now
                         </Button>
+
                         <button
                           onClick={muteForSession}
-                          className="w-full flex items-center justify-center gap-1.5 text-[9px] sm:text-[11px] font-medium text-zinc-500 hover:text-zinc-300 transition-colors py-1"
+                          className="w-full text-center text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors py-1"
                         >
-                          <EyeOff className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                          Don't show again this session
+                          Don&apos;t show again this session
                         </button>
                       </div>
-
                     </div>
+
+                    <div className="hidden sm:block absolute left-[-6px] top-10 w-4 h-4 bg-[#121218] border-l border-t border-white/20 rotate-[-45deg]" />
                   </div>
                 )}
 
-                {/* ── THE CARD ITSELF ── */}
                 <div
                   onClick={() => {
-                          if (isDimmed) return;
+                    if (isDimmed) return;
 
-                          if (isSpotlit) {
-                            mutePermanently();
-                            handleTabClick(card.id);
-                            return;
-                          }
+                    if (isSpotlit) {
+                      dismissTutorial();
+                      handleTabClick(card.id);
+                      return;
+                    }
 
-                          if (!showTutorial) {
-                            handleProtectedCardClick(card);
-                          }
-                        }}
-                
-                
+                    if (!showTutorial) {
+                      handleProtectedCardClick(card);
+                    }
+                  }}
                   className={`
                     w-[240px] sm:w-[280px] h-[300px] sm:h-[360px]
                     rounded-[24px] sm:rounded-[32px] p-6 sm:p-8
                     flex flex-col justify-between cursor-pointer
                     relative overflow-hidden group border transition-all duration-500
-                    ${isActive
-                      ? `bg-white border-transparent text-black scale-[1.02] ${card.glow}`
-                      : `bg-gradient-to-br ${card.bgGradient} border-white/10 text-white hover:border-white/20 hover:scale-[1.02]`
+                    ${
+                      isActive
+                        ? `bg-white border-transparent text-black scale-[1.02] ${card.glow}`
+                        : `bg-gradient-to-br ${card.bgGradient} border-white/10 text-white hover:border-white/20 hover:scale-[1.02]`
                     }
-                    ${isSpotlit ? "ring-2 sm:ring-4 ring-white/30 border-transparent shadow-[0_0_80px_rgba(255,255,255,0.15)] scale-[1.05]" : ""}
+                    ${
+                      isSpotlit
+                        ? "ring-2 ring-white/40 shadow-2xl scale-[1.03]"
+                        : ""
+                    }
                   `}
                 >
                   {isLocked && (
-                      <div className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 border border-white/10 text-zinc-200 text-[10px] font-bold tracking-widest uppercase backdrop-blur-md">
-                        <Lock className="w-3 h-3" />
-                        Locked
-                      </div>
-                    )}
+                    <div className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 border border-white/10 text-zinc-200 text-[10px] font-bold tracking-widest uppercase backdrop-blur-md">
+                      <Lock className="w-3 h-3" />
+                      Locked
+                    </div>
+                  )}
 
                   <div className="z-10 flex flex-col h-full">
                     <div>
-                      <p className={`text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase mb-2 sm:mb-3 ${isActive ? "text-zinc-500" : "text-zinc-300"}`}>
+                      <p
+                        className={`text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase mb-2 sm:mb-3 ${
+                          isActive ? "text-zinc-500" : "text-zinc-300"
+                        }`}
+                      >
                         {card.overline}
                       </p>
-                      <h3 className={`text-2xl sm:text-3xl font-semibold tracking-tight leading-tight mb-3 sm:mb-4 ${isActive ? "text-black" : "text-white"}`}>
+
+                      <h3
+                        className={`text-2xl sm:text-3xl font-semibold tracking-tight leading-tight mb-3 sm:mb-4 ${
+                          isActive ? "text-black" : "text-white"
+                        }`}
+                      >
                         {card.title}
                       </h3>
-                      <p className={`text-xs sm:text-sm font-medium leading-relaxed ${isActive ? "text-zinc-600" : "text-zinc-300"}`}>
+
+                      <p
+                        className={`text-xs sm:text-sm font-medium leading-relaxed ${
+                          isActive ? "text-zinc-600" : "text-zinc-300"
+                        }`}
+                      >
                         {card.desc}
                       </p>
                     </div>
@@ -398,18 +431,20 @@ export function DashboardNav({ firstName, activeTab, handleTabClick }: Dashboard
           })}
         </div>
       </div>
+
       <PremiumUnlockDialog
-            open={isPremiumDialogOpen}
-            onOpenChange={setIsPremiumDialogOpen}
-            title="Unlock Premium Access"
-            description="Pay ₹11 once to unlock the full website, including premium calculators, advanced units, and other locked features."
-            featureName={lockedFeatureName}
-            priceLabel="₹11"
-            onPaymentSuccess={async () => {
-              await refreshSubscription();
-              setIsPremiumDialogOpen(false);
-            }}
-          />
+        open={isPremiumDialogOpen}
+        onOpenChange={setIsPremiumDialogOpen}
+        title="Unlock Premium Access"
+        description="Pay ₹11 once to unlock the full website, including premium calculators, advanced units, and other locked features."
+        featureName={lockedFeatureName}
+        priceLabel="₹11"
+        onPaymentSuccess={async () => {
+          await refreshSubscription();
+          setIsPremiumDialogOpen(false);
+        }}
+      />
+
     </div>
   );
 }
