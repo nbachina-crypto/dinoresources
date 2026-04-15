@@ -19,6 +19,7 @@ export function DashboardHeader({
     handleSignOut,
 }: DashboardHeaderProps) {
     const navigate = useNavigate();
+console.log("Navigate initialized:", navigate);
 
     return (
         <header className="border-b border-white/5 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-20">

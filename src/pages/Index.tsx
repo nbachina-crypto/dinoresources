@@ -10,7 +10,8 @@ import dinoLogo from "@/assets/dinosaurWhite.png";
 
 const Index = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+ const navigate = useNavigate();
+console.log("Navigate initialized:", navigate);
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
