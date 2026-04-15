@@ -2,6 +2,7 @@ import { useRef, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Upload,
+  BookPlus,
   BookOpen,
   Layers,
   ChevronRight,
@@ -98,6 +99,7 @@ export function SubjectGrid({
   searchQuery,
   setSearchQuery,
   filteredSubjects,
+  setIsAddSubjectDialogOpen,
   setIsUploadDialogOpen,
   handleSubjectClick,
 }: any) {
@@ -127,6 +129,26 @@ export function SubjectGrid({
           background: radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 50%), rgba(255,255,255,0.08) 0%, transparent 70%);
         }
       `}</style>
+
+      {isContributor && activeTab === "subjects" && (
+        <div className="mb-6 flex justify-end gap-2">
+          <Button
+            onClick={() => setIsAddSubjectDialogOpen(true)}
+            variant="ghost"
+            className="h-10 px-4 rounded-full bg-white/[0.04] border border-white/8 text-zinc-300 hover:bg-white/8 hover:text-white text-[13px] font-medium"
+          >
+            <BookPlus className="w-3.5 h-3.5 mr-2" />
+            Add
+          </Button>
+          <Button
+            onClick={() => setIsUploadDialogOpen(true)}
+            className="h-10 px-4 rounded-full bg-white text-black hover:bg-zinc-100 text-[13px] font-semibold shadow-md"
+          >
+            <Upload className="w-3.5 h-3.5 mr-2" />
+            Upload
+          </Button>
+        </div>
+      )}
 
       <div className="mb-6 flex justify-center relative z-30">
         <div className="relative w-full sm:w-[400px] md:w-[480px] group pointer-events-auto">
