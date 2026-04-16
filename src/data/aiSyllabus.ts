@@ -22,7 +22,6 @@ export interface AiTopic {
 import { artificialIntelligence } from "./subjects/artificialIntelligence";
 import { cns } from "./subjects/cns";
 import { digitalForensics } from "./subjects/digitalForensics";
-import { oose } from "./subjects/oose";
 import { webAppDevelopment } from "./subjects/webAppDevelopment";
 
 export const aiSyllabus: Record<string, Record<string, AiTopic[]>> = {
@@ -30,7 +29,6 @@ export const aiSyllabus: Record<string, Record<string, AiTopic[]>> = {
   "Artificial intelligence": artificialIntelligence,
   "Cryptography and Network Security": cns,
   "Digital Forensics": digitalForensics,
-  "OOSE Based Application Development":oose,
   
   
 };

@@ -1,4 +1,58 @@
 import type { AiTopic } from "../aiSyllabus";
+import u3t1q1Detailed   from "../cnsAnswers/u3-t1-q1-detailed.md?raw";
+import u3t1q1Simplified from "../cnsAnswers/u3-t1-q1-simplified.md?raw";
+import u3t1q2Detailed   from "../cnsAnswers/u3-t1-q2-detailed.md?raw";
+import u3t1q2Simplified from "../cnsAnswers/u3-t1-q2-simplified.md?raw";
+import u3t1q3Detailed   from "../cnsAnswers/u3-t1-q3-detailed.md?raw";
+import u3t1q3Simplified from "../cnsAnswers/u3-t1-q3-simplified.md?raw";
+import u3t1q4Detailed   from "../cnsAnswers/u3-t1-q4-detailed.md?raw";
+import u3t1q4Simplified from "../cnsAnswers/u3-t1-q4-simplified.md?raw";
+import u3t1q5Detailed   from "../cnsAnswers/u3-t1-q5-detailed.md?raw";
+import u3t1q5Simplified from "../cnsAnswers/u3-t1-q5-simplified.md?raw";
+import u3t1q6Detailed   from "../cnsAnswers/u3-t1-q6-detailed.md?raw";
+import u3t1q6Simplified from "../cnsAnswers/u3-t1-q6-simplified.md?raw";
+import u3t2q1Detailed   from "../cnsAnswers/u3-t2-q1-detailed.md?raw";
+import u3t2q1Simplified from "../cnsAnswers/u3-t2-q1-simplified.md?raw";
+import u3t2q2Detailed   from "../cnsAnswers/u3-t2-q2-detailed.md?raw";
+import u3t2q2Simplified from "../cnsAnswers/u3-t2-q2-simplified.md?raw";
+import u3t2q3Detailed   from "../cnsAnswers/u3-t2-q3-detailed.md?raw";
+import u3t2q3Simplified from "../cnsAnswers/u3-t2-q3-simplified.md?raw";
+import u3t2q4Detailed   from "../cnsAnswers/u3-t2-q4-detailed.md?raw";
+import u3t2q4Simplified from "../cnsAnswers/u3-t2-q4-simplified.md?raw";
+import u4t1q1Detailed   from "../cnsAnswers/u4-t1-q1-detailed.md?raw";
+import u4t1q1Simplified from "../cnsAnswers/u4-t1-q1-simplified.md?raw";
+import u4t1q2Detailed   from "../cnsAnswers/u4-t1-q2-detailed.md?raw";
+import u4t1q2Simplified from "../cnsAnswers/u4-t1-q2-simplified.md?raw";
+import u4t2q1Detailed   from "../cnsAnswers/u4-t2-q1-detailed.md?raw";
+import u4t2q1Simplified from "../cnsAnswers/u4-t2-q1-simplified.md?raw";
+import u4t2q2Detailed   from "../cnsAnswers/u4-t2-q2-detailed.md?raw";
+import u4t2q2Simplified from "../cnsAnswers/u4-t2-q2-simplified.md?raw";
+import u4t2q3Detailed   from "../cnsAnswers/u4-t2-q3-detailed.md?raw";
+import u4t2q3Simplified from "../cnsAnswers/u4-t2-q3-simplified.md?raw";
+import u4t2q4Detailed   from "../cnsAnswers/u4-t2-q4-detailed.md?raw";
+import u4t2q4Simplified from "../cnsAnswers/u4-t2-q4-simplified.md?raw";
+import u4t2q5Detailed   from "../cnsAnswers/u4-t2-q5-detailed.md?raw";
+import u4t2q5Simplified from "../cnsAnswers/u4-t2-q5-simplified.md?raw";
+import u4t3q1Detailed   from "../cnsAnswers/u4-t3-q1-detailed.md?raw";
+import u4t3q1Simplified from "../cnsAnswers/u4-t3-q1-simplified.md?raw";
+import u4t3q2Detailed   from "../cnsAnswers/u4-t3-q2-detailed.md?raw";
+import u4t3q2Simplified from "../cnsAnswers/u4-t3-q2-simplified.md?raw";
+import u4t3q3Detailed   from "../cnsAnswers/u4-t3-q3-detailed.md?raw";
+import u4t3q3Simplified from "../cnsAnswers/u4-t3-q3-simplified.md?raw";
+import u5t1q1Detailed   from "../cnsAnswers/u5-t1-q1-detailed.md?raw";
+import u5t1q1Simplified from "../cnsAnswers/u5-t1-q1-simplified.md?raw";
+import u5t1q2Detailed   from "../cnsAnswers/u5-t1-q2-detailed.md?raw";
+import u5t1q2Simplified from "../cnsAnswers/u5-t1-q2-simplified.md?raw";
+import u5t2q1Detailed   from "../cnsAnswers/u5-t2-q1-detailed.md?raw";
+import u5t2q1Simplified from "../cnsAnswers/u5-t2-q1-simplified.md?raw";
+import u5t3q1Detailed   from "../cnsAnswers/u5-t3-q1-detailed.md?raw";
+import u5t3q1Simplified from "../cnsAnswers/u5-t3-q1-simplified.md?raw";
+import u5t3q2Detailed   from "../cnsAnswers/u5-t3-q2-detailed.md?raw";
+import u5t3q2Simplified from "../cnsAnswers/u5-t3-q2-simplified.md?raw";
+import u5t3q3Detailed   from "../cnsAnswers/u5-t3-q3-detailed.md?raw";
+import u5t3q3Simplified from "../cnsAnswers/u5-t3-q3-simplified.md?raw";
+
+
 
 export const cns: Record<string, AiTopic[]> = {
 
@@ -17,8 +71,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q1",
           question: "Explain the Division Algorithm with suitable examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q1Detailed,
+            simplified: u3t1q1Simplified,
           },
           isFree: true,
         },
@@ -26,8 +80,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q2",
           question: "Explain the Euclidean Algorithm and its application in finding GCD.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q2Detailed,
+            simplified: u3t1q2Simplified,
           },
           isFree: false,
         },
@@ -35,8 +89,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q3",
           question: "Explain modular arithmetic and its properties.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q3Detailed,
+            simplified: u3t1q3Simplified,
           },
           isFree: false,
         },
@@ -44,8 +98,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q4",
           question: "Explain prime numbers and methods for testing primality.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q4Detailed,
+            simplified: u3t1q4Simplified,
           },
           isFree: false,
         },
@@ -53,8 +107,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q5",
           question: "Explain Fermat's Theorem and Euler's Theorem with examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q5Detailed,
+            simplified: u3t1q5Simplified,
           },
           isFree: false,
         },
@@ -62,8 +116,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t1-q6",
           question: "Explain the Chinese Remainder Theorem with suitable examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t1q6Detailed,
+            simplified: u3t1q6Simplified,
           },
           isFree: false,
         },
@@ -81,8 +135,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t2-q1",
           question: "Explain the concept of public key cryptosystem.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t2q1Detailed,
+            simplified: u3t2q1Simplified,
           },
           isFree: true,
         },
@@ -90,8 +144,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t2-q2",
           question: "Explain RSA algorithm with a detailed example.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t2q2Detailed,
+            simplified: u3t2q2Simplified,
           },
           isFree: false,
         },
@@ -99,8 +153,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t2-q3",
           question: "Discuss the security aspects of RSA.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t2q3Detailed,
+            simplified: u3t2q3Simplified,
           },
           isFree: false,
         },
@@ -108,8 +162,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u3-t2-q4",
           question: "Explain Diffie-Hellman key exchange with example.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u3t2q4Detailed,
+            simplified: u3t2q4Simplified,
           },
           isFree: false,
         },
@@ -132,8 +186,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t1-q1",
           question: "Explain the applications of cryptographic hash functions.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t1q1Detailed,
+            simplified: u4t1q1Simplified,
           },
           isFree: true,
         },
@@ -141,8 +195,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t1-q2",
           question: "Explain the working of Secure Hash Algorithm (SHA).",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t1q2Detailed,
+            simplified: u4t1q2Simplified,
           },
           isFree: false,
         },
@@ -160,8 +214,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t2-q1",
           question: "Discuss message authentication requirements and functions.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t2q1Detailed,
+            simplified: u4t2q1Simplified,
           },
           isFree: true,
         },
@@ -169,8 +223,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t2-q2",
           question: "Explain Message Authentication Codes (MAC) and their requirements.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t2q2Detailed,
+            simplified: u4t2q2Simplified,
           },
           isFree: false,
         },
@@ -178,8 +232,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t2-q3",
           question: "Explain HMAC, DAA, and CMAC with suitable examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t2q3Detailed,
+            simplified: u4t2q3Simplified,
           },
           isFree: false,
         },
@@ -187,8 +241,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t2-q4",
           question: "Explain digital signatures and their properties.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t2q4Detailed,
+            simplified: u4t2q4Simplified,
           },
           isFree: false,
         },
@@ -196,8 +250,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t2-q5",
           question: "Explain Digital Signature Standard (DSS).",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t2q5Detailed,
+            simplified: u4t2q5Simplified,
           },
           isFree: false,
         },
@@ -215,8 +269,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t3-q1",
           question: "Explain key management and distribution mechanisms.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t3q1Detailed,
+            simplified: u4t3q1Simplified,
           },
           isFree: true,
         },
@@ -224,8 +278,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t3-q2",
           question: "Explain distribution of public keys with examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t3q2Detailed,
+            simplified: u4t3q2Simplified,
           },
           isFree: false,
         },
@@ -233,8 +287,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u4-t3-q3",
           question: "Explain X.509 certificates and their role in security.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u4t3q3Detailed,
+            simplified: u4t3q3Simplified,
           },
           isFree: false,
         },
@@ -257,8 +311,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t1-q1",
           question: "Explain SSL and TLS protocols with their architecture.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t1q1Detailed,
+            simplified: u5t1q1Simplified,
           },
           isFree: true,
         },
@@ -266,8 +320,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t1-q2",
           question: "Compare SSL and TLS.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t1q2Detailed,
+            simplified: u5t1q2Simplified,
           },
           isFree: false,
         },
@@ -285,8 +339,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t2-q1",
           question: "Explain S/MIME and its role in email security.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t2q1Detailed,
+            simplified: u5t2q1Simplified,
           },
           isFree: true,
         },
@@ -304,8 +358,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t3-q1",
           question: "Explain different types of firewalls with examples.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t3q1Detailed,
+            simplified: u5t3q1Simplified,
           },
           isFree: true,
         },
@@ -313,8 +367,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t3-q2",
           question: "Explain the configuration of firewalls in a network.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t3q2Detailed,
+            simplified: u5t3q2Simplified,
           },
           isFree: false,
         },
@@ -322,8 +376,8 @@ export const cns: Record<string, AiTopic[]> = {
           id: "cns-u5-t3-q3",
           question: "Explain Intrusion Detection Systems (IDS) and Intrusion Prevention Systems (IPS) and compare them.",
           answers: {
-            detailed:   "Coming Soon",
-            simplified: "Coming Soon",
+            detailed:   u5t3q3Detailed,
+            simplified: u5t3q3Simplified,
           },
           isFree: false,
         },
