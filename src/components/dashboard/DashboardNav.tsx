@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import genai from "@/assets/aiWhite.png";
 import { useSubscription } from "@/hooks/useSubscription";
-import { PremiumUnlockDialog } from "../PremiumUnlockDialog";
+import { PremiumUnlockDialog } from "@/components/PremiumUnlockDialog";
 
 interface DashboardNavProps {
   firstName: string;
