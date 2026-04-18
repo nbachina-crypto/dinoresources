@@ -11,6 +11,7 @@ import {
 import { Plus, Trash2, ChevronDown, ChevronUp, AlertCircle, X, Lock } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
 import { PremiumUnlockDialog } from "./premiumUnlockDialog";
+
 /* ---------- Grade System ---------- */
 
 const GRADES = ["O", "A+", "A", "B+", "B", "C", "P"] as const;
@@ -211,6 +212,13 @@ export default function SGPACalculator() {
   const [cladGrade, setCladGrade] = useState<Grade | "">("");
   const [toast, setToast] = useState<{ id: number; msg: string } | null>(null);
 
+  const handleCladToggle = (checked: boolean) => {
+        setHasCLAD(checked);
+        if (!checked) {
+          setCladGrade("");
+        }
+      };
+
   /* ── Persistence ── */
   useEffect(() => {
     try {
@@ -317,41 +325,55 @@ export default function SGPACalculator() {
 
   /* ── Render ── */
   return (
-    <div className="max-w-xl mx-auto space-y-3 font-sans text-sm pb-6">
+    <div className="w-full space-y-3 font-sans text-sm pb-6">
 
       {toast && (
         <Toast key={toast.id} message={toast.msg} onClose={() => setToast(null)} />
       )}
 
-      {/* ── CLAD ── */}
-      <div className="flex items-center justify-between px-3 py-2.5 border border-border/60 rounded-lg bg-muted/20">
-        <span className="font-medium">
-          Do you have CLAD?{" "}
-          <span className="text-xs text-muted-foreground font-normal">(1 credit)</span>
-        </span>
-        <div className="flex items-center gap-3">
-          {hasCLAD && (
-            <Select value={cladGrade} onValueChange={(v) => setCladGrade(v as Grade)}>
-              <SelectTrigger className="h-8 text-xs w-[80px]">
-                <SelectValue placeholder="Grade" />
-              </SelectTrigger>
-              <SelectContent>
-                {GRADES.map((g) => (
-                  <SelectItem key={g} value={g} className="text-xs">{g}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-          <button
-            onClick={() => { setHasCLAD((v) => !v); setCladGrade(""); }}
-            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${hasCLAD ? "bg-primary" : "bg-muted-foreground/30"}`}
-            aria-label="Toggle CLAD"
-          >
-            <span className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform ${hasCLAD ? "translate-x-4" : "translate-x-0.5"}`} />
-          </button>
-        </div>
-      </div>
+      
+      
+        {/* ── CLAD ── */}
+        {/* ── CLAD ── */}
+          <div className="border border-border/60 rounded-lg bg-muted/20 p-3 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-medium leading-tight">Do you have CLAD?</p>
+                <p className="text-xs text-muted-foreground">(1 credit)</p>
+              </div>
 
+              <label className="relative inline-flex items-center cursor-pointer select-none shrink-0">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={hasCLAD}
+                  onChange={(e) => handleCladToggle(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-muted-foreground/30 rounded-full peer peer-checked:bg-primary transition-colors"></div>
+                <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+              </label>
+            </div>
+
+            {hasCLAD && (
+              <div className="space-y-1">
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  CLAD Grade
+                </p>
+                <Select value={cladGrade} onValueChange={(v) => setCladGrade(v as Grade)}>
+                  <SelectTrigger className="h-9 w-full text-sm">
+                    <SelectValue placeholder="Select CLAD grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GRADES.map((g) => (
+                      <SelectItem key={g} value={g} className="text-sm">
+                        {g}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
       {/* ── Add Subject container ── */}
       <div className="border border-border/60 rounded-lg bg-card overflow-hidden">
       
