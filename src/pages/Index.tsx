@@ -413,4 +413,4 @@ const Index = () => {
   return <Dashboard key={session.user.id} />;
 };
 
-// export default Index;
+export default Index;
