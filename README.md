@@ -5,14 +5,48 @@ Teamdino is a student-centric platform for GITAM Students that provides centrali
 
 ---
 
+### Landing Page
+<img width="1348" height="631" alt="image" src="https://github.com/user-attachments/assets/c6620983-fdca-4456-8155-0f094bad0397" />
+<img width="1360" height="628" alt="image" src="https://github.com/user-attachments/assets/dee3c677-674e-4418-91b2-45aa4dcafe8f" />
+
+
+
+
 ### Subject Resources Dashboard
-<img width="1845" height="916" alt="image" src="https://github.com/user-attachments/assets/854358f4-fd0b-4617-8092-74a5d89c5679" />
-<img width="1914" height="934" alt="image" src="https://github.com/user-attachments/assets/d1ef58ee-e288-468e-a63f-d9af1fcafa44" />
+<img width="1220" height="611" alt="image" src="https://github.com/user-attachments/assets/74c822db-16fc-4d3e-8cdc-b1479a2fc5bf" />
+
+
+
+
+### Your Subjects
+<img width="1312" height="633" alt="image" src="https://github.com/user-attachments/assets/2668c091-98a6-4950-ba28-4a11624f9926" />
+<img width="1349" height="591" alt="image" src="https://github.com/user-attachments/assets/8bc505a4-3b24-4140-8557-ebe401a0dacb" />
+
+
+
+
+### Study With AI
+<img width="1191" height="479" alt="image" src="https://github.com/user-attachments/assets/546d173a-7ccf-4b28-9600-e2902083a7eb" />
+<img width="627" height="560" alt="image" src="https://github.com/user-attachments/assets/d2a858f0-f834-4db3-9f2f-96e49d0b6552" />
+<img width="807" height="582" alt="image" src="https://github.com/user-attachments/assets/4ceda47b-7c31-4621-906b-5d282d413b78" />
+
+
+
+
+### Grade Calculator
+<img width="861" height="654" alt="image" src="https://github.com/user-attachments/assets/7ec02818-836f-4d90-a554-32400a25bb8e" />
+
+
+
+
+### CGPA Predictor
+<img width="832" height="641" alt="image" src="https://github.com/user-attachments/assets/57743b53-3e2d-45b1-860b-19c3f54d9b82" />
+
 
 
 
 ### Attendance Calculator
-<img width="926" height="682" alt="image" src="https://github.com/user-attachments/assets/a50e3e20-2c71-4f18-a096-d140e3a50cde" />
+<img width="753" height="643" alt="image" src="https://github.com/user-attachments/assets/f79268db-69fa-4d7f-bcc1-6dbe87eacab5" />
 
 ---
 
@@ -25,7 +59,7 @@ Teamdino is a student-centric platform for GITAM Students that provides centrali
 ---
 
 ## Impact
-- 830+ registered users  
+- 950+ registered users  
 - 300–400 daily active users during exam periods  
 
 ---
@@ -47,13 +81,13 @@ Teamdino is a student-centric platform for GITAM Students that provides centrali
 ---
 
 ## Tech Stack
-- TypeScript (AI-assisted development)
+- TypeScript, React JS
 - Supabase (backend and database)
 - Vercel (deployment)
 
 ---
 
 ## Setup / Access
-Visit: https://teamdino.in
+Visit: [https://teamdino.in](https://www.teamdino.in/)
 
 ---
