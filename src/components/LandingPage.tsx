@@ -131,17 +131,6 @@ export default function LandingPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const statsReveal = useReveal(0.2);
 
-  /* Inject chat agent script */
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.noupe.com/embed/019df5a8af4f760488b941f0e5ca0bf0bca5.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   /* Phrase cycling with crossfade */
   useEffect(() => {
     const interval = setInterval(() => {
